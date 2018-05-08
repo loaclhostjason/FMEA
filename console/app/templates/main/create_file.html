@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+
+{% block main_file_act %}act{% endblock %}
+
+{% block main_content %}
+    <div class="col-sm-12 console-title clearfix bline">
+        <div class="pull-left">
+            <h4>新建文件</h4>
+            <a href="{{ url_for('.my_file_list') }}" class="btn btn-xs btn-toinstlist">
+                <span class="icon-toinstlist"></span>
+                <span>返回</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-sm-12"></div>
+{% endblock %}

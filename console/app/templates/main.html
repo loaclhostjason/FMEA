@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block main %}cur{% endblock %}
+
+{% block head %}
+
+    {{ super() }}
+    <style>
+        .menu-sub.menu-sub-disbale {
+            display: none;
+            border-bottom: 1px solid #cadbe6;
+        }
+    </style>
+{% endblock %}
+
+
+{% block page_content %}
+    <div class="aside">
+        <div class="menu">
+            <h2><span>我的文件</span></h2>
+            <hr class="line-mod">
+            <dl class="menu-list">
+                <dd>
+                    <a href="{{ url_for('main.my_file_list') }}"
+                       class="menu-lv2 {% block main_file_act %}{% endblock %}">
+                        <span>文件列表</span>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#" class="menu-lv2">
+                        <span>最近修改</span>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#" class="menu-lv2">
+                        <span>我的收藏</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        <a href="javascript:void(0)" class="btn-fold-menu" title="收起">收起</a>
+    </div>
+
+    <div class="main">
+        <div class="console-container">
+            {% block main_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
