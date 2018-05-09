@@ -21,8 +21,13 @@
 
                 <div class="panel-border">
                     <div class="charttable-title">
-                        <span class="title-text">结构树编辑区 <a href="javascript:void (0)" class="btn btn-primary btn-xs pull-right add-product">添加</a></span>
+                        <span class="title-text">结构树编辑区
+                            {% if not request.args.get('config_name') %}
+                                <a href="javascript:void (0)"
+                                   class="btn btn-primary btn-xs pull-right add-product">添加</a>
+                            {% endif %}
 
+                        </span>
                     </div>
                     <div class="charttable-w">
                         <div id="myDiagramDiv" style="min-height: 300px"></div>

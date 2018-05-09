@@ -4,4 +4,16 @@ $(document).ready(function () {
     $('.add-product').click(function () {
         file.show_modal(file_modal, $(this));
     });
+
+    $('.submit_product').click(function () {
+        var params = file_modal.find('form').serialize();
+        $.post('/file/product/create', params, function (resp) {
+            if (resp.success) {
+                file_modal.modal('hide');
+                sessionStorage.setItem('success', resp.message);
+                window.location.href = '/main/file/create?config_name=' + resp.config_name
+            } else
+                toastr.error(resp.message)
+        })
+    })
 });

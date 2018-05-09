@@ -12,12 +12,12 @@ class ProductMixin:
 
     product_id = db.Column(db.String(12))
 
-    company_name = db.Column(db.String(32), nullable=False)
+    company_name = db.Column(db.String(32))
     project_location = db.Column(db.String(68))
     consumer = db.Column(db.String(68))
 
     version = db.Column(db.String(68))
-    name = db.Column(db.String(68), index=True, nullable=False)
+    name = db.Column(db.String(68), index=True)
 
     start_date = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime)
