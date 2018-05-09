@@ -6,6 +6,7 @@ common_css = Bundle(
     'vendor/nprogress/nprogress.css',
     'vendor/toastr/toastr.min.css',
     'vendor/font-awesome/css/font-awesome.min.css',
+    'css/comment/*',
     'css/app.css',
     'css/main.css',
     filters='cssmin',
@@ -15,6 +16,7 @@ common_css = Bundle(
 common_js = Bundle(
     'vendor/nprogress/nprogress.js',
     'vendor/toastr/toastr.min.js',
+    'js/gojs/*',
     'js/app.js',
     filters='jsmin',
     output='public/js/common.js',
