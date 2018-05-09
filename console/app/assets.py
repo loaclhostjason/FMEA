@@ -18,6 +18,7 @@ common_js = Bundle(
     'vendor/toastr/toastr.min.js',
     'js/gojs/*',
     'js/app.js',
+    'js/class.js',
     filters='jsmin',
     output='public/js/common.js',
 )

@@ -21,6 +21,10 @@ def read_config():
     return mysql_url
 
 
+base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+conf_path = os.path.join(base_path, 'console', 'config')
+
+
 class Config:
     DEBUG = True
     # SECRET_KEY = os.urandom(24)
@@ -37,6 +41,8 @@ class Config:
     BABEL_DEFAULT_LOCALE = 'zh_Hans_CN'
 
     ASSETS_DEBUG = False
+
+    CONFIG_PATH = conf_path
 
     @staticmethod
     def init_app(app):

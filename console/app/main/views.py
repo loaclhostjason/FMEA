@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, jsonify, abort, request, f
 from flask_login import login_required
 
 from . import main
+from .forms import *
 
 
 @main.route('/main')
@@ -15,4 +16,5 @@ def my_file_list():
 @main.route('/main/file/create')
 @login_required
 def create_file():
-    return render_template('main/create_file.html')
+    form = CreateProductForm()
+    return render_template('main/create_file.html', form=form)

@@ -3,6 +3,8 @@
 {% block main_file_act %}act{% endblock %}
 
 {% block main_content %}
+    {% include 'main/modals/select_product.html' %}
+
     <div class="col-sm-12 console-title clearfix">
         <div class="pull-left">
             <h4>新建文件</h4>
@@ -19,7 +21,9 @@
 
                 <div class="panel-border">
                     <div class="charttable-title">
-                        <span class="title-text">结构树编辑区</span></div>
+                        <span class="title-text">结构树编辑区 <a href="javascript:void (0)" class="btn btn-primary btn-xs pull-right add-product">添加</a></span>
+
+                    </div>
                     <div class="charttable-w">
                         <div id="myDiagramDiv" style="min-height: 300px"></div>
                     </div>

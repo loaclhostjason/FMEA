@@ -7,6 +7,9 @@ from sqlalchemy.ext.declarative import declared_attr
 class ProductMixin:
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
+    config_name = db.Column(db.String(32))
+
+
     product_id = db.Column(db.String(12))
 
     company_name = db.Column(db.String(32), nullable=False)

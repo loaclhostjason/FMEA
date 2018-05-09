@@ -1,17 +1,8 @@
 {% extends "base.html" %}
+{% import 'macro_form.html' as render_form %}
 
 {% block main %}cur{% endblock %}
 
-{% block head %}
-
-    {{ super() }}
-    <style>
-        .menu-sub.menu-sub-disbale {
-            display: none;
-            border-bottom: 1px solid #cadbe6;
-        }
-    </style>
-{% endblock %}
 
 
 {% block page_content %}
@@ -46,4 +37,10 @@
             {% block main_content %}{% endblock %}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/main/file.js') }}"></script>
 {% endblock %}

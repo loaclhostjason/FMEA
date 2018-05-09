@@ -207,8 +207,8 @@ input[type=checkbox], input[type=radio] {
 .btn-primary:focus,
 .btn-primary:active {
     color: #fff;
-    border: 1px solid #28B5D6;
-    background-color: #28B5D6;
+    border: 1px solid #28B5D6 !important;
+    background-color: #28B5D6 !important;
 }
 
 .form-inline .form-group {
