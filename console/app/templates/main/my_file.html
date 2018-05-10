@@ -28,52 +28,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% if none %}
-                    {% for site in sites %}
+                {% if products %}
+                    {% for product in products %}
                         <tr>
                             <td>
-                                <a href="{{ url_for('.site_detail', site_id=site.id) }}">{{ site.name }}</a>
+                                <a href="#">xxx</a>
                             </td>
 
-                            <td>
-                                {{ '%s个'| format(site.file_asset | length) if site.file_asset else '--' }}
-                            </td>
-
-                            <td>
-                                {% if site.relation_site %}
-                                    {% for site_rel in site.relation_site %}
-                                        <label class="text-center"
-                                               style="font-weight: normal; border: 1px solid #409eff;padding: 4px 10px;">
-                                            {{ site_rel.servers.name }}
-                                        </label>
-                                    {% endfor %}
-                                {% else %}
-                                    --
-                                {% endif %}
-                            </td>
-
-
-                            <td>
-                                <span>{{ site.site_user_relate.user.username if site.site_user_relate else '--' }}</span>
-                            </td>
+                            <td>{{ product.design_resp or '--' }}</td>
+                            <td>{{ product.last_time or '--' }}</td>
 
                             <td class="text-right">
-                                <div>
-                                    {% if site.site_user_relate %}
-                                        <a href="javascript:void (0);" class="remove_allot_user" data-id="{{ site.id }}"
-                                           data-type="sites">
-                                            撤销人员
-                                        </a>
-                                    {% else %}
-                                        <a href="javascript:void (0);" class="site_user"
-                                           data-sites-id="{{ site.id }}">分配人员</a>
-                                    {% endif %}
-                                </div>
-                                <div>
-                                    <a href="{{ url_for('.edit_site', site_id=site.id, page_from='edit_site') }}">编辑</a>
-                                    <span class="text-explode">|</span>
-                                    <a href="javascript:void (0);" class="del_site" data-id="{{ site.id }}">删除</a>
-                                </div>
+                                <a href="{{ url_for('.edit_file', product_id=product.id, config_name=product.config_name) }}">编辑</a>
                             </td>
                         </tr>
                     {% endfor %}

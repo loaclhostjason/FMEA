@@ -2,13 +2,13 @@
 from ..base import *
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declared_attr
+from datetime import datetime
 
 
 class ProductMixin:
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
     config_name = db.Column(db.String(32))
-
 
     product_id = db.Column(db.String(12))
 
@@ -25,3 +25,6 @@ class ProductMixin:
     func_teams = db.Column(db.String(2000))
     fmea_id = db.Column(db.String(20))
     design_resp = db.Column(db.String(128))
+
+    first_time = db.Column(db.DateTime, default=datetime.now)
+    last_time = db.Column(db.DateTime, default=datetime.now)

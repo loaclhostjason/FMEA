@@ -25,3 +25,23 @@ def create_file_product():
     d = dict({'config_name': form_data['config_name'], **config_data})
     db.session.add(Product(**d))
     return jsonify({'success': True, 'message': '更新成功', 'config_name': form_data['config_name']})
+
+
+@main.route('/file/tree')
+@login_required
+def get_file_tree():
+    product_id = request.args.get('product_id')
+    if not product_id:
+        return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
+
+    product = Product.query.get_or_404(product_id)
+    product_info = {"name": product.name}
+
+    result = {
+        'nodedata': [],
+        'linkdata': [],
+    }
+
+    result['nodedata'].append(product_info)
+    result['linkdata'] = []
+    return jsonify({'success': True, 'data': result})
