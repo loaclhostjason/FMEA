@@ -21,6 +21,13 @@ def read_config():
     return mysql_url
 
 
+def read_sqlite_url():
+    path = os.path.abspath(os.path.dirname(__file__))
+    sqlit_path = os.path.join(path, 'db', 'data.db')
+
+    return 'sqlite:///%s' % sqlit_path
+
+
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 conf_path = os.path.join(base_path, 'console', 'config')
 
@@ -30,7 +37,7 @@ class Config:
     # SECRET_KEY = os.urandom(24)
     SECRET_KEY = 'fm'
 
-    SQLALCHEMY_DATABASE_URI = read_config()
+    SQLALCHEMY_DATABASE_URI = read_sqlite_url()
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
