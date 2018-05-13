@@ -22,7 +22,7 @@ def create_file_product():
     if product:
         return jsonify({'success': False, 'message': '添加过，请编辑'})
 
-    d = dict({'config_name': form_data['config_name'], **config_data})
+    d = dict({'config_name': form_data['config_name']}, **config_data)
     db.session.add(Product(**d))
     return jsonify({'success': True, 'message': '更新成功', 'config_name': form_data['config_name']})
 

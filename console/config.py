@@ -11,7 +11,7 @@ def read_config():
         mysql_info = json.loads(mysql_info)
     mysql_dict = mysql_info['mysql']
 
-    mysql_url = 'mysql://%s:%s@%s:%s/%s' % (
+    mysql_url = 'mysql+pymysql://%s:%s@%s:%s/%s' % (
         mysql_dict['user'],
         mysql_dict['password'],
         mysql_dict['host'],
@@ -37,7 +37,7 @@ class Config:
     # SECRET_KEY = os.urandom(24)
     SECRET_KEY = 'fm'
 
-    SQLALCHEMY_DATABASE_URI = read_sqlite_url()
+    SQLALCHEMY_DATABASE_URI = read_config()
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
