@@ -37,7 +37,7 @@ class Config:
     # SECRET_KEY = os.urandom(24)
     SECRET_KEY = 'fm'
 
-    SQLALCHEMY_DATABASE_URI = read_config()
+    SQLALCHEMY_DATABASE_URI = read_sqlite_url()
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False

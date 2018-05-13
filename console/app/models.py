@@ -94,7 +94,7 @@ class User(UserBaseMixin, UserMixin, BaseModelFunc, db.Model):
     @classmethod
     def update_time_ip(cls):
         user = cls.query.filter(cls.username == current_user.username).first_or_404()
-        user.login_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        user.login_time = datetime.now()
         user.login_ip = request.remote_addr
         db.session.add(user)
 
