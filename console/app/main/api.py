@@ -1,6 +1,6 @@
 # coding: utf-8
 from flask import render_template, redirect, url_for, jsonify, abort, request, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from . import main
 from .forms import *
@@ -30,6 +30,8 @@ def create_file_product():
         return jsonify({'success': False, 'message': '添加过，请编辑'})
 
     d = dict({'config_name': form_data['config_name']}, **config_data)
+
+    d['user_id'] = current_user.get_id()
     add_product = Product(**d)
     db.session.add(add_product)
     db.session.flush()

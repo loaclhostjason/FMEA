@@ -28,3 +28,11 @@ class ProductMixin:
 
     first_time = db.Column(db.DateTime, default=datetime.now)
     last_time = db.Column(db.DateTime, default=datetime.now)
+
+    @declared_attr
+    def user_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    @declared_attr
+    def user(cls):
+        return db.relationship('User', foreign_keys=[cls.user_id], backref=backref("product", cascade="all,delete"))
