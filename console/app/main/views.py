@@ -8,7 +8,6 @@ from .models import *
 from ..base import Check
 
 
-@main.route('/main')
 @main.route('/')
 @login_required
 def my_file_list():
@@ -16,14 +15,14 @@ def my_file_list():
     return render_template('main/my_file.html', products=products)
 
 
-@main.route('/main/file/create')
+@main.route('/file/create')
 @login_required
 def create_file():
     form = CreateProductForm()
     return render_template('main/create_edit_file.html', form=form)
 
 
-@main.route('/main/file/edit/<int:product_id>', methods=['GET', 'POST'])
+@main.route('/file/edit/<int:product_id>', methods=['GET', 'POST'])
 @login_required
 def edit_file(product_id):
     form = CreateProductForm()

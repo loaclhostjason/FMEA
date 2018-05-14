@@ -36,7 +36,7 @@ $(document).ready(function () {
                     if (product_id){
                         action = $.getUrlParam('action');
                         if (action !== 'edit_attr')
-                            window.location.href = window.location.href + '&action=edit_attr'
+                            window.location.href = window.location.href + '?action=edit_attr'
                     }
 
                 }),

@@ -11,7 +11,7 @@ $(document).ready(function () {
             if (resp.success) {
                 file_modal.modal('hide');
                 sessionStorage.setItem('success', resp.message);
-                window.location.href = '/main/file/create?config_name=' + resp.config_name
+                window.location.href = '/file/edit/' + resp.product_id
             } else
                 toastr.error(resp.message)
         })

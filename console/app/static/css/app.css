@@ -253,4 +253,10 @@ input[type=checkbox], input[type=radio] {
     border-color: #adadad;
 }
 
+.text-explode {
+    color: #CCC !important;
+    font-weight: normal !important;
+    margin: 0 4px !important;
+}
+
 
