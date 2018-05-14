@@ -42,8 +42,6 @@ def edit_file(product_id):
             return redirect(request.url)
 
         edit_form.set_form_data(product)
-        print(process_list)
         return render_template('main/create_edit_file.html', form=form, product=product, edit_form=edit_form, process_list=process_list)
 
-    print(process_list)
     return render_template('main/create_edit_file.html', form=form, product=product, process_list=process_list)

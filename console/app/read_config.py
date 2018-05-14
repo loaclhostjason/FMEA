@@ -7,7 +7,6 @@ from flask import current_app
 class ReadConfig:
     def __init__(self):
         path = current_app.config['CONFIG_PATH']
-        print(path)
 
         self.config_paths = list()
         for (root, dirs, files) in os.walk(path):

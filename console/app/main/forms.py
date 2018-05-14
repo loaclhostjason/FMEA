@@ -16,7 +16,6 @@ class CreateProductForm(FlaskForm, BaseForm):
         super(CreateProductForm, self).__init__(*args, **kwards)
 
         paths = ReadConfig().get_all_config()
-        print(111, paths)
         self.config_name.choices = [(path['filename'], path['filename']) for path in paths] if paths else []
 
 
