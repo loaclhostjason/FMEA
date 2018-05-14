@@ -39,7 +39,7 @@
                             <td>{{ product.last_time or '--' }}</td>
 
                             <td class="text-right">
-                                <a href="{{ url_for('.edit_file', product_id=product.id, config_name=product.config_name) }}">编辑</a>
+                                <a href="{{ url_for('.edit_file', product_id=product.id) }}">编辑</a>
                                 <span class="text-explode">|</span>
                                 <a href="javascript:void (0)" class="delete-file" data-id="{{ product.id }}">删除</a>
                             </td>
