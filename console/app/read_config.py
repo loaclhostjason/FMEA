@@ -39,5 +39,12 @@ class ReadConfig:
         return data
 
 
-if __name__ == '__main__':
-    ReadConfig().read_config_data('test')
+class ReadAppConfig:
+    def __init__(self):
+        self.path = current_app.config['APP_CONFIG_PATH']
+
+    def get_config(self):
+        with open(self.path, 'r', encoding='utf-8') as f:
+            data = f.read()
+            data = json.loads(data)
+        return data

@@ -30,6 +30,7 @@ def read_sqlite_url():
 
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 conf_path = os.path.join(base_path, 'console', 'config')
+app_path = os.path.join(base_path, 'console', 'app_config', 'process.json')
 
 
 class Config:
@@ -50,6 +51,7 @@ class Config:
     ASSETS_DEBUG = False
 
     CONFIG_PATH = conf_path
+    APP_CONFIG_PATH = app_path
 
     @staticmethod
     def init_app(app):

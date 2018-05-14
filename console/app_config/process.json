@@ -1,0 +1,108 @@
+{
+    "structural_analysis": {
+        "name_zh": "结构分析",
+        "id": 1,
+        "content": [
+            {
+                "name": "add_process",
+                "name_zh": "新增过程"
+            },
+            {
+                "name": "add_process_step",
+                "name_zh": "新增过程步骤"
+            },
+            {
+                "name": "add_work",
+                "name_zh": "新增作业要素"
+            }
+        ]
+    },
+    "functional_analysis": {
+        "name_zh": "功能分析",
+        "id": 2,
+        "content": [
+            {
+                "name": "add_func",
+                "name_zh": "新增功能"
+            },
+            {
+                "name": "add_product_char",
+                "name_zh": "新增产品特性"
+            },
+            {
+                "name": "add_process_char",
+                "name_zh": "新增过程特性"
+            },
+            {
+                "name": "edit_func_net",
+                "name_zh": "编辑功能网"
+            }
+        ]
+    },
+    "failure_analysis": {
+        "name_zh": "失效分析",
+        "id": 3,
+        "content": [
+            {
+                "name": "add_failure",
+                "name_zh": "新增失效"
+            },
+            {
+                "name": "edit_failure",
+                "name_zh": "编辑失效网"
+            }
+        ]
+    },
+    "current_action": {
+        "name_zh": "当前措施组风险分析",
+        "id": 4,
+        "content": [
+            {
+                "name": "s_assess",
+                "name_zh": "S评估"
+            },
+            {
+                "name": "preventive_action",
+                "name_zh": "预防措施"
+            },
+            {
+                "name": "probe_action",
+                "name_zh": "探测措施"
+            },
+            {
+                "name": "o_assess",
+                "name_zh": "O评估"
+            },
+            {
+                "name": "d_assess",
+                "name_zh": "D评估"
+            }
+        ]
+    },
+    "optimize_action": {
+        "name_zh": "优化措施组风险分析",
+        "id": 5,
+        "content": [
+            {
+                "name": "s_assess",
+                "name_zh": "S评估"
+            },
+            {
+                "name": "preventive_action",
+                "name_zh": "预防措施"
+            },
+            {
+                "name": "probe_action",
+                "name_zh": "探测措施"
+            },
+            {
+                "name": "o_assess",
+                "name_zh": "O评估"
+            },
+            {
+                "name": "d_assess",
+                "name_zh": "D评估"
+            }
+        ]
+    }
+}
