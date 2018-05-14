@@ -15,5 +15,9 @@ $(document).ready(function () {
             } else
                 toastr.error(resp.message)
         })
+    });
+
+    $('.label-border').click(function () {
+        alert('稍等 还没实现');
     })
 });

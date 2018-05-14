@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var $$ = go.GraphObject.make;
+    var jqclass = $.jqclass;
 
     var myDiagram =
         $$(go.Diagram, "myDiagramStructure",
@@ -42,7 +43,8 @@ $(document).ready(function () {
                 }),
             makeButton("新增过程",
                 function (e, obj) {
-                    alert('新增过程');
+                    var add_process = $("#add-process");
+                    jqclass.show_modal(add_process, $(this));
                 })
         );
 

@@ -17,6 +17,7 @@ common_js = Bundle(
     'vendor/nprogress/nprogress.js',
     'vendor/toastr/toastr.min.js',
     'js/gojs/*',
+    'js/class/*',
     'js/app.js',
     'js/class.js',
     filters='jsmin',

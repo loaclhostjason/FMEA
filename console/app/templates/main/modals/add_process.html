@@ -8,12 +8,32 @@
                 </div>
 
                 <div class="modal-body clearfix">
-                    <div class="row">
-                        <table class="table table-hover">
+                    <div class="row" style="margin: 20px; margin-top: 0;margin-bottom: 0">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="100">项目</th>
+                                <th width="100">值</th>
+                            </tr>
+                            </thead>
                             <tbody>
-                            {% if product_list %}
-                                {% for pro in product_list %}
+                            {% if process_list %}
+                                {% for name, pro in process_list.items() %}
                                     <tr>
+                                        <td>
+                                            {{ pro.name_zh }}
+
+                                        </td>
+
+                                        <td>
+                                            {% for value in pro.content %}
+                                                <div>
+                                                <label class="label-border text-center" style="width: 125px;cursor: pointer"> {{ value.name_zh }}</label>
+                                                </div>
+
+                                            {% endfor %}
+                                        </td>
+
 
                                     </tr>
                                 {% endfor %}
