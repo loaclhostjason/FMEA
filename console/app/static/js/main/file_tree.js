@@ -11,7 +11,6 @@ $(document).ready(function () {
                 "draggingTool.isEnabled": false,
                 layout: $$(go.TreeLayout,
                     {
-                        angle: 90,
                         setsPortSpot: false,
                         setsChildPortSpot: false,
                         arrangement: go.TreeLayout.ArrangementHorizontal,

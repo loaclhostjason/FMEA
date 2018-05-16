@@ -36,3 +36,25 @@ class ProductMixin:
     @declared_attr
     def user(cls):
         return db.relationship('User', foreign_keys=[cls.user_id], backref=backref("product", cascade="all,delete"))
+
+
+class AnalysisMixin:
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
+    parent_id = db.Column(db.Integer, index=True)
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', foreign_keys=[cls.product_id], backref=backref("child", cascade="all,delete"))
+
+
+class Product(ProductMixin, db.Model):
+    pass
+
+
+class ProductChildRelation(AnalysisMixin, db.Model):
+    pass

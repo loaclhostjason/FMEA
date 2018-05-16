@@ -16,3 +16,7 @@ class UserBaseMixin:
     theme = db.Column(db.String(32), default='default')
 
     role = db.Column(db.String(16))
+
+
+class User(UserBaseMixin, db.Model):
+    pass

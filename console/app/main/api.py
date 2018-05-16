@@ -43,18 +43,49 @@ def create_file_product():
 @main.route('/file/tree')
 @login_required
 def get_file_tree():
-    product_id = request.args.get('product_id')
-    if not product_id:
-        return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
-
-    product = Product.query.get_or_404(product_id)
-    product_info = {"name": product.name}
-
     result = {
         'nodedata': [],
         'linkdata': [],
     }
 
+    product_id = request.args.get('product_id')
+    if not product_id:
+        return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
+
+    product = Product.query.get_or_404(product_id)
+    product_info = {
+        "name": product.name,
+        'key': product_id
+    }
     result['nodedata'].append(product_info)
-    result['linkdata'] = []
+
+    realtion = product.child
+    link_data = []
+    for rl in realtion:
+        link_data.append({'from': rl.parent_id, 'to': rl.id})
+        result['nodedata'].append({'name': rl.name, 'key': rl.id})
+
+
+    result['linkdata'] = link_data
     return jsonify({'success': True, 'data': result})
+
+
+@main.route('/file/tree/content/add/<int:id>', methods=['POST'])
+@login_required
+def add_file_tree_content(id):
+    form_data = request.form.to_dict()
+    parent_id = form_data.get('parent_id')
+    content = form_data.get('content')
+    if not content:
+        return jsonify({'success': False, 'message': '内容不能为空'})
+
+    d = {
+        'parent_id': parent_id or id,
+        'product_id': id
+    }
+    result = []
+    for con in content.split('\r\n'):
+        d['name'] = con
+        result.append(ProductChildRelation(**d))
+    db.session.add_all(result)
+    return jsonify({'success': True})
