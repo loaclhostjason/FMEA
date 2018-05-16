@@ -8,12 +8,21 @@ from .. import db
 from .models import *
 from ..read_config import ReadConfig
 
+'''
+我的文件 delete
+'''
+
 
 @main.route('/file/product/delete/<int:id>', methods=['POST'])
 def delete_file(id):
     product = Product.query.get_or_404(id)
     db.session.delete(product)
     return jsonify({'success': True, 'message': '删除成功'})
+
+
+'''
+我的文件 create
+'''
 
 
 @main.route('/file/product/create', methods=['POST'])
@@ -40,6 +49,11 @@ def create_file_product():
     return jsonify({'success': True, 'message': '更新成功', 'product_id': product_id})
 
 
+'''
+我的文件 树
+'''
+
+
 @main.route('/file/tree')
 @login_required
 def get_file_tree():
@@ -53,21 +67,22 @@ def get_file_tree():
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
     product = Product.query.get_or_404(product_id)
-    product_info = {
-        "name": product.name,
-        'key': product_id
-    }
-    result['nodedata'].append(product_info)
+    result['nodedata'].append({'name': product.name, 'key': product_id})
 
     realtion = product.child
     link_data = []
     for rl in realtion:
+        # if rl.parent_id != product_id:
         link_data.append({'from': rl.parent_id, 'to': rl.id})
         result['nodedata'].append({'name': rl.name, 'key': rl.id})
 
-
     result['linkdata'] = link_data
     return jsonify({'success': True, 'data': result})
+
+
+'''
+我的文件 儿子节点添加
+'''
 
 
 @main.route('/file/tree/content/add/<int:id>', methods=['POST'])

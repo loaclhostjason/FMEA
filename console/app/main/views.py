@@ -8,6 +8,10 @@ from .models import *
 from ..base import Check
 from ..read_config import ReadAppConfig
 
+'''
+dashboard
+'''
+
 
 @main.route('/')
 @login_required
@@ -16,11 +20,21 @@ def my_file_list():
     return render_template('main/my_file.html', products=products)
 
 
+'''
+页面 文件 创建
+'''
+
+
 @main.route('/file/create')
 @login_required
 def create_file():
     form = CreateProductForm()
     return render_template('main/create_edit_file.html', form=form)
+
+
+'''
+页面 文件 编辑
+'''
 
 
 @main.route('/file/edit/<int:product_id>', methods=['GET', 'POST'])

@@ -21,3 +21,14 @@ class ProductChildRelation(AnalysisMixin, BaseModelFunc, db.Model):
 
     def __repr__(self):
         return '<ProductChildRelation: {}>'.format(self.id)
+
+    @classmethod
+    def set_base_relation(cls, data):
+        d = {
+            'name': data.get('name'),
+            'parent_id': data.get('parent_id'),
+            'product_id': data.get('product_id'),
+        }
+        r = cls(**d)
+        db.session.add(r)
+        return

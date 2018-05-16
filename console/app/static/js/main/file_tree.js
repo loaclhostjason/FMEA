@@ -33,7 +33,7 @@ $(document).ready(function () {
         $$(go.Adornment, "Vertical",
             makeButton("编辑属性",
                 function (e, obj) {
-                    if (product_id){
+                    if (product_id) {
                         action = $.getUrlParam('action');
                         if (action !== 'edit_attr')
                             window.location.href = window.location.href + '?action=edit_attr'
@@ -42,8 +42,15 @@ $(document).ready(function () {
                 }),
             makeButton("新增过程",
                 function (e, obj) {
+                    var node = obj.part.adornedPart;
+                    if (node !== null) {
+                        var thisemp = node.data;
+                        var parent_id = thisemp['key'];
+                    }
                     var add_process = $("#add-process");
+                    var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
+                    add_content.find('[name="parent_id"]').val(parent_id);
                 })
         );
 
