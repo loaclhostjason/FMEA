@@ -45,7 +45,8 @@ class ProductMixin:
         return db.relationship('User', foreign_keys=[cls.user_id], backref=backref("product", cascade="all,delete"))
 
 
-class AnalysisMixin:
+class ProductChildRelationMixin:
+    __tablename__ = 'product_child_relation'
     id = db.Column(db.Integer, primary_key=True)
 
     # 名称 and 等级
@@ -68,9 +69,37 @@ class AnalysisMixin:
         return db.relationship('Product', foreign_keys=[cls.product_id], backref=backref("child", cascade="all,delete"))
 
 
+class AttrMixin:
+    __tablename__ = 'attr'
+    id = db.Column(db.Integer, primary_key=True)
+
+    config_name = db.Column(db.String(32))
+    content = db.Column(db.Text)
+
+    @declared_attr
+    def product_relation_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product_child_relation.id'))
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    @declared_attr
+    def product_relations(cls):
+        return db.relationship('ProductChildRelation', foreign_keys=[cls.product_relation_id], backref=backref("attr", cascade="all,delete"))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', foreign_keys=[cls.product_id], backref=backref("attr", cascade="all,delete"))
+
+
 class Product(ProductMixin, db.Model):
     pass
 
 
-class ProductChildRelation(AnalysisMixin, db.Model):
+class ProductChildRelation(ProductChildRelationMixin, db.Model):
+    pass
+
+
+class Attr(AttrMixin, db.Model):
     pass

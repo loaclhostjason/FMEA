@@ -1,7 +1,8 @@
 # coding: utf-8
 
 from models.industry import ProductMixin
-from models.industry import AnalysisMixin
+from models.industry import ProductChildRelationMixin
+from models.industry import AttrMixin
 
 from .. import db
 
@@ -14,7 +15,7 @@ class Product(ProductMixin, db.Model):
         return '<Product: {}>'.format(self.id)
 
 
-class ProductChildRelation(AnalysisMixin, db.Model):
+class ProductChildRelation(ProductChildRelationMixin, db.Model):
     def __init__(self, *args, **kwargs):
         super(ProductChildRelation, self).__init__(*args, **kwargs)
 
@@ -71,3 +72,7 @@ class ProductChildRelation(AnalysisMixin, db.Model):
             lv2.name_number_set = parent.name_number
             db.session.add(lv2)
         return
+
+
+class Attr(AttrMixin, db.Model):
+    pass
