@@ -11,65 +11,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from models.user.user import UserBaseMixin
 
 
-class BaseModelFunc:
-    @staticmethod
-    def enum_to_value(data):
-        if not data:
-            new_data = None
-            return new_data
-
-        try:
-            new_data = data.value
-        except Exception as e:
-            new_data = data
-        return new_data
-
-    @staticmethod
-    def enum_to_name(data):
-        if not data:
-            new_data = None
-            return new_data
-
-        try:
-            new_data = data.name.lower()
-        except Exception as e:
-            new_data = data
-        return new_data
-
-    def to_dict(self, extra_kw=None, extra_dict=None, remove_key=list()):
-        model_field = [v for v in self.__dict__.keys() if not v.startswith('_') and v not in remove_key]
-        result = dict()
-        for info in model_field:
-            result[info] = self.enum_to_value(getattr(self, info))
-
-        if extra_kw and isinstance(extra_kw, list):
-            for info in extra_kw:
-                result[info] = self.enum_to_value(getattr(self, info))
-
-        if extra_dict and isinstance(extra_dict, dict):
-            for k, v in extra_dict.items():
-                result[k] = v
-
-        return result
-
-    def to_dict_lo(self, extra_kw=None, extra_dict=None, remove_key=list()):
-        model_field = [v for v in self.__dict__.keys() if not v.startswith('_') and v not in remove_key]
-        result = dict()
-        for info in model_field:
-            result[info] = self.enum_to_name(getattr(self, info))
-
-        if extra_kw and isinstance(extra_kw, list):
-            for info in extra_kw:
-                result[info] = self.enum_to_name(getattr(self, info))
-
-        if extra_dict and isinstance(extra_dict, dict):
-            for k, v in extra_dict.items():
-                result[k] = v
-
-        return result
-
-
-class User(UserBaseMixin, UserMixin, BaseModelFunc, db.Model):
+class User(UserBaseMixin, UserMixin, db.Model):
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
 

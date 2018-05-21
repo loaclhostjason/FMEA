@@ -10,9 +10,10 @@ from .error_handle import Ehandle
 
 from config import Config
 from .jinja_env import JinjaEnv
+from .base_model import BaseModel
 
 bootstrap = Bootstrap()
-db = SQLAlchemy()
+db = SQLAlchemy(model_class=BaseModel)
 babel = Babel()
 moment = Moment()
 error_handle = Ehandle()
@@ -50,5 +51,21 @@ def create_app():
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    # 公共模板
+    from .temps import temps as temps_blueprint
+    app.register_blueprint(temps_blueprint, url_prefix='/temps')
+
+    # 管理
+    from .manage import manage as manage_blueprint
+    app.register_blueprint(manage_blueprint, url_prefix='/manage')
+
+    # 帮助
+    from .help import help as help_blueprint
+    app.register_blueprint(help_blueprint, url_prefix='/help')
+
+    # 联系方式
+    from .contact import contact as contact_blueprint
+    app.register_blueprint(contact_blueprint, url_prefix='/contact')
 
     return app

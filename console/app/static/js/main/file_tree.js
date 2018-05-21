@@ -13,9 +13,7 @@ $(document).ready(function () {
                     {
                         setsPortSpot: false,
                         setsChildPortSpot: false,
-                        arrangement: go.TreeLayout.ArrangementHorizontal,
-                        layerSpacing: 100,
-                        nodeSpacing: 150
+                        arrangement: go.TreeLayout.ArrangementHorizontal
                     }
                 )
             });
@@ -46,11 +44,13 @@ $(document).ready(function () {
                     if (node !== null) {
                         var thisemp = node.data;
                         var parent_id = thisemp['key'];
+                        var level = thisemp['level'];
                     }
                     var add_process = $("#add-process");
                     var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
                     add_content.find('[name="parent_id"]').val(parent_id);
+                    add_content.find('[name="level"]').val(level);
                 })
         );
 

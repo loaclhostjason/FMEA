@@ -67,14 +67,14 @@ def get_file_tree():
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
     product = Product.query.get_or_404(product_id)
-    result['nodedata'].append({'name': product.name, 'key': product_id})
+    result['nodedata'].append({'name': product.name, 'key': product_id, 'level': product.level + 1})
 
     realtion = product.child
     link_data = []
     for rl in realtion:
         # if rl.parent_id != product_id:
         link_data.append({'from': rl.parent_id, 'to': rl.id})
-        result['nodedata'].append({'name': rl.name, 'key': rl.id})
+        result['nodedata'].append({'name': rl.name, 'key': rl.id, 'level': rl.level + 1})
 
     result['linkdata'] = link_data
     return jsonify({'success': True, 'data': result})
@@ -91,16 +91,23 @@ def add_file_tree_content(id):
     form_data = request.form.to_dict()
     parent_id = form_data.get('parent_id')
     content = form_data.get('content')
-    if not content:
+    level = form_data.get('level')
+
+    if not content or not level:
         return jsonify({'success': False, 'message': '内容不能为空'})
 
     d = {
         'parent_id': parent_id or id,
-        'product_id': id
+        'product_id': id,
+        'level': int(level)
     }
     result = []
-    for con in content.split('\r\n'):
+    for index, con in enumerate(content.split('\r\n'), start=1):
         d['name'] = con
+        d['number'] = index
         result.append(ProductChildRelation(**d))
     db.session.add_all(result)
+    db.session.commit()
+
+    ProductChildRelation.update_name_number()
     return jsonify({'success': True})

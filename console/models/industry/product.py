@@ -8,8 +8,16 @@ from datetime import datetime
 class ProductMixin:
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
+    # 名称 and 等级
+    name = db.Column(db.String(68), index=True)
+    level = db.Column(db.Integer, index=True, nullable=False, default=0)
+    number = db.Column(db.Integer, default=1)  # id
+    name_number = db.Column(db.String(32), index=True)  # 编号
+
+    # 配置文件名称
     config_name = db.Column(db.String(32))
 
+    # todo attr
     product_id = db.Column(db.String(12))
 
     company_name = db.Column(db.String(32))
@@ -17,7 +25,6 @@ class ProductMixin:
     consumer = db.Column(db.String(68))
 
     version = db.Column(db.String(68))
-    name = db.Column(db.String(68), index=True)
 
     start_date = db.Column(db.DateTime)
     update_date = db.Column(db.DateTime)
@@ -40,7 +47,16 @@ class ProductMixin:
 
 class AnalysisMixin:
     id = db.Column(db.Integer, primary_key=True)
+
+    # 名称 and 等级
     name = db.Column(db.String(32))
+    level = db.Column(db.Integer, index=True, nullable=False, default=1)
+    number = db.Column(db.Integer, default=1)  # id
+    name_number = db.Column(db.String(32), index=True)  # 编号
+
+    # todo delete
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
     parent_id = db.Column(db.Integer, index=True)
 
     @declared_attr
