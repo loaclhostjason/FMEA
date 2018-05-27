@@ -20,7 +20,7 @@
                 <a href="/" class="logo"><i class="fa fa-skyatlas"></i> FMEA</a>
             </h1>
             <div class="top-panel">
-                {% if current_user.is_authenticated %}
+                {% if current_user.is_authenticate and current_user.confirmed %}
                     <ul class="top-menu pandect-menu">
                         <li class="custom-item {% block main %}{% endblock %}">
                             <a href="#"><i class="glyphicon glyphicon-home"></i> 我的文件</a>
@@ -79,7 +79,6 @@
 {% block scripts %}
 
     {{ super() }}
-    <script src="{{ url_for("static", filename="js/gojs/go.js") }}"></script>
     {{ moment.include_moment('2.10.3', '/static/vendor/moment/moment-with-locales.min.js') }}
     {% assets "common_js" %}
         <script src="{{ ASSET_URL }}"></script>

@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_babel import Babel
 from flask_moment import Moment
+from flask_mail import Mail
 from .assets import assets_env, bundles
 from .error_handle import Ehandle
 
@@ -16,6 +17,7 @@ bootstrap = Bootstrap()
 db = SQLAlchemy(model_class=BaseModel)
 babel = Babel()
 moment = Moment()
+mail = Mail()
 error_handle = Ehandle()
 
 jinja_env = JinjaEnv()
@@ -40,6 +42,7 @@ def create_app():
     login_manager.init_app(app)
     babel.init_app(app)
     moment.init_app(app)
+    mail.init_app(app)
 
     assets_env.init_app(app)
     assets_env.register(bundles)

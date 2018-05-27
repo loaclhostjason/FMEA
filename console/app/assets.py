@@ -16,7 +16,6 @@ common_css = Bundle(
 common_js = Bundle(
     'vendor/nprogress/nprogress.js',
     'vendor/toastr/toastr.min.js',
-    'js/gojs/*',
     'js/class/*',
     'js/app.js',
     'js/class.js',
@@ -24,7 +23,14 @@ common_js = Bundle(
     output='public/js/common.js',
 )
 
+go_js = Bundle(
+    'js/gojs/other/*',
+    filters='jsmin',
+    output='public/js/go_js',
+)
+
 bundles = {
     'common_css': common_css,
     'common_js': common_js,
+    'go_js': go_js,
 }

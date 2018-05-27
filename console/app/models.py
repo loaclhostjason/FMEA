@@ -40,27 +40,35 @@ class User(UserBaseMixin, UserMixin, db.Model):
         user.login_ip = request.remote_addr
         db.session.add(user)
 
-    def generate_auth_token(self, expiration):
+    def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
 
-        return s.dumps({'id': self.id})
+        return s.dumps({'confirm': self.id})
 
-    @staticmethod
-    def verify_auth_token(token):
+    def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
-
         try:
             data = s.loads(token)
         except:
-            return None
-        return User.query.get(data['id'])
+            return False
+
+        if data.get('confirm') != self.id:
+            return False
+
+        self.confirmed = True
+        self.confirmed_on = datetime.now()
+        db.session.add(self)
+        return True
 
     @staticmethod
     def insert_admin():
         u = {
             'username': 'admin',
+            'email': 'admin@qq.com',
             'password': '123',
             'role': 'admin',
+            'confirmed': True,
+            'confirmed_on': datetime.now(),
         }
         old = User.query.filter_by(username=u['username']).first()
         if not old:

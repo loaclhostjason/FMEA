@@ -1,6 +1,6 @@
 # coding: utf-8
 from flask import render_template, redirect, url_for, jsonify, abort, request, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from . import main
 from .forms import *
@@ -16,7 +16,7 @@ dashboard
 @main.route('/')
 @login_required
 def my_file_list():
-    products = Product.query.all()
+    products = Product.query.filter_by(user_id=current_user.get_id()).all()
     return render_template('main/my_file.html', products=products)
 
 

@@ -101,8 +101,13 @@ def add_file_tree_content(id):
         'product_id': id,
         'level': int(level)
     }
+
+    len_level = ProductChildRelation.query.filter(ProductChildRelation.level == int(level)).order_by(ProductChildRelation.timestamp.desc(),
+                                                                                                     ProductChildRelation.id.desc()).first()
+    start_index = len_level.number + 1 if len_level else 1
+
     result = []
-    for index, con in enumerate(content.split('\r\n'), start=1):
+    for index, con in enumerate(content.split('\r\n'), start=start_index):
         d['name'] = con
         d['number'] = index
         result.append(ProductChildRelation(**d))

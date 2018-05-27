@@ -53,6 +53,21 @@ class Config:
     CONFIG_PATH = conf_path
     APP_CONFIG_PATH = app_path
 
+    MAIL_DEBUG = True
+    MAIL_SUPPRESS_SEND = False
+    MAIL_SERVER = 'smtp.qq.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
+    MAIL_USERNAME = '951995314@qq.com'
+    MAIL_PASSWORD = 'ktlwclelryfdbcae'
+    MAIL_DEFAULT_SENDER = '951995314@qq.com'
+    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
+    FLASKY_MAIL_SENDER = 'Flasky Admin <951995314@qq.com>'
+    FLASKY_ADMIN = None
+
+
+
     @staticmethod
     def init_app(app):
         pass

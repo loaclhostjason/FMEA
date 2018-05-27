@@ -28,17 +28,14 @@
         <div class="widthLimit">
             <div class="loginForm" style="padding: 25px;">
                 <div class="login_title">
-                    <span>账号登录</span>
+                    <span>账号注册</span>
                 </div>
                 <form method="post">
                     {{ form.hidden_tag() }}
                     <div style="margin-top: 50px">{{ form.email(class="fm-text") }}</div>
+                    <div class="margin-top-20">{{ form.username(class="fm-text") }}</div>
                     <div class="margin-top-20">{{ form.password(class="fm-text") }}</div>
-                    <div class="margin-top-20">
-                        {{ form.remember_me() }}
-                        {{ form.remember_me.label }}
-                        <a href="{{ url_for('.register') }}" style="margin-left: 20px">注册账号</a>
-                    </div>
+                    <div class="margin-top-20">{{ form.password2(class="fm-text") }}</div>
                     <div class="margin-top-20">{{ form.submit(class="fm-button") }}</div>
                 </form>
             </div>
