@@ -20,10 +20,10 @@
                 <a href="/" class="logo"><i class="fa fa-skyatlas"></i> FMEA</a>
             </h1>
             <div class="top-panel">
-                {% if current_user.is_authenticate and current_user.confirmed %}
+                {% if current_user.is_authenticated and current_user.confirmed %}
                     <ul class="top-menu pandect-menu">
                         <li class="custom-item {% block main %}{% endblock %}">
-                            <a href="#"><i class="glyphicon glyphicon-home"></i> 我的文件</a>
+                            <a href="{{ url_for('main.my_file_list') }}"><i class="glyphicon glyphicon-home"></i> 我的文件</a>
                         </li>
 
                         <li class="custom-item">
@@ -34,12 +34,12 @@
                             <a href="#"><i class="glyphicon glyphicon-asterisk"></i> 管理</a>
                         </li>
 
-                        <li class="custom-item">
-                            <a href="#"><i class="glyphicon glyphicon-question-sign"></i> 帮助</a>
+                        <li class="custom-item {% block help %}{% endblock %}">
+                            <a href="{{ url_for('help.doc_list') }}"><i class="glyphicon glyphicon-question-sign"></i> 帮助</a>
                         </li>
 
-                        <li class="custom-item">
-                            <a href="#"><i class="glyphicon glyphicon-earphone"></i> 联系方式</a>
+                        <li class="custom-item {% block contact %}{% endblock %}">
+                            <a href="{{ url_for('contact.contract_way') }}"><i class="glyphicon glyphicon-earphone"></i> 联系方式</a>
                         </li>
                     </ul>
                 {% endif %}

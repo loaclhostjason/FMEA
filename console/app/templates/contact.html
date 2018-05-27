@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import 'macro_form.html' as render_form %}
+
+{% block contact %}cur{% endblock %}
+
+
+{% block page_content %}
+    <div class="main" style="left: 0;">
+        <div class="console-container">
+            {% block contact_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
