@@ -95,26 +95,32 @@ class FuncRelation(FuncRelationMixin, db.Model):
     def __init__(self, *args, **kwargs):
         super(FuncRelation, self).__init__(*args, **kwargs)
 
-    @property
-    def name_number_set(self):
-        raise AttributeError('no getter name_number_set')
-
-    @name_number_set.setter
-    def name_number_set(self, number=None):
-        if not number:
+    @staticmethod
+    def update_name_number(parent_id, number):
+        parduct_relation = ProductRelation.query.get_or_404(parent_id)
+        if not parduct_relation:
             return
-        parent_number = self.product_relation.name_number
-        self.name_number = '%s-FU%d' % (parent_number, number)
-        db.session.add(self)
-        return
+
+        return '%s-FU%d' % (parduct_relation.name_number, number)
 
     @classmethod
     def add_func_relation(cls, data, content):
+        if not data['parent_id']:
+            return
+
+        data['product_relation_id'] = int(data['parent_id'])
+        try:
+            del data['parent_id']
+            del data['level']
+        except Exception:
+            pass
+
         result = []
         for index, con in enumerate(content.split('\r\n'), start=1):
             data['name'] = con
             data['number'] = index
-            data['name_number_set'] = index
+            data['name_number'] = cls.update_name_number(data['product_relation_id'], index)
             result.append(cls(**data))
         db.session.add_all(result)
         db.session.commit()
+        return

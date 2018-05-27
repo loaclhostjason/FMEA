@@ -74,7 +74,7 @@ class FuncRelationMixin:
     id = db.Column(db.Integer, primary_key=True)
 
     @declared_attr
-    def product_realtion_id(cls):
+    def product_relation_id(cls):
         return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
 
     @declared_attr
@@ -89,7 +89,7 @@ class FuncRelationMixin:
 
     @declared_attr
     def product_relation(cls):
-        return db.relationship('ProductRelation', backref=db.backref('func_relation', cascade='all, delete-orphan'))
+        return db.relationship('ProductRelation', backref=db.backref('func_relation', lazy='dynamic', cascade='all, delete-orphan'))
 
     @declared_attr
     def product(cls):
