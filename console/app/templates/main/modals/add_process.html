@@ -22,7 +22,14 @@
                                         <td>
                                             {% for value in pro.content %}
                                                 <div>
-                                                <label class="label-border text-center show-content" style="width: 125px;cursor: pointer"> {{ value.name_zh }}</label>
+                                                    {% if name == 'functional_analysis' %}
+                                                        <label data-type="func" class="label-border text-center show-content"
+                                                               style="width: 125px;cursor: pointer"> {{ value.name_zh }}</label>
+                                                    {% else %}
+                                                        <label class="label-border text-center show-content"
+                                                               style="width: 125px;cursor: pointer"> {{ value.name_zh }}</label>
+                                                    {% endif %}
+
                                                 </div>
 
                                             {% endfor %}

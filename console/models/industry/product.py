@@ -45,8 +45,8 @@ class ProductMixin:
         return db.relationship('User', foreign_keys=[cls.user_id], backref=backref("product", cascade="all,delete"))
 
 
-class ProductChildRelationMixin:
-    __tablename__ = 'product_child_relation'
+class ProductRelationMixin:
+    __tablename__ = 'product_relation'
     id = db.Column(db.Integer, primary_key=True)
 
     # 名称 and 等级
@@ -66,7 +66,34 @@ class ProductChildRelationMixin:
 
     @declared_attr
     def product(cls):
-        return db.relationship('Product', foreign_keys=[cls.product_id], backref=backref("child", cascade="all,delete"))
+        return db.relationship('Product', backref=backref("product_relation", cascade="all, delete-orphan"))
+
+
+class FuncRelationMixin:
+    __tablename__ = 'func_relation'
+    id = db.Column(db.Integer, primary_key=True)
+
+    @declared_attr
+    def product_realtion_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    name = db.Column(db.String(64))
+    number = db.Column(db.Integer, default=1)  # 插入顺序
+    name_number = db.Column(db.String(32), index=True)  # 编号
+
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    @declared_attr
+    def product_relation(cls):
+        return db.relationship('ProductRelation', backref=db.backref('func_relation', cascade='all, delete-orphan'))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref=backref("func_relation", cascade="all, delete-orphan"))
 
 
 class AttrMixin:
@@ -78,7 +105,7 @@ class AttrMixin:
 
     @declared_attr
     def product_relation_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('product_child_relation.id'))
+        return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
 
     @declared_attr
     def product_id(cls):
@@ -86,7 +113,7 @@ class AttrMixin:
 
     @declared_attr
     def product_relations(cls):
-        return db.relationship('ProductChildRelation', foreign_keys=[cls.product_relation_id], backref=backref("attr", cascade="all,delete"))
+        return db.relationship('ProductRelation', foreign_keys=[cls.product_relation_id], backref=backref("attr", cascade="all,delete"))
 
     @declared_attr
     def product(cls):
@@ -97,7 +124,11 @@ class Product(ProductMixin, db.Model):
     pass
 
 
-class ProductChildRelation(ProductChildRelationMixin, db.Model):
+class ProductRelation(ProductRelationMixin, db.Model):
+    pass
+
+
+class FuncRelation(FuncRelationMixin, db.Model):
     pass
 
 

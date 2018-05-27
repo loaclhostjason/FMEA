@@ -1,8 +1,9 @@
 # coding: utf-8
 
 from models.industry import ProductMixin
-from models.industry import ProductChildRelationMixin
+from models.industry import ProductRelationMixin
 from models.industry import AttrMixin
+from models.industry import FuncRelationMixin
 
 from .. import db
 
@@ -11,16 +12,10 @@ class Product(ProductMixin, db.Model):
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
 
-    def __repr__(self):
-        return '<Product: {}>'.format(self.id)
 
-
-class ProductChildRelation(ProductChildRelationMixin, db.Model):
+class ProductRelation(ProductRelationMixin, db.Model):
     def __init__(self, *args, **kwargs):
-        super(ProductChildRelation, self).__init__(*args, **kwargs)
-
-    def __repr__(self):
-        return '<ProductChildRelation: {}>'.format(self.id)
+        super(ProductRelation, self).__init__(*args, **kwargs)
 
     @classmethod
     def set_base_relation(cls, data):
@@ -73,6 +68,53 @@ class ProductChildRelation(ProductChildRelationMixin, db.Model):
             db.session.add(lv2)
         return
 
+    @classmethod
+    def add_product_relation(cls, data, content):
+        level = data['level']
+
+        len_level = cls.query.filter(cls.level == int(level)).order_by(cls.timestamp.desc(), cls.id.desc()).first()
+        start_index = len_level.number + 1 if len_level else 1
+
+        result = []
+        for index, con in enumerate(content.split('\r\n'), start=start_index):
+            data['name'] = con
+            data['number'] = index
+            result.append(cls(**data))
+        db.session.add_all(result)
+        db.session.commit()
+
+        cls.update_name_number()
+        return start_index
+
 
 class Attr(AttrMixin, db.Model):
     pass
+
+
+class FuncRelation(FuncRelationMixin, db.Model):
+    def __init__(self, *args, **kwargs):
+        super(FuncRelation, self).__init__(*args, **kwargs)
+
+    @property
+    def name_number_set(self):
+        raise AttributeError('no getter name_number_set')
+
+    @name_number_set.setter
+    def name_number_set(self, number=None):
+        if not number:
+            return
+        parent_number = self.product_relation.name_number
+        self.name_number = '%s-FU%d' % (parent_number, number)
+        db.session.add(self)
+        return
+
+    @classmethod
+    def add_func_relation(cls, data, content):
+        result = []
+        for index, con in enumerate(content.split('\r\n'), start=1):
+            data['name'] = con
+            data['number'] = index
+            data['name_number_set'] = index
+            result.append(cls(**data))
+        db.session.add_all(result)
+        db.session.commit()
