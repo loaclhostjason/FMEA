@@ -105,3 +105,8 @@ a {
     border: 1px solid #e0e0e0;
     background-color: #fff;
 }
+
+.table-process .label-border:hover {
+    background: #dddddd;
+    border: 1px solid #999;
+}
