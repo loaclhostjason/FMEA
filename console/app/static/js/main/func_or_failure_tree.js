@@ -3,7 +3,7 @@ $(document).ready(function () {
     var jqclass = $.jqclass;
 
     var myDiagram =
-        $$(go.Diagram, "myDiagramStructure",
+        $$(go.Diagram, "myDiagramFunc",
             {
                 initialContentAlignment: go.Spot.Center,
                 "undoManager.isEnabled": true,
@@ -11,9 +11,10 @@ $(document).ready(function () {
                 "draggingTool.isEnabled": false,
                 layout: $$(go.TreeLayout,
                     {
+                        angle: 90,
                         setsPortSpot: false,
                         setsChildPortSpot: false,
-                        arrangement: go.TreeLayout.ArrangementHorizontal
+                        arrangement: go.TreeLayout.ArrangementVertical
                     }
                 )
             });
@@ -38,24 +39,21 @@ $(document).ready(function () {
                     }
 
                 }),
-            makeButton("新增过程",
+            makeButton("新增失效",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var parent_id = thisemp['key'];
-                        var level = thisemp['level'];
+                        var func_relation_id = thisemp['key'];
                     }
                     var add_process = $("#add-process");
                     var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
-
-                    add_content.find('[name="parent_id"]').val(parent_id);
-                    add_content.find('[name="level"]').val(level);
+                    add_content.find('[name="parent_id"]').val(func_relation_id);
                 })
         );
 
-    myDiagram.nodeTemplate =
+    myDiagram.nodeTemplateMap.add("FuncNode",
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
             $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
@@ -63,8 +61,8 @@ $(document).ready(function () {
                 click: function (e, obj) {
                     var node = obj.part.data;
                     if (node !== null) {
-                        var product_relation_id = node['key'];
-                        $.get_func_or_failure_tree('func', product_relation_id);
+                        var func_relation_id = node['key'];
+                        $.get_func_or_failure_tree('failure', func_relation_id);
                     }
 
                 }
@@ -72,16 +70,64 @@ $(document).ready(function () {
             {
                 contextMenu: partContextMenu
             }
-        );
+        ));
 
-    myDiagram.linkTemplate =
-        $$(go.Link, {selectionAdorned: false},
+    myDiagram.nodeTemplateMap.add("FailureNode",
+        $$(go.Node, "Auto",
+            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
+            $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
+            {
+                click: function (e, obj) {
+                    var node = obj.part.data;
+                    if (node !== null) {
+                        var func_relation_id = node['key'];
+                        $.get_func_or_failure_tree('failure', func_relation_id);
+                    }
+
+                }
+            },
+            {
+                contextMenu: partContextMenu
+            }
+        ));
+
+    myDiagram.linkTemplateMap.add("FuncLink",
+        $$(go.Link, {
+                selectionAdorned: false,
+                routing: go.Link.Orthogonal,
+                corner: 10,
+                fromSpot: new go.Spot(0, 0.5),
+                toSpot: new go.Spot(0, 0.5)
+            },
+            $$(go.Shape, {strokeWidth: 2, stroke: "#666"})
+        ));
+
+    myDiagram.linkTemplateMap.add("FailureLink",
+        $$(go.Link, {
+                selectionAdorned: false,
+                routing: go.Link.Orthogonal,
+                // corner: 10,
+                // fromSpot: new go.Spot(1, 0.5),
+                // toSpot: new go.Spot(0, 0.5)
+            },
             $$(go.Shape, {strokeWidth: 2, stroke: "#666"}),
             $$(go.Shape, {fill: '#666', stroke: null, toArrow: "Standard", segmentFraction: 0})
-        );
+        ));
 
-    $.get_tree = function (product_id) {
-        $.get('/file/tree?product_id=' + product_id).done(function (resp) {
+
+    // $.myDiagramFunc = myDiagram;
+
+    $.get_func_or_failure_tree = function (type, relation_id) {
+        var params = '';
+        if (type === 'func') {
+            params = '&product_relation_id=' + relation_id
+        }
+
+        if (type === 'failure') {
+            params = '&func_relation_id=' + relation_id
+        }
+
+        $.get('/file/func/failure/tree?type=' + type + params).done(function (resp) {
             if (resp.success) {
                 var data = resp['data'];
                 var nodedata = data['nodedata'];
@@ -91,8 +137,5 @@ $(document).ready(function () {
                 toastr.error(resp.message)
         });
     };
-
-    if (product_id)
-        $.get_tree(product_id)
 
 });

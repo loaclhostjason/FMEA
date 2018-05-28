@@ -98,7 +98,7 @@
 
     {{ super() }}
     <script src="{{ url_for('static', filename='js/main/file_tree.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main/func_tree.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/func_or_failure_tree.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main/show_content.js') }}"></script>
     <script>
         product_id = "{{ product.id if product else '' }}"

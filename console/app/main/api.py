@@ -8,6 +8,8 @@ from .. import db
 from .models import *
 from ..read_config import ReadConfig
 
+from .func import get_func_relation, get_failure_relation
+
 '''
 我的文件 delete
 '''
@@ -80,7 +82,7 @@ def get_file_tree():
     return jsonify({'success': True, 'data': result})
 
 
-@main.route('/file/func/tree')
+@main.route('/file/func/failure/tree')
 @login_required
 def get_file_func_tree():
     result = {
@@ -89,22 +91,18 @@ def get_file_func_tree():
     }
 
     type = request.args.get('type')
-    product_relation_id = request.args.get('product_relation_id')
 
     if type == 'func':
-        func_relation = FuncRelation.query.filter_by(product_relation_id=product_relation_id).all()
-        if not func_relation:
-            return jsonify({'success': True, 'data': result})
+        product_relation_id = request.args.get('product_relation_id')
+        result = get_func_relation(result, product_relation_id)
 
-        for index, fr in enumerate(func_relation):
-            result['nodedata'].append({'name': fr.name, 'key': fr.id})
-            d = {
-                'category': 'FuncLink',
-            }
-            if len(func_relation) >= 2 and index < len(func_relation) - 1:
-                d['from'] = fr.id
-                d['to'] = func_relation[index + 1].id
-            result['linkdata'].append(d)
+    if type == 'failure':
+        func_relation_id = request.args.get('func_relation_id')
+
+        func_relation = FuncRelation.query.get_or_404(func_relation_id)
+        result = get_func_relation(result, func_relation.product_relation_id)
+
+        result = get_failure_relation(result, func_relation_id)
 
     return jsonify({'success': True, 'data': result})
 
@@ -119,17 +117,21 @@ def get_file_func_tree():
 def add_file_tree_content(id):
     form_data = request.form.to_dict()
 
-    if not form_data.get('content') or not form_data.get('level'):
+    if not form_data.get('content'):
         return jsonify({'success': False, 'message': '内容不能为空'})
 
     d = {
         'parent_id': form_data.get('parent_id') or id,
         'product_id': id,
-        'level': int(form_data.get('level'))
+        'level': int(form_data['level']) if form_data.get('level') else None
     }
 
+    product_relation_id = None
+    func_relation_id = None
     if form_data.get('type') == 'func':
-        FuncRelation.add_func_relation(d, form_data.get('content'))
+        product_relation_id = FuncRelation.add_func_relation(d, form_data.get('content'))
+    elif form_data.get('type') == 'failure':
+        func_relation_id = FailureRelation.add_fail_relation(d, form_data.get('content'))
     else:
         ProductRelation.add_product_relation(d, form_data.get('content'))
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id, func_relation_id: func_relation_id})
