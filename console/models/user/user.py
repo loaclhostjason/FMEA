@@ -18,7 +18,7 @@ class UserBaseMixin:
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime)
 
-    role = db.Column(db.String(16))
+    role = db.Column(db.String(16), default='user')
 
 
 class User(UserBaseMixin, db.Model):

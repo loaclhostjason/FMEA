@@ -85,7 +85,7 @@
                     <div class="charttable-title">
                         <span class="title-text">功能树、失效树编辑区</span></div>
                     <div class="charttable-w">
-                        <div id="myDiagramDiv" style="min-height: 750px"></div>
+                        <div id="myDiagramFunc" style="min-height: 750px"></div>
                     </div>
                 </div>
             </div>
@@ -98,6 +98,7 @@
 
     {{ super() }}
     <script src="{{ url_for('static', filename='js/main/file_tree.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/func_tree.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main/show_content.js') }}"></script>
     <script>
         product_id = "{{ product.id if product else '' }}"

@@ -80,6 +80,35 @@ def get_file_tree():
     return jsonify({'success': True, 'data': result})
 
 
+@main.route('/file/func/tree')
+@login_required
+def get_file_func_tree():
+    result = {
+        'nodedata': [],
+        'linkdata': [],
+    }
+
+    type = request.args.get('type')
+    product_relation_id = request.args.get('product_relation_id')
+
+    if type == 'func':
+        func_relation = FuncRelation.query.filter_by(product_relation_id=product_relation_id).all()
+        if not func_relation:
+            return jsonify({'success': True, 'data': result})
+
+        for index, fr in enumerate(func_relation):
+            result['nodedata'].append({'name': fr.name, 'key': fr.id})
+            d = {
+                'category': 'FuncLink',
+            }
+            if len(func_relation) >= 2 and index < len(func_relation) - 1:
+                d['from'] = fr.id
+                d['to'] = func_relation[index + 1].id
+            result['linkdata'].append(d)
+
+    return jsonify({'success': True, 'data': result})
+
+
 '''
 我的文件 儿子节点添加
 '''

@@ -7,6 +7,7 @@ from .forms import *
 from .models import *
 from ..base import Check
 from ..read_config import ReadAppConfig
+from sqlalchemy import or_
 
 '''
 dashboard
@@ -16,7 +17,12 @@ dashboard
 @main.route('/')
 @login_required
 def my_file_list():
-    products = Product.query.filter_by(user_id=current_user.get_id()).all()
+    products = Product.query
+
+    if not current_user.is_admin():
+        products = products.filter(user_id=current_user.get_id())
+
+    products = products.all()
     return render_template('main/my_file.html', products=products)
 
 

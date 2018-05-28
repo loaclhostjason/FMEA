@@ -59,6 +59,24 @@ $(document).ready(function () {
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
             $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
             {
+                click: function (e, obj) {
+                    var node = obj.part.data;
+                    if (node !== null) {
+                        var product_relation_id = node['key'];
+                        $.get('/file/func/tree?type=func&product_relation_id=' + product_relation_id).done(function (resp) {
+                            if (resp.success) {
+                                var data = resp['data'];
+                                var nodedata = data['nodedata'];
+                                var linkdata = data['linkdata'];
+                                $.myDiagramFunc.model = new go.GraphLinksModel(nodedata, linkdata);
+                            } else
+                                toastr.error(resp.message)
+                        });
+                    }
+
+                }
+            },
+            {
                 contextMenu: partContextMenu
             }
         );
