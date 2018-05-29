@@ -30,9 +30,12 @@
                             <a href="#"><i class="glyphicon glyphicon-download-alt"></i> 公共模板</a>
                         </li>
 
-                        <li class="custom-item ">
-                            <a href="#"><i class="glyphicon glyphicon-asterisk"></i> 管理</a>
-                        </li>
+                        {% if current_user.is_admin() %}
+                            <li class="custom-item ">
+                                <a href="#"><i class="glyphicon glyphicon-asterisk"></i> 管理</a>
+                            </li>
+                        {% endif %}
+
 
                         <li class="custom-item {% block help %}{% endblock %}">
                             <a href="{{ url_for('help.doc_list') }}"><i class="glyphicon glyphicon-question-sign"></i> 帮助</a>

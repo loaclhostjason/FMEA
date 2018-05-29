@@ -65,6 +65,7 @@ $(document).ready(function () {
                     if (node !== null) {
                         var product_relation_id = node['key'];
                         $.get_func_or_failure_tree('func', product_relation_id);
+
                     }
 
                 }

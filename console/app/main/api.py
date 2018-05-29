@@ -92,18 +92,16 @@ def get_file_func_tree():
 
     type = request.args.get('type')
 
+    product_relation_id = None
     if type == 'func':
         product_relation_id = request.args.get('product_relation_id')
-        result = get_func_relation(result, product_relation_id)
 
     if type == 'failure':
         func_relation_id = request.args.get('func_relation_id')
-
         func_relation = FuncRelation.query.get_or_404(func_relation_id)
-        result = get_func_relation(result, func_relation.product_relation_id)
+        product_relation_id = func_relation.product_relation_id
 
-        result = get_failure_relation(result, func_relation_id)
-
+    result = get_func_relation(result, product_relation_id)
     return jsonify({'success': True, 'data': result})
 
 
@@ -134,4 +132,4 @@ def add_file_tree_content(id):
         func_relation_id = FailureRelation.add_fail_relation(d, form_data.get('content'))
     else:
         ProductRelation.add_product_relation(d, form_data.get('content'))
-    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id, func_relation_id: func_relation_id})
+    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id, 'func_relation_id': func_relation_id})

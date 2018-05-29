@@ -11,7 +11,6 @@ $(document).ready(function () {
                 "draggingTool.isEnabled": false,
                 layout: $$(go.TreeLayout,
                     {
-                        angle: 90,
                         setsPortSpot: false,
                         setsChildPortSpot: false,
                         arrangement: go.TreeLayout.ArrangementVertical
@@ -55,18 +54,8 @@ $(document).ready(function () {
 
     myDiagram.nodeTemplateMap.add("FuncNode",
         $$(go.Node, "Auto",
-            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
-            $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
-            {
-                click: function (e, obj) {
-                    var node = obj.part.data;
-                    if (node !== null) {
-                        var func_relation_id = node['key'];
-                        $.get_func_or_failure_tree('failure', func_relation_id);
-                    }
-
-                }
-            },
+            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "green"}),
+            $$(go.TextBlock, {margin: 8, stroke: "green"}, new go.Binding("text", "name")),
             {
                 contextMenu: partContextMenu
             }
@@ -74,42 +63,26 @@ $(document).ready(function () {
 
     myDiagram.nodeTemplateMap.add("FailureNode",
         $$(go.Node, "Auto",
-            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
-            $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
-            {
-                click: function (e, obj) {
-                    var node = obj.part.data;
-                    if (node !== null) {
-                        var func_relation_id = node['key'];
-                        $.get_func_or_failure_tree('failure', func_relation_id);
-                    }
-
-                }
-            },
+            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "red"}),
+            $$(go.TextBlock, {margin: 8, stroke: "red"}, new go.Binding("text", "name")),
             {
                 contextMenu: partContextMenu
             }
         ));
 
-    myDiagram.linkTemplateMap.add("FuncLink",
-        $$(go.Link, {
-                selectionAdorned: false,
-                routing: go.Link.Orthogonal,
-                corner: 10,
-                fromSpot: new go.Spot(0, 0.5),
-                toSpot: new go.Spot(0, 0.5)
-            },
-            $$(go.Shape, {strokeWidth: 2, stroke: "#666"})
-        ));
+    // myDiagram.linkTemplateMap.add("FuncLink",
+    //     $$(go.Link, {
+    //             selectionAdorned: false,
+    //             routing: go.Link.Orthogonal,
+    //             corner: 10,
+    //             fromSpot: new go.Spot(0, 0.5),
+    //             toSpot: new go.Spot(0, 0.5)
+    //         },
+    //         $$(go.Shape, {strokeWidth: 2, stroke: "#666"})
+    //     ));
 
     myDiagram.linkTemplateMap.add("FailureLink",
-        $$(go.Link, {
-                selectionAdorned: false,
-                routing: go.Link.Orthogonal,
-                // corner: 10,
-                // fromSpot: new go.Spot(1, 0.5),
-                // toSpot: new go.Spot(0, 0.5)
-            },
+        $$(go.Link, {selectionAdorned: false},
             $$(go.Shape, {strokeWidth: 2, stroke: "#666"}),
             $$(go.Shape, {fill: '#666', stroke: null, toArrow: "Standard", segmentFraction: 0})
         ));
