@@ -12,13 +12,14 @@
             <hr class="line-mod">
             <dl class="menu-list">
                 <dd>
-                    <a href="{{ url_for('main.my_file_list') }}"
+                    <a href="{{ url_for('.my_file_list') }}"
                        class="menu-lv2 {% block main_file_act %}{% endblock %}">
                         <span>文件列表</span>
                     </a>
                 </dd>
                 <dd>
-                    <a href="#" class="menu-lv2">
+                    <a href="{{ url_for('.last_file_list') }}"
+                       class="menu-lv2 {% block main_last_file %}{% endblock %}">
                         <span>最近修改</span>
                     </a>
                 </dd>

@@ -65,3 +65,21 @@ def edit_file(product_id):
         return render_template('main/create_edit_file.html', product=product, edit_form=edit_form, process_list=process_list)
 
     return render_template('main/create_edit_file.html', form=form, product=product, process_list=process_list)
+
+
+
+'''
+页面 最近修改文件
+'''
+
+
+@main.route('/last/file/list')
+@login_required
+def last_file_list():
+    products = Product.query
+
+    if not current_user.is_admin():
+        products = products.filter(user_id=current_user.get_id())
+
+    products = products.all()
+    return render_template('main/last_file.html', products=products)
