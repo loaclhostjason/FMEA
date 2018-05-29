@@ -8,6 +8,7 @@ from datetime import datetime
 class ProductMixin:
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(128))
     # 名称 and 等级
     name = db.Column(db.String(68), index=True)
     level = db.Column(db.Integer, index=True, nullable=False, default=0)
@@ -157,6 +158,7 @@ class ProductRelation(ProductRelationMixin, db.Model):
 
 class FuncRelation(FuncRelationMixin, db.Model):
     pass
+
 
 class FailureRelation(FailureRelationMixin, db.Model):
     pass

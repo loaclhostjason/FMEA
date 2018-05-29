@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import 'macro_form.html' as render_form %}
+
+{% block manage %}cur{% endblock %}
+
+
+{% block page_content %}
+    <div class="aside">
+        <div class="menu">
+            <h2><span>管理</span></h2>
+            <hr class="line-mod">
+            <dl class="menu-list">
+                <dd>
+                    <a href="{{ url_for('.config_list') }}"
+                       class="menu-lv2 {% block manage_config %}{% endblock %}">
+                        <span>配置文件</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        <a href="javascript:void(0)" class="btn-fold-menu" title="收起">收起</a>
+    </div>
+
+    <div class="main">
+        <div class="console-container">
+            {% block manage_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

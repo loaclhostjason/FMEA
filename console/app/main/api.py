@@ -7,6 +7,7 @@ from .forms import *
 from .. import db
 from .models import *
 from ..read_config import ReadConfig
+from datetime import datetime
 
 from .func import get_func_relation, get_failure_relation
 
@@ -40,7 +41,10 @@ def create_file_product():
     if product:
         return jsonify({'success': False, 'message': '添加过，请编辑'})
 
-    d = dict({'config_name': form_data['config_name']}, **config_data)
+    d = dict({
+        'config_name': form_data['config_name'],
+        'file_name': '%s_%s' % (form_data['config_name'], datetime.now().strftime('%Y-%m-%d'))
+    }, **config_data)
 
     d['user_id'] = current_user.get_id()
     add_product = Product(**d)

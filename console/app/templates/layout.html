@@ -31,8 +31,8 @@
                         </li>
 
                         {% if current_user.is_admin() %}
-                            <li class="custom-item ">
-                                <a href="#"><i class="glyphicon glyphicon-asterisk"></i> 管理</a>
+                            <li class="custom-item {% block manage %}{% endblock %}">
+                                <a href="{{ url_for('manage.config_list') }}"><i class="glyphicon glyphicon-asterisk"></i> 管理</a>
                             </li>
                         {% endif %}
 
