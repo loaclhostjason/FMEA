@@ -5,7 +5,23 @@
 
 
 {% block page_content %}
-    <div class="main" style="left: 0;">
+    <div class="aside">
+        <div class="menu">
+            <h2><span>联系方式</span></h2>
+            <hr class="line-mod">
+            <dl class="menu-list">
+                <dd>
+                    <a href="{{ url_for('.contract_way') }}"
+                       class="menu-lv2 {% block contact_ways %}{% endblock %}">
+                        <span>联系我们</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        <a href="javascript:void(0)" class="btn-fold-menu" title="收起">收起</a>
+    </div>
+
+    <div class="main">
         <div class="console-container">
             {% block contact_content %}{% endblock %}
         </div>

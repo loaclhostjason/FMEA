@@ -1,0 +1,69 @@
+{% extends "help.html" %}
+
+{% block help_doc %}act{% endblock %}
+
+{% block help_content %}
+
+
+    <div class="col-sm-12 console-title clearfix bline" style="margin-bottom: 15px">
+        <div class="pull-left">
+
+            {% if doc %}
+                <h4>编辑 {{ doc.title }}</h4>
+            {% else %}
+                <h4>创建文档</h4>
+            {% endif %}
+
+            <a href="{{ url_for('.doc_list') }}"
+               class="btn btn-xs btn-toinstlist"><span class="icon-toinstlist"></span><span>返回文档</span>
+            </a>
+        </div>
+    </div>
+
+
+    <form method="post" class="form-horizontal" enctype="multipart/form-data">
+
+
+        <div class="col-sm-12 row" style="margin-top: 5px">
+
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                <div class="col-sm-2">{{ render_form.input_label(form.title) }}</div>
+                <div class="col-sm-3">{{ render_form.input(form.title) }}</div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2">{{ render_form.input_label(form.file) }}</div>
+                <div class="col-sm-3">
+                    <div class="form-label">
+                        {{ form.file }}
+                        {% if form.file.data %}
+                            <p class="form-input-help">已有文件：{{ form.file.data }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-sm-12 row">
+            <div class="top-line"></div>
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <button class="btn btn-primary pull-right">
+                        {% if doc %}保存{% else %}创建{% endif %}
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <a href="{{ url_for('.doc_list') }}" class="btn btn-default pull-left">取消</a>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+{% endblock %}
+

@@ -3,6 +3,11 @@ import os
 import json
 
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+upload_base_path = os.path.join(basedir, 'upload')
+upload_doc_path = os.path.join(basedir, 'upload', 'doc')
+
+
 def read_config():
     path = os.path.abspath(os.path.dirname(__file__))
     config_path = os.path.join(path, 'config.json')
@@ -66,6 +71,7 @@ class Config:
     FLASKY_MAIL_SENDER = 'Flasky Admin <951995314@qq.com>'
     FLASKY_ADMIN = None
 
+    UPLOAD_DOC_DEST = upload_doc_path
 
 
     @staticmethod

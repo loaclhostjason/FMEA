@@ -5,9 +5,56 @@
 
 
 {% block page_content %}
-    <div class="main" style="left: 0;">
+    <div class="aside">
+        <div class="menu">
+            <h2><span>帮助</span></h2>
+            <hr class="line-mod">
+            <dl class="menu-list">
+                <dd>
+                    <a href="{{ url_for('.doc_list') }}"
+                       class="menu-lv2 {% block help_doc %}{% endblock %}">
+                        <span>帮助文档</span>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="#"
+                       class="menu-lv2">
+                        <span>视频</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        <a href="javascript:void(0)" class="btn-fold-menu" title="收起">收起</a>
+    </div>
+
+    <div class="main">
         <div class="console-container">
             {% block help_content %}{% endblock %}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+
+    {{ super() }}
+    <script src="{{ url_for('static', filename='vendor/bootstrap-date/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-date/daterangepicker.js') }}"></script>
+{% endblock %}
+
+{% block head %}
+
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-date/daterangepicker-bs3.css') }}"
+          type="text/css">
+
+    <style>
+        .daterangepicker select.yearselect {
+            position: relative;
+            bottom: 2px;
+        }
+
+        .form-control {
+            margin-left: 3px;
+        }
+    </style>
 {% endblock %}

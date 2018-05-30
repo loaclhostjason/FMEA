@@ -31,3 +31,7 @@ input[type=checkbox], input[type=radio] {
     background-color: #f5f5f5;
     cursor: default;
 }
+
+.form-inline .form-group {
+    margin: 4px 8px 4px 0;
+}
