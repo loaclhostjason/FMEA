@@ -64,6 +64,19 @@ def create_edit_doc():
     return render_template('help/create_edit_doc.html', form=form, doc=doc)
 
 
+@help.route('/doc/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_doc(id):
+    doc = HelpDoc.query.filter_by(id=id).first()
+    if not doc:
+        return jsonify({'success': False, 'message': '没有记录'})
+
+    base_path = os.path.join(current_app.config['UPLOAD_DOC_DEST'], doc.time.strftime('%Y%m%d'))
+    del_os_filename(base_path, doc.file)
+    db.session.delete(doc)
+    return jsonify({'success': True, 'message': '删除成功'})
+
+
 @help.route('/download_file', methods=['GET', 'POST'])
 @login_required
 def download_files():

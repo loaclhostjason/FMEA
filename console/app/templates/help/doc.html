@@ -114,6 +114,13 @@
             applyClass: 'btn btn-success',
             cancelClass: 'btn btn-default'
         });
+
+        $('.delete-doc').click(function () {
+            var id = $(this).data('id');
+            var msg = "是否删除文档？";
+            var url = '/help/doc/delete/' + id;
+            $.update_info_reload(msg, url, '');
+        });
     </script>
 {% endblock %}
 
