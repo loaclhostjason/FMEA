@@ -35,7 +35,7 @@ class HelpDoc(HelpDocMixin, db.Model):
             model = model.filter(cls.time > start_time, cls.time <= end_time)
 
         if params.get('title'):
-            model = model.filter(cls.title == params['title'])
+            model = model.filter(cls.title.like( '%' + str(params['title']).strip() + '%'))
         return model.all()
 
     @classmethod
