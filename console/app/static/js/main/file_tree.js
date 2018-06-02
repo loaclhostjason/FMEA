@@ -57,6 +57,14 @@ $(document).ready(function () {
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
             $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
             {
+                toolTip: $$(go.Adornment, "Auto",
+                    $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),
+                    $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name_number", function (val) {
+                        return val ? '编号: ' + val : '---'
+                    }))
+                )
+            },
+            {
                 click: function (e, obj) {
                     var node = obj.part.data;
                     if (node !== null) {
@@ -83,6 +91,7 @@ $(document).ready(function () {
             if (resp.success) {
                 var data = resp['data'];
                 var nodedata = data['nodedata'];
+                console.log(nodedata);
                 var linkdata = data['linkdata'];
                 myDiagram.model = new go.GraphLinksModel(nodedata, linkdata);
             } else
@@ -98,14 +107,56 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     var add_process = $("#add-process");
-    add_process.on('show.bs.modal', function (event) {
-        var btn = $(event.relatedTarget);
+    add_process.on('hide.bs.modal', function () {
+        $(this).find('input').val("");
+    });
+    add_process.on('show.bs.modal', function () {
         var modal = $(this);
+        $.get('/process', function (resp) {
 
-        var level = modal.find('[name="level"]').val();
-        var label = modal.find('.table-process lable');
-        level = Number(level);
+            var data = resp['data'];
+            var level = modal.find('input').val();
+            level = Number(level);
+            console.log(data);
+            get_process_table(data, level);
+
+        })
+    });
 
 
-    })
+    function get_process_table(data, level) {
+        var process_table = $('.table-process tbody');
+        var html = '';
+        for (var key in data) {
+            html += '<tr><td>' + data[key]['name_zh'] + '</td>';
+            html += '<td>';
+            data[key]['content'].forEach(function (value) {
+                switch (key) {
+                    case "functional_analysis":
+                        if ($.inArray(level, value['show_level']) > -1) {
+                        html += '<div><label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                    } else
+                        html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+
+                        break;
+                    case "failure_analysis":
+                        if ($.inArray(level, value['show_level']) > -1) {
+                        html += '<div><label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                    } else
+                        html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+
+                        break;
+                    default:
+                        if ($.inArray(level, value['show_level']) > -1)
+                            html += '<div><label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                        else
+                            html += '<div><label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+
+                }
+
+            });
+            html += '</td></tr>';
+        }
+        process_table.html(html);
+    }
 });

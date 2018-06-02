@@ -4,7 +4,8 @@ $(document).ready(function () {
     var add_content = $("#add-content");
     var add_process = $("#add-process");
 
-    $('.show-content').click(function () {
+
+    $(document).on('click', '.show-content', function () {
         jqclass.show_modal(add_content, $(this));
     });
 

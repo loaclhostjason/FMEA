@@ -10,6 +10,20 @@ from ..read_config import ReadConfig
 from datetime import datetime
 
 from .func import get_func_relation, get_failure_relation
+from ..read_config import ReadAppConfig
+
+'''
+process 
+'''
+
+
+@main.route('/process')
+@login_required
+def prcess_list():
+    process_list = ReadAppConfig().get_config()
+    return jsonify({'success': True, 'data': process_list})
+
+
 
 '''
 我的文件 delete

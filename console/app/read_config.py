@@ -2,6 +2,7 @@
 import os
 import json
 from flask import current_app
+from collections import OrderedDict
 
 
 class ReadConfig:
@@ -46,4 +47,5 @@ class ReadAppConfig:
         with open(self.path, 'r', encoding='utf-8') as f:
             data = f.read()
             data = json.loads(data)
+        print(data)
         return data

@@ -128,3 +128,10 @@ a {
     font-size: 40px;
     font-weight: bold;
 }
+
+.label-border.disabled {
+    background: #f7f7f7 !important;
+    color: #666;
+    border: 1px solid #c7bebe !important;
+    cursor: not-allowed !important;
+}
