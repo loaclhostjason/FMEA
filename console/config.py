@@ -3,27 +3,28 @@ import os
 import json
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-upload_base_path = os.path.join(basedir, 'upload')
-upload_doc_path = os.path.join(basedir, 'upload', 'doc')
+class ReadConfigJson(object):
 
+    def __init__(self):
+        path = os.path.abspath(os.path.dirname(__file__))
+        config_path = os.path.join(path, 'config.json')
+        self.config_path = config_path
 
-def read_config():
-    path = os.path.abspath(os.path.dirname(__file__))
-    config_path = os.path.join(path, 'config.json')
-    with open(config_path, encoding='utf-8') as f:
-        mysql_info = f.read()
-        mysql_info = json.loads(mysql_info)
-    mysql_dict = mysql_info['mysql']
+    def __read_json(self):
+        with open(self.config_path, encoding='utf-8') as f:
+            data = f.read()
+            data = json.loads(data)
+        return data
 
-    mysql_url = 'mysql+pymysql://%s:%s@%s:%s/%s' % (
-        mysql_dict['user'],
-        mysql_dict['password'],
-        mysql_dict['host'],
-        mysql_dict['port'],
-        mysql_dict['database']
-    )
-    return mysql_url
+    def get_mysql_config(self):
+        mysql_dict = self.__read_json()['mysql']
+        mysql_url = 'mysql+pymysql://{user}:{password}@{host}:{port}/{database}'.format(user=mysql_dict['user'],
+                                                                                        password=mysql_dict['password'],
+                                                                                        host=mysql_dict['host'],
+                                                                                        port=mysql_dict['port'],
+                                                                                        database=mysql_dict['database'])
+
+        return mysql_url
 
 
 def read_sqlite_url():
@@ -37,13 +38,18 @@ base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 conf_path = os.path.join(base_path, 'console', 'config')
 app_path = os.path.join(base_path, 'console', 'app_config', 'process.json')
 
+upload_base_path = os.path.join(base_path, 'upload')
+upload_doc_path = os.path.join(base_path, 'upload', 'doc')
+upload_video_path = os.path.join(base_path, 'upload', 'video')
+
+
 
 class Config:
     DEBUG = True
     # SECRET_KEY = os.urandom(24)
     SECRET_KEY = 'fm'
 
-    SQLALCHEMY_DATABASE_URI = read_config()
+    SQLALCHEMY_DATABASE_URI = ReadConfigJson().get_mysql_config()
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
@@ -71,8 +77,8 @@ class Config:
     FLASKY_MAIL_SENDER = 'Flasky Admin <951995314@qq.com>'
     FLASKY_ADMIN = None
 
-    UPLOAD_DOC_DEST = upload_doc_path
-
+    UPLOAD_DOC_DIR = upload_doc_path
+    UPLOADS_DEFAULT_DEST = upload_video_path
 
     @staticmethod
     def init_app(app):

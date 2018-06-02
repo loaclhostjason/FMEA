@@ -10,9 +10,14 @@ def del_os_filename(base_path, filename):
             if filename and filename == name:
                 os.remove(os.path.join(root, name))
 
+def del_file(path):
+    if not path:
+        return
+    os.remove(path)
+
 
 def upload_file(file, data):
-    path = os.path.join(current_app.config['UPLOAD_DOC_DEST'])
+    path = os.path.join(current_app.config['UPLOAD_DOC_DIR'])
     now_day = datetime.datetime.now().strftime('%Y%m%d')
     base_path = os.path.join(path, now_day)
     if not os.path.exists(base_path):
@@ -34,9 +39,9 @@ def download_file(filename, extra_path=None):
         from urllib.parse import quote
 
         if extra_path:
-            filename_path = os.path.join(current_app.config['UPLOAD_DOC_DEST'], extra_path, filename)
+            filename_path = os.path.join(current_app.config['UPLOAD_DOC_DIR'], extra_path, filename)
         else:
-            filename_path = os.path.join(current_app.config['UPLOAD_DOC_DEST'], filename)
+            filename_path = os.path.join(current_app.config['UPLOAD_DOC_DIR'], filename)
 
         response = make_response(send_file(filename_path, as_attachment=True))
         response.headers["Content-Disposition"] = \

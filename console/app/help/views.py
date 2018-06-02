@@ -7,14 +7,17 @@ from .models import *
 from ..decorators import role_required
 from .func import *
 import time
+# from datetime import datetime
 
+from config import Config
+from ..app import upload_video
 
 @help.route('/doc', methods=['GET', 'POST'])
 @login_required
 def doc_list():
     form = SelectHelpDocForm()
 
-    docs_query = HelpDoc.query.order_by(HelpDoc.time.desc())
+    docs_query = HelpFiles.query.order_by(HelpFiles.time.desc()).filter_by(type='doc')
 
     Check(form).check_validate_on_submit()
     if form.validate_on_submit():
@@ -23,7 +26,7 @@ def doc_list():
 
     page_params = {k: v for k, v in request.args.items() if v and k not in ['page']}
 
-    docs = HelpDoc.filter_params(docs_query, page_params)
+    docs = HelpFiles.filter_params(docs_query, page_params)
 
     form.set_form_data(page_params)
     return render_template('help/doc.html', form=form, docs=docs)
@@ -35,11 +38,11 @@ def doc_list():
 def create_edit_doc():
     form = HelpDocForm()
     doc_id = request.args.get('doc_id')
-    doc = HelpDoc.query.filter_by(id=doc_id).first()
+    doc = HelpFiles.query.filter_by(id=doc_id).first()
 
     Check(form).check_validate_on_submit()
     if form.validate_on_submit():
-        old_doc = HelpDoc.query.filter_by(title=form.title.data).first()
+        old_doc = HelpFiles.query.filter_by(title=form.title.data, type='doc').first()
         if old_doc and old_doc.title != form.title.data:
             flash({'errors': '标题重复了'})
             return redirect(request.url)
@@ -55,7 +58,7 @@ def create_edit_doc():
         if doc:
             form.populate_obj(doc)
 
-        HelpDoc.edit_or_create(form_data, doc)
+        HelpFiles.edit_or_create_doc(form_data, doc)
         flash({'success': '更新成功！'})
         return redirect(url_for('.doc_list'))
 
@@ -67,11 +70,11 @@ def create_edit_doc():
 @help.route('/doc/delete/<int:id>', methods=['POST'])
 @login_required
 def delete_doc(id):
-    doc = HelpDoc.query.filter_by(id=id).first()
+    doc = HelpFiles.query.filter_by(id=id).first()
     if not doc:
         return jsonify({'success': False, 'message': '没有记录'})
 
-    base_path = os.path.join(current_app.config['UPLOAD_DOC_DEST'], doc.time.strftime('%Y%m%d'))
+    base_path = os.path.join(current_app.config['UPLOAD_DOC_DIR'], doc.time.strftime('%Y%m%d'))
     del_os_filename(base_path, doc.file)
     db.session.delete(doc)
     return jsonify({'success': True, 'message': '删除成功'})
@@ -88,3 +91,32 @@ def download_files():
     time_d = Tool.str_to_time(time_str)
     if filename:
         return download_file(filename, Tool.time_to_date(time_d, format='%Y%m%d'))
+
+
+@help.route('/video', methods=['GET', 'POST'])
+@login_required
+def video_list():
+    form = SelectHelpVideoForm()
+    return render_template('help/video.html', form=form)
+
+
+@help.route('/video/create_edit', methods=['GET', 'POST'])
+@login_required
+def create_edit_video():
+    form = HelpVideoForm()
+    video_id = request.args.get('doc_id')
+    video = HelpFiles.query.filter_by(id=video_id, type='video').first()
+
+    Check(form).check_validate_on_submit()
+    if form.validate_on_submit():
+        old_video = HelpFiles.query.filter_by(title=form.title.data, type='video').first()
+        if old_video and old_video.title != form.title.data:
+            flash({'errors': '标题重复了'})
+            return redirect(request.url)
+
+        form_data = form.get_video_form()
+        HelpFiles.edit_or_create_video(form_data, video)
+        flash({'success': '更新成功'})
+        return redirect(url_for('.video_list'))
+
+    return render_template('help/create_edit_video.html', form=form, video=video)

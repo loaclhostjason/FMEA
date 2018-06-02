@@ -1,13 +1,13 @@
 {% extends "help.html" %}
 
-{% block help_doc %}act{% endblock %}
+{% block help_video %}act{% endblock %}
 
 {% block help_content %}
 
     <div class="row">
         <div class="col-sm-12">
             <div class="console-title clearfix bline" style="min-height: 50px">
-                <div class="pull-left"><h4>帮助文档</h4></div>
+                <div class="pull-left"><h4>帮助视频</h4></div>
 
             </div>
         </div>
@@ -17,7 +17,7 @@
 
             {% if current_user.is_admin() %}
                 <div style="margin-bottom: 10px">
-                    <a href="{{ url_for('.create_edit_doc') }}" class="btn btn-primary">新建文件</a>
+                    <a href="{{ url_for('.create_edit_video') }}" class="btn btn-primary">上次视频</a>
                 </div>
             {% endif %}
 
@@ -38,56 +38,13 @@
                 </form>
             </div>
 
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th width="150">上次时间</th>
-                    <th>标题</th>
-                    <th>文件名</th>
-                    <th width="100">上传者</th>
-                    {% if current_user.is_admin() %}
-                        <th width="120" class="text-right">操作</th>
-                    {% endif %}
 
-                </tr>
-                </thead>
-                <tbody>
-                {% if docs %}
-                    {% for doc in docs %}
-                        <tr>
-                            <td>
-                                {{ doc.time or '--' }}
-                            </td>
 
-                            <td>{{ doc.title }}</td>
-                            <td>
-                                <a data-toggle="tooltip"
-                                   data-placement="left"
-                                   title="{{ '文档：%s' % doc.file }}"
-                                   href="{{ url_for('.download_files', filename=doc.file, time=doc.time) }}">
-                                    {{ doc.file_name or '--' }}</a>
-                            </td>
-                            <td><span>{{ doc.user.username if doc.user else '--' }}</span></td>
+        </div>
 
-                            <td class="text-right">
-                                <a href="{{ url_for('.create_edit_doc', doc_id=doc.id) }}">编辑</a>
-                                <span class="text-explode">|</span>
-                                <a href="javascript:void (0)" class="delete-doc" data-id="{{ doc.id }}">删除</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-
-                {% else %}
-                    <tr>
-                        <td style="padding: 50px 0" colspan="7" align="center">
-                            <span>没有记录</span>
-                        </td>
-                    </tr>
-
-                {% endif %}
-                </tbody>
-            </table>
-
+        <hr />
+        <div class="col-sm-12" style="margin-top: 20px">
+            1212
         </div>
     </div>
 {% endblock %}

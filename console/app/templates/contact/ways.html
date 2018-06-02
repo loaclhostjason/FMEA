@@ -18,22 +18,22 @@
                     <li class="list-group-item">
                         <span class="label label-default">地址</span>
                         <span class="text-explode">|</span>
-                        <span>中华人民共和国</span>
+                        <span>{{ contact.address }}</span>
                     </li>
                     <li class="list-group-item">
                         <span class="label label-default">邮件</span>
                         <span class="text-explode">|</span>
-                        <span><a href="mailto:admin@qq.com">admin@qq.com</a></span>
+                        <span><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></span>
                     </li>
                     <li class="list-group-item">
                         <span class="label label-default">电话</span>
                         <span class="text-explode">|</span>
-                        <span>12345678901</span>
+                        <span>{{ contact.phone }}</span>
                     </li>
                     <li class="list-group-item">
                         <span class="label label-default">传真</span>
                         <span class="text-explode">|</span>
-                        <span>12345678901</span></li>
+                        <span>{{ contact.fax }}</span></li>
                 </ul>
             </div>
 

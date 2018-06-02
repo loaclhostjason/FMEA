@@ -1,16 +1,16 @@
 # coding:utf-8
 
 from .. import db
-from models.help.doc import HelpDocMixin
+from models.help.doc import HelpFilesMixin
 import os
 from flask import current_app
 from flask_login import current_user
 from .func import *
 
 
-class HelpDoc(HelpDocMixin, db.Model):
+class HelpFiles(HelpFilesMixin, db.Model):
     def __init__(self, *args, **kwargs):
-        super(HelpDoc, self).__init__(*args, **kwargs)
+        super(HelpFiles, self).__init__(*args, **kwargs)
 
     @staticmethod
     def __get_start_end_date(range_date):
@@ -39,7 +39,7 @@ class HelpDoc(HelpDocMixin, db.Model):
         return model.all()
 
     @classmethod
-    def edit_or_create(cls, form_data, doc):
+    def edit_or_create_doc(cls, form_data, doc):
         form_data['user_id'] = current_user.get_id()
         if not doc:
             doc = cls(**form_data)
@@ -47,10 +47,24 @@ class HelpDoc(HelpDocMixin, db.Model):
             return
 
         if form_data.get('file'):
-            base_path = os.path.join(current_app.config['UPLOAD_DOC_DEST'], doc.time.strftime('%Y%m%d'))
+            base_path = os.path.join(current_app.config['UPLOAD_DOC_DIR'], doc.time.strftime('%Y%m%d'))
             del_os_filename(base_path, doc.file)
             doc.file = form_data['file']
             doc.file_name = form_data.get('file_name')
 
         db.session.add(doc)
+        return
+
+    @classmethod
+    def edit_or_create_video(cls, form_data, video):
+        if not video:
+            doc = cls(**form_data)
+            db.session.add(doc)
+            return
+
+        del_file(video.file)
+        video.tile = form_data['tile']
+        video.file = form_data['file']
+        video.file_name = form_data['file_name']
+        db.session.add(video)
         return

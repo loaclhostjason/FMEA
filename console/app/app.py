@@ -6,10 +6,11 @@ from flask_login import LoginManager
 from flask_babel import Babel
 from flask_moment import Moment
 from flask_mail import Mail
-from .assets import assets_env, bundles
-from .error_handle import Ehandle
+from flask_uploads import UploadSet, configure_uploads, patch_request_class, AUDIO
 
 from config import Config
+from .assets import assets_env, bundles
+from .error_handle import Ehandle
 from .jinja_env import JinjaEnv
 from .base_model import BaseModel
 
@@ -18,9 +19,10 @@ db = SQLAlchemy(model_class=BaseModel)
 babel = Babel()
 moment = Moment()
 mail = Mail()
-error_handle = Ehandle()
 
+error_handle = Ehandle()
 jinja_env = JinjaEnv()
+upload_video = UploadSet('videos', AUDIO)
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -46,8 +48,10 @@ def create_app():
 
     assets_env.init_app(app)
     assets_env.register(bundles)
-
     error_handle.init_app(app)
+
+    configure_uploads(app, upload_video)
+    patch_request_class(app)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
