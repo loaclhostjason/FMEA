@@ -11,6 +11,7 @@ from datetime import datetime
 
 from .func import get_func_relation, get_failure_relation
 from ..read_config import ReadAppConfig
+from collections import defaultdict
 
 '''
 process 
@@ -21,7 +22,11 @@ process
 @login_required
 def prcess_list():
     process_list = ReadAppConfig().get_config()
-    return jsonify({'success': True, 'data': process_list})
+    process_list = sorted(process_list.items(), key=lambda d: d[1]['id'])
+    result = []
+    for k, v in process_list:
+        result.append({k: dict(v)})
+    return jsonify({'success': True, 'data': result})
 
 
 

@@ -127,36 +127,42 @@ $(document).ready(function () {
     function get_process_table(data, level) {
         var process_table = $('.table-process tbody');
         var html = '';
-        for (var key in data) {
-            html += '<tr><td>' + data[key]['name_zh'] + '</td>';
-            html += '<td>';
-            data[key]['content'].forEach(function (value) {
-                switch (key) {
-                    case "functional_analysis":
-                        if ($.inArray(level, value['show_level']) > -1) {
-                        html += '<div><label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
-                    } else
-                        html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
 
-                        break;
-                    case "failure_analysis":
-                        if ($.inArray(level, value['show_level']) > -1) {
-                        html += '<div><label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
-                    } else
-                        html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+        // console.log(data);
+        data.forEach(function (info) {
+            for (var key in info) {
 
-                        break;
-                    default:
-                        if ($.inArray(level, value['show_level']) > -1)
-                            html += '<div><label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
-                        else
-                            html += '<div><label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                html += '<tr><td>' + info[key]['name_zh'] + '</td>';
+                html += '<td>';
+                info[key]['content'].forEach(function (value) {
+                    switch (key) {
+                        case "functional_analysis":
+                            if ($.inArray(level, value['show_level']) > -1) {
+                                html += '<div><label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                            } else
+                                html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
 
-                }
+                            break;
+                        case "failure_analysis":
+                            if ($.inArray(level, value['show_level']) > -1) {
+                                html += '<div><label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                            } else
+                                html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
 
-            });
-            html += '</td></tr>';
-        }
+                            break;
+                        default:
+                            if ($.inArray(level, value['show_level']) > -1)
+                                html += '<div><label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                            else
+                                html += '<div><label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+
+                    }
+
+                });
+                html += '</td></tr>';
+            }
+        });
         process_table.html(html);
+
     }
 });
