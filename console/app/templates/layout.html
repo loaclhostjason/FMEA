@@ -26,8 +26,8 @@
                             <a href="{{ url_for('main.my_file_list') }}"><i class="glyphicon glyphicon-home"></i> 我的文件</a>
                         </li>
 
-                        <li class="custom-item">
-                            <a href="#"><i class="glyphicon glyphicon-download-alt"></i> 公共模板</a>
+                        <li class="custom-item {% block temps %}{% endblock %}">
+                            <a href="{{ url_for('temps.temps_list') }}"><i class="glyphicon glyphicon-download-alt"></i> 公共模板</a>
                         </li>
 
                         {% if current_user.is_admin() %}

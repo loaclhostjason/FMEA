@@ -16,6 +16,12 @@
                         <span>配置文件</span>
                     </a>
                 </dd>
+                <dd>
+                    <a href="{{ url_for('.manage_contact') }}"
+                       class="menu-lv2 {% block manage_contact %}{% endblock %}">
+                        <span>管理联系方式</span>
+                    </a>
+                </dd>
             </dl>
         </div>
         <a href="javascript:void(0)" class="btn-fold-menu" title="收起">收起</a>
