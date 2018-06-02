@@ -32,27 +32,51 @@ def delete_file(id):
 @login_required
 def create_file_product():
     form_data = request.form.to_dict()
-    if not form_data.get('config_name'):
-        return jsonify({'success': False, 'message': '没有选择配置文件'})
+    if not form_data.get('name'):
+        return jsonify({'success': False, 'message': '产品名称不能为空'})
 
-    config_data = ReadConfig().read_config_data(form_data['config_name'])
-
-    product = Product.query.filter_by(config_name=form_data['config_name']).first()
+    product = Product.query.filter_by(name=form_data['name']).first()
     if product:
-        return jsonify({'success': False, 'message': '添加过，请编辑'})
+        return jsonify({'success': False, 'message': '产品名称重复'})
 
-    d = dict({
-        'config_name': form_data['config_name'],
-        'file_name': '%s_%s' % (form_data['config_name'], datetime.now().strftime('%Y-%m-%d'))
-    }, **config_data)
+    d = {
+        'name': form_data['name'],
+        'user_id': current_user.get_id(),
+    }
 
-    d['user_id'] = current_user.get_id()
     add_product = Product(**d)
     db.session.add(add_product)
     db.session.flush()
 
     product_id = add_product.id
     return jsonify({'success': True, 'message': '更新成功', 'product_id': product_id})
+
+
+# @main.route('/file/product/create', methods=['POST'])
+# @login_required
+# def create_file_product():
+#     form_data = request.form.to_dict()
+#     if not form_data.get('config_name'):
+#         return jsonify({'success': False, 'message': '没有选择配置文件'})
+#
+#     config_data = ReadConfig().read_config_data(form_data['config_name'])
+#
+#     product = Product.query.filter_by(config_name=form_data['config_name']).first()
+#     if product:
+#         return jsonify({'success': False, 'message': '添加过，请编辑'})
+#
+#     d = dict({
+#         'config_name': form_data['config_name'],
+#         'file_name': '%s_%s' % (form_data['config_name'], datetime.now().strftime('%Y-%m-%d'))
+#     }, **config_data)
+#
+#     d['user_id'] = current_user.get_id()
+#     add_product = Product(**d)
+#     db.session.add(add_product)
+#     db.session.flush()
+#
+#     product_id = add_product.id
+#     return jsonify({'success': True, 'message': '更新成功', 'product_id': product_id})
 
 
 '''
@@ -73,14 +97,24 @@ def get_file_tree():
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
     product = Product.query.get_or_404(product_id)
-    result['nodedata'].append({'name': product.name, 'key': product_id, 'level': product.level + 1})
+    result['nodedata'].append({
+        'name': product.name,
+        'key': product_id,
+        'level': product.level + 1,
+        'name_number': product.name_number
+    })
 
     realtion = product.product_relation
     link_data = []
     for rl in realtion:
         # if rl.parent_id != product_id:
         link_data.append({'from': rl.parent_id, 'to': rl.id})
-        result['nodedata'].append({'name': rl.name, 'key': rl.id, 'level': rl.level + 1})
+        result['nodedata'].append({
+            'name': rl.name,
+            'key': rl.id,
+            'level': rl.level + 1,
+            'name_number': rl.name_number,
+        })
 
     result['linkdata'] = link_data
     return jsonify({'success': True, 'data': result})

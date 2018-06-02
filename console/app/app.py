@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_babel import Babel
 from flask_moment import Moment
 from flask_mail import Mail
-from flask_uploads import UploadSet, configure_uploads, patch_request_class, AUDIO
+from flask_uploads import UploadSet, configure_uploads, patch_request_class, AUDIO, ALL
 
 from config import Config
 from .assets import assets_env, bundles
@@ -22,7 +22,7 @@ mail = Mail()
 
 error_handle = Ehandle()
 jinja_env = JinjaEnv()
-upload_video = UploadSet('videos', AUDIO)
+upload_video = UploadSet('videos', ALL)
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -51,7 +51,7 @@ def create_app():
     error_handle.init_app(app)
 
     configure_uploads(app, upload_video)
-    patch_request_class(app)
+    patch_request_class(app, size=640 * 1024 * 1024)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')

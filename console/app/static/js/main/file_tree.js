@@ -31,11 +31,7 @@ $(document).ready(function () {
         $$(go.Adornment, "Vertical",
             makeButton("编辑属性",
                 function (e, obj) {
-                    if (product_id) {
-                        action = $.getUrlParam('action');
-                        if (action !== 'edit_attr')
-                            window.location.href = window.location.href + '?action=edit_attr'
-                    }
+
 
                 }),
             makeButton("新增过程",
@@ -52,6 +48,7 @@ $(document).ready(function () {
 
                     add_content.find('[name="parent_id"]').val(parent_id);
                     add_content.find('[name="level"]').val(level);
+                    add_process.find('[name="level"]').val(level);
                 })
         );
 
@@ -96,4 +93,19 @@ $(document).ready(function () {
     if (product_id)
         $.get_tree(product_id)
 
+});
+
+
+$(document).ready(function () {
+    var add_process = $("#add-process");
+    add_process.on('show.bs.modal', function (event) {
+        var btn = $(event.relatedTarget);
+        var modal = $(this);
+
+        var level = modal.find('[name="level"]').val();
+        var label = modal.find('.table-process lable');
+        level = Number(level);
+
+
+    })
 });

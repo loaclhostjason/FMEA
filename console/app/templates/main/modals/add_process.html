@@ -8,6 +8,8 @@
                 </div>
 
                 <div class="modal-body clearfix">
+                    <input type="hidden" name="level" value="">
+
                     <div class="row" style="margin: 20px; margin-top: 0;margin-bottom: 0">
                         <table class="table table-hover table-bordered table-process">
                             <tbody>
@@ -22,7 +24,13 @@
                                         <td>
                                             {% for value in pro.content %}
                                                 <div>
-                                                    {% if name == 'functional_analysis' %}
+                                                    {% if name == 'structural_analysis' %}
+                                                        <label data-type="struct"
+                                                               class="label-border text-center show-content label-struct"
+                                                               style="width: 125px;cursor: pointer"> {{ value.name_zh }}
+                                                        </label>
+
+                                                    {% elif name == 'functional_analysis' %}
                                                         <label data-type="func" class="label-border text-center show-content"
                                                                style="width: 125px;cursor: pointer"> {{ value.name_zh }}</label>
                                                     {% elif name == 'failure_analysis' %}

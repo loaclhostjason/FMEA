@@ -98,9 +98,10 @@ class FuncRelation(FuncRelationMixin, db.Model):
 
     @staticmethod
     def update_name_number(parent_id, number):
-        parduct_relation = ProductRelation.query.get_or_404(parent_id)
+        parduct_relation = ProductRelation.query.filter_by(id=parent_id).first()
         if not parduct_relation:
-            return
+            func_relation = FuncRelation.query.filter(FuncRelation.product_id == FuncRelation.product_relation_id).all()
+            return '%s-FU%d' % (0, len(func_relation) + 1)
 
         return '%s-FU%d' % (parduct_relation.name_number, number)
 
@@ -116,8 +117,9 @@ class FuncRelation(FuncRelationMixin, db.Model):
         except Exception:
             pass
 
+        content = content.split('\r\n')
         result = []
-        for index, con in enumerate(content.split('\r\n'), start=1):
+        for index, con in enumerate(content, start=1):
             data['name'] = con
             data['number'] = index
             data['name_number'] = cls.update_name_number(data['product_relation_id'], index)

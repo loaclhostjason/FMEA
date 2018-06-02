@@ -47,23 +47,9 @@ def create_file():
 @login_required
 def edit_file(product_id):
     form = CreateProductForm()
-    edit_form = StructureTreeForm()
-
     process_list = ReadAppConfig().get_config()
 
-    action = request.args.get('action')
     product = Product.query.get_or_404(product_id)
-
-    if action == 'edit_attr':
-        Check(edit_form).check_validate_on_submit()
-        if edit_form.validate_on_submit():
-            edit_form.populate_obj(product)
-            flash({'success': '更新成功'})
-            return redirect(request.url)
-
-        edit_form.set_form_data(product)
-        return render_template('main/create_edit_file.html', product=product, edit_form=edit_form, process_list=process_list)
-
     return render_template('main/create_edit_file.html', form=form, product=product, process_list=process_list)
 
 

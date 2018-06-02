@@ -8,31 +8,13 @@ from datetime import datetime
 class ProductMixin:
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
-    file_name = db.Column(db.String(128))
     # 名称 and 等级
     name = db.Column(db.String(68), index=True)
     level = db.Column(db.Integer, index=True, nullable=False, default=0)
-    number = db.Column(db.Integer, default=1)  # id
-    name_number = db.Column(db.String(32), index=True)  # 编号
+    name_number = db.Column(db.String(32), default=0)  # 编号
 
     # 配置文件名称
     config_name = db.Column(db.String(32))
-
-    # todo attr
-    product_id = db.Column(db.String(12))
-
-    company_name = db.Column(db.String(32))
-    project_location = db.Column(db.String(68))
-    consumer = db.Column(db.String(68))
-
-    version = db.Column(db.String(68))
-
-    start_date = db.Column(db.DateTime)
-    update_date = db.Column(db.DateTime)
-
-    func_teams = db.Column(db.String(2000))
-    fmea_id = db.Column(db.String(20))
-    design_resp = db.Column(db.String(128))
 
     first_time = db.Column(db.DateTime, default=datetime.now)
     last_time = db.Column(db.DateTime, default=datetime.now)
@@ -43,7 +25,7 @@ class ProductMixin:
 
     @declared_attr
     def user(cls):
-        return db.relationship('User', foreign_keys=[cls.user_id], backref=backref("product", cascade="all,delete"))
+        return db.relationship('User', backref=backref("product", cascade="all,delete"))
 
 
 class ProductRelationMixin:

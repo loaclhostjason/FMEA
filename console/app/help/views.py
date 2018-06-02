@@ -12,6 +12,7 @@ import time
 from config import Config
 from ..app import upload_video
 
+
 @help.route('/doc', methods=['GET', 'POST'])
 @login_required
 def doc_list():
@@ -97,7 +98,8 @@ def download_files():
 @login_required
 def video_list():
     form = SelectHelpVideoForm()
-    return render_template('help/video.html', form=form)
+    videos = HelpFiles.query.filter_by(type='video').all()
+    return render_template('help/video.html', form=form, videos=videos)
 
 
 @help.route('/video/create_edit', methods=['GET', 'POST'])
@@ -120,3 +122,42 @@ def create_edit_video():
         return redirect(url_for('.video_list'))
 
     return render_template('help/create_edit_video.html', form=form, video=video)
+
+
+@help.route('/video/read/<int:id>', methods=['GET', 'POST'])
+@login_required
+def read_video(id):
+    video = HelpFiles.query.get_or_404(id)
+
+    return download_file2(video.file, video.file_name)
+
+
+@help.route('/video/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_video(id):
+    video = HelpFiles.query.get_or_404(id)
+
+    try:
+        del_file(video.file)
+    except Exception as e:
+        return  jsonify({'success': False, 'message': str(e)})
+
+    db.session.delete(video)
+    return jsonify({'success': True, 'message': '更新成功'})
+
+
+@help.route('/video/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_video(id):
+    video = HelpFiles.query.get_or_404(id)
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        if not title:
+            return jsonify({'success': False, 'message': '没有标题'})
+
+        video.title = title
+        db.session.add(video)
+        return jsonify({'success': True, 'message': '更新成功'})
+
+    return jsonify({'success': True, 'data': video.to_dict()})

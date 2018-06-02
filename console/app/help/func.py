@@ -10,6 +10,7 @@ def del_os_filename(base_path, filename):
             if filename and filename == name:
                 os.remove(os.path.join(root, name))
 
+
 def del_file(path):
     if not path:
         return
@@ -46,6 +47,21 @@ def download_file(filename, extra_path=None):
         response = make_response(send_file(filename_path, as_attachment=True))
         response.headers["Content-Disposition"] = \
             "attachment;" \
+            "filename*=UTF-8''{utf_filename}".format(
+                utf_filename=quote(filename.encode('utf-8'))
+            )
+        return response
+    except Exception as e:
+        print(e)
+        abort(404)
+
+
+def download_file2(file_path, filename):
+    try:
+        from urllib.parse import quote
+
+        response = make_response(send_file(file_path, as_attachment=True))
+        response.headers["Content-Disposition"] = \
             "filename*=UTF-8''{utf_filename}".format(
                 utf_filename=quote(filename.encode('utf-8'))
             )

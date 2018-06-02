@@ -3,6 +3,7 @@
 {% block help_video %}act{% endblock %}
 
 {% block help_content %}
+    {% include "help/modal/update_title.html" %}
 
     <div class="row">
         <div class="col-sm-12">
@@ -39,12 +40,37 @@
             </div>
 
 
-
         </div>
 
-        <hr />
+        <hr/>
         <div class="col-sm-12" style="margin-top: 20px">
-            1212
+            {% for video in videos %}
+
+                <div class="col-xs-4">
+
+                    <div class="panel-border" style="margin-top: 10px">
+                        <div class="charttable-title">
+                            <span class="title-text" style="display: inline"><b>{{ video.title }}</b></span>
+                            <span style="position: absolute; right: 30px; font-size: 16px"><a href="javascript:void (0)" class="update-video"
+                                                                                              data-id="{{ video.id }}"><i
+                                    class="glyphicon glyphicon-edit"></i></a></span>
+                            <span style="position: absolute; right: 10px;font-size: 16px"><a href="javascript:void (0)" class="delete-video"
+                                                                                             data-id="{{ video.id }}"><i
+                                    class="glyphicon glyphicon-trash"></i></a></span>
+                        </div>
+                        <div class="charttable-w">
+                            <div>
+                                <video style="height: 300px" src="{{ url_for('.read_video', id=video.id) }}" controls="controls">
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endfor %}
+
         </div>
     </div>
 {% endblock %}
@@ -72,12 +98,38 @@
             cancelClass: 'btn btn-default'
         });
 
-        $('.delete-doc').click(function () {
+        $('.delete-video').click(function () {
             var id = $(this).data('id');
-            var msg = "是否删除文档？";
-            var url = '/help/doc/delete/' + id;
+            var msg = "是否删除视频？";
+            var url = '/help/video/delete/' + id;
             $.update_info_reload(msg, url, '');
         });
+
+        var updateTitle = $('#updateTitle');
+        $('.update-video').click(function () {
+            $.jqclass.show_modal(updateTitle, $(this));
+        });
+
+        var btn;
+        updateTitle.on('show.bs.modal', function (event) {
+            btn = $(event.relatedTarget);
+            $.get('/help/video/edit/' + btn.data('id'), function (resp) {
+                var data = resp['data'];
+                $(this).find('[name="title"]').val(data['title'])
+            })
+        });
+
+        $('.submit_update_title').click(function () {
+            $.post('/help/video/edit/' + btn.data('id'), {'title': updateTitle.find('input').val()}, function (resp) {
+                if (resp.success) {
+                    sessionStorage.setItem("success", resp.message);
+                    window.location.reload()
+                } else {
+                    toastr.error(resp.message);
+                }
+            })
+        });
+
     </script>
 {% endblock %}
 
