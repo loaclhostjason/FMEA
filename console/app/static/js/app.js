@@ -1,3 +1,15 @@
+function  update_info(url, params, modal_dom) {
+    $.post(url, params, function (data) {
+        if (data.success) {
+            toastr.success(data.message);
+            if (modal_dom)
+                modal_dom.modal('hide')
+        } else {
+            toastr.error(data.message);
+        }
+    })
+}
+
 $(document).ready(function () {
     $("[data-toggle='popover']").popover({
         placement: 'top',

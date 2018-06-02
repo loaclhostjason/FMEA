@@ -3,6 +3,7 @@
 {% block base_content %}
     {% include "toast_success_or_error.html" %}
     {% include "confirm_modal.html" %}
+    {% include "auth/modal/user_pwd_modal.html" %}
 
     {#    <div class="main">#}
     {#        <div class="console-container">#}
@@ -10,6 +11,25 @@
     {#        </div>#}
     {#    </div>#}
     {% block page_content %}{% endblock %}
+{% endblock %}
+
+{% block scripts %}
+
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            var userpwdModal = $('#userpwdModal');
+            $('.update-pwd').click(function () {
+                var jq_clas = new JClass();
+                jq_clas.show_modal(userpwdModal, $(this));
+            });
+
+            $('.submit_update').click(function () {
+                var params = userpwdModal.find('form').serialize();
+                update_info('/update/password', params, userpwdModal)
+            })
+        })
+    </script>
 {% endblock %}
 
 

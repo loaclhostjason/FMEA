@@ -83,3 +83,16 @@ def last_file_list():
 
     products = products.all()
     return render_template('main/last_file.html', products=products)
+
+
+@main.route('/update/password', methods=['POST'])
+@login_required
+def update_password():
+    user = User.query.get_or_404(current_user.get_id())
+    form_data = request.form.to_dict()
+    if form_data['password2'] != form_data['password']:
+        return jsonify({'success': False, 'message': '密码不一致'})
+
+    user.password = form_data['password']
+    db.session.add(user)
+    return jsonify({'success': True, 'message': '更新成功'})
