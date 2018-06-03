@@ -18,7 +18,8 @@ def get_func_relation(init_result, product_relation_id):
         init_result['nodedata'].append({
             'category': 'FuncNode',
             'name': fr.name,
-            'key': fr.id
+            'key': fr.id,
+            'name_number': fr.name_number
         })
 
         init_result = get_failure_relation(init_result, fr.id)
@@ -42,7 +43,8 @@ def get_failure_relation(result, func_relation_id):
         result['nodedata'].append({
             'category': 'FailureNode',
             'name': failure.name,
-            'key': failure.id
+            'key': failure.id,
+            'name_number': failure.name_number
         })
         d = {
             'category': 'FailureLink',

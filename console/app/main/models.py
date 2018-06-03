@@ -7,6 +7,7 @@ from models.industry import FuncRelationMixin
 from models.industry import FailureRelationMixin
 
 from .. import db
+from ..base import Tool, Check
 
 
 class Product(ProductMixin, db.Model):
@@ -89,7 +90,46 @@ class ProductRelation(ProductRelationMixin, db.Model):
 
 
 class Attr(AttrMixin, db.Model):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(Attr, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def edit(cls, form_data, attr):
+        Check.update_model(attr, form_data)
+        db.session.add(attr)
+        return
+
+    @classmethod
+    def create_edit_extra(cls, form_data, attr):
+        if not attr:
+            attr = cls(**form_data)
+            db.session.add(attr)
+            return
+
+        Check.update_model(attr, form_data)
+        db.session.add(attr)
+        return
+
+    @classmethod
+    def init_attr(cls):
+        r = [
+            {'name': '结构树节点-0', 'level': 0, 'type': 'structure'},
+            {'name': '结构树节点-1', 'level': 1, 'type': 'structure'},
+            {'name': '结构树节点-2', 'level': 2, 'type': 'structure'},
+            {'name': '结构树节点-3', 'level': 3, 'type': 'structure'},
+            {'name': '功能树节点', 'level': None, 'type': 'func'},
+            {'name': '失效树节点', 'level': None, 'type': 'failure'},
+        ]
+        attr = Attr.query.all()
+        if attr:
+            return
+        result = []
+        for info in r:
+            new_attr = cls(**info)
+            result.append(new_attr)
+        db.session.add_all(result)
+        db.session.commit()
+        return
 
 
 class FuncRelation(FuncRelationMixin, db.Model):

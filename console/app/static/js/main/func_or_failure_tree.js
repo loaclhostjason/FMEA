@@ -67,6 +67,14 @@ $(document).ready(function () {
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "green"}),
             $$(go.TextBlock, {margin: 8, stroke: "green"}, new go.Binding("text", "name")),
             {
+                toolTip: $$(go.Adornment, "Auto",
+                    $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),
+                    $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name_number", function (val) {
+                        return val ? '编号: ' + val : '---'
+                    }))
+                )
+            },
+            {
                 contextMenu: partContextMenu
             }
         ));
@@ -75,6 +83,14 @@ $(document).ready(function () {
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "red"}),
             $$(go.TextBlock, {margin: 8, stroke: "red"}, new go.Binding("text", "name")),
+            {
+                toolTip: $$(go.Adornment, "Auto",
+                    $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),
+                    $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name_number", function (val) {
+                        return val ? '编号: ' + val : '---'
+                    }))
+                )
+            },
             {
                 contextMenu: failureContextMenu
             }

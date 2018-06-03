@@ -7,13 +7,73 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="console-title clearfix bline" style="min-height: 50px">
-                <div class="pull-left"><h4>配置文件</h4></div>
+                <div class="pull-left"><h4>配置文件--属性配置</h4></div>
 
             </div>
         </div>
 
-        <div class="col-sm-12" style="margin-top: 20px">
+        <div class="col-sm-12" style="margin: 10px 0">
+            <a href="{{ url_for('.create_edit_extra_attr') }}" class="btn btn-primary">添加额外属性</a>
+        </div>
 
+        <div class="col-sm-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th width="100">节点名称</th>
+                    <th>属性内容</th>
+                    <th>默认</th>
+                    <th>优先级</th>
+                    <th width="150">最后修改时间</th>
+                    <th width="150">修改者</th>
+                    <th width="120" class="text-right">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if attrs %}
+                    {% for attr in attrs %}
+                        <tr>
+                            <td>
+                                {{ attr.name or '--' }}
+                            </td>
+
+                            <td>{{ attr.content or '--' }}</td>
+                            <td>
+                                {% if not attr.extra %}
+                                    <i class="glyphicon glyphicon-ok text-success"></i>
+                                {% else %}
+                                    <i class="glyphicon glyphicon-remove text-info"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ '高' if attr.extra else '低' }}</td>
+                            <td>{{ attr.update_time }}</td>
+                            <td>{{ attr.username or '--' }}</td>
+
+                            <td class="text-right">
+                                {% if attr.extra %}
+                                    <a href="{{ url_for('.create_edit_extra_attr', id=attr.id) }}">编辑</a>
+                                {% else %}
+                                    <a href="{{ url_for('.edit_attr', id=attr.id) }}">编辑</a>
+                                {% endif %}
+
+                                {% if attr.extra %}
+                                    <span class="text-explode">|</span>
+                                    <a href="javascript:void (0)" class="delete-attr" data-id="{{ attr.id }}">删除</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <tr>
+                        <td style="padding: 50px 0" colspan="6" align="center">
+                            <span>没有记录</span>
+                        </td>
+                    </tr>
+
+                {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@ from ..base import *
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declared_attr
 from datetime import datetime
+from enum import Enum
 
 
 class ProductMixin:
@@ -106,28 +107,27 @@ class FailureRelationMixin:
         return db.relationship('Product', backref=backref("failure_relation", cascade="all, delete-orphan"))
 
 
+class AttrType(Enum):
+    structure = '结构树'
+    func = '功能树'
+    failure = '失效树'
+
+
 class AttrMixin:
     __tablename__ = 'attr'
     id = db.Column(db.Integer, primary_key=True)
 
-    config_name = db.Column(db.String(32))
+    name = db.Column(db.String(16))
+    level = db.Column(db.Integer)
+    type = db.Column(db.Enum(AttrType))
+
+    update_time = db.Column(db.DateTime, default=datetime.now)
+
     content = db.Column(db.Text)
+    username = db.Column(db.String(12), default='系统')
 
-    @declared_attr
-    def product_relation_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
-
-    @declared_attr
-    def product_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('product.id'))
-
-    @declared_attr
-    def product_relations(cls):
-        return db.relationship('ProductRelation', foreign_keys=[cls.product_relation_id], backref=backref("attr", cascade="all,delete"))
-
-    @declared_attr
-    def product(cls):
-        return db.relationship('Product', foreign_keys=[cls.product_id], backref=backref("attr", cascade="all,delete"))
+    extra = db.Column(db.Boolean, default=False)
+    name_number = db.Column(db.String(32))
 
 
 class Product(ProductMixin, db.Model):

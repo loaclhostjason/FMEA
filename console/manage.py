@@ -4,6 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_assets import ManageAssets
 
 from app.models import *
+from app.main.models import Attr
 from app.contact.models import ContactWay
 from app.assets import assets_env
 from app import app, db
@@ -29,6 +30,7 @@ def deploy():
 
     # 创建内置用户
     User.insert_admin()
+    Attr.init_attr()
     ContactWay.insert_data()
 
 

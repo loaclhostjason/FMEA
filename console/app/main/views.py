@@ -8,6 +8,7 @@ from .models import *
 from ..base import Check
 from ..read_config import ReadAppConfig
 from sqlalchemy import or_
+from ..base import pagination_result
 
 '''
 dashboard
@@ -67,7 +68,7 @@ def last_file_list():
     if not current_user.is_admin():
         products = products.filter(user_id=current_user.get_id())
 
-    products = products.all()
+    products = pagination_result(products)
     return render_template('main/last_file.html', products=products)
 
 

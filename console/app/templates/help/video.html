@@ -51,12 +51,15 @@
                     <div class="panel-border" style="margin-top: 10px">
                         <div class="charttable-title">
                             <span class="title-text" style="display: inline"><b>{{ video.title }}</b></span>
-                            <span style="position: absolute; right: 30px; font-size: 16px"><a href="javascript:void (0)" class="update-video"
-                                                                                              data-id="{{ video.id }}"><i
-                                    class="glyphicon glyphicon-edit"></i></a></span>
-                            <span style="position: absolute; right: 10px;font-size: 16px"><a href="javascript:void (0)" class="delete-video"
-                                                                                             data-id="{{ video.id }}"><i
-                                    class="glyphicon glyphicon-trash"></i></a></span>
+                            {% if current_user.is_admin() %}
+                                <span style="position: absolute; right: 30px; font-size: 16px"><a href="javascript:void (0)" class="update-video"
+                                                                                                  data-id="{{ video.id }}"><i
+                                        class="glyphicon glyphicon-edit"></i></a></span>
+                                <span style="position: absolute; right: 10px;font-size: 16px"><a href="javascript:void (0)" class="delete-video"
+                                                                                                 data-id="{{ video.id }}"><i
+                                        class="glyphicon glyphicon-trash"></i></a></span>
+                            {% endif %}
+
                         </div>
                         <div class="charttable-w">
                             <div>
