@@ -52,6 +52,16 @@ $(document).ready(function () {
                 })
         );
 
+
+    var failureContextMenu =
+        $$(go.Adornment, "Vertical",
+            makeButton("编辑属性",
+                function (e, obj) {
+
+
+                })
+        );
+
     myDiagram.nodeTemplateMap.add("FuncNode",
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "green"}),
@@ -66,7 +76,7 @@ $(document).ready(function () {
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "red"}),
             $$(go.TextBlock, {margin: 8, stroke: "red"}, new go.Binding("text", "name")),
             {
-                contextMenu: partContextMenu
+                contextMenu: failureContextMenu
             }
         ));
 

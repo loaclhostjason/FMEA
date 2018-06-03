@@ -73,8 +73,8 @@ class Config:
     MAIL_USERNAME = '951995314@qq.com'
     MAIL_PASSWORD = 'ktlwclelryfdbcae'
     MAIL_DEFAULT_SENDER = '951995314@qq.com'
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
-    FLASKY_MAIL_SENDER = 'Flasky Admin <951995314@qq.com>'
+    FLASKY_MAIL_SUBJECT_PREFIX = '[FMEA]'
+    FLASKY_MAIL_SENDER = 'FMEA Admin <951995314@qq.com>'
     FLASKY_ADMIN = None
 
     UPLOAD_DOC_DIR = upload_doc_path

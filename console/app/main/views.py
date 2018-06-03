@@ -20,7 +20,7 @@ def my_file_list():
     products = Product.query
 
     if not current_user.is_admin():
-        products = products.filter(user_id=current_user.get_id())
+        products = products.filter_by(user_id=current_user.id)
 
     products = products.all()
     return render_template('main/my_file.html', products=products)

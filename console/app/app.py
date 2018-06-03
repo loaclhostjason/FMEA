@@ -25,10 +25,10 @@ jinja_env = JinjaEnv()
 upload_video = UploadSet('videos', ALL)
 
 login_manager = LoginManager()
-login_manager.session_protection = 'strong'
+# login_manager.session_protection = 'strong'
 # message in warning, error, success
-login_manager.login_message = {'info': "您还未登录"}
-login_manager.login_view = 'auth.login'
+# login_manager.login_message = {'info': "您还未登录"}
+# login_manager.login_view = 'auth.login'
 
 
 def create_app():

@@ -25,8 +25,8 @@ def unconfirmed():
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
-    send_email(current_user.email, 'Confirm Your Account', 'auth/email/confirm', user=current_user, token=token)
-    flash({'info': 'A new confirmation email has been sent to you by email.'})
+    send_email(current_user.email, '确认您的帐户', 'auth/email/confirm', user=current_user, token=token)
+    flash({'info': '一个新的确认电子邮件已经发送给你的电子邮件'})
     return redirect(url_for('main.my_file_list'))
 
 
@@ -36,6 +36,11 @@ def register():
 
     Check(form).check_validate_on_submit()
     if form.validate_on_submit():
+        old = User.query.filter_by(email=form.email.data).first()
+        if old:
+            flash({'errors': '已经注册了， 请登陆'})
+            return redirect(request.url)
+
         register_form_data = form.get_form_data()
         del register_form_data['password2']
         user = User(**register_form_data)
@@ -45,7 +50,7 @@ def register():
         token = user.generate_confirmation_token()
         send_email(user.email, 'Confirm Your Accont', 'auth/email/confirm', user=user, token=token)
 
-        flash({'success': 'A Confirmation email has been sent to you by email.'})
+        flash({'success': '确认邮件已通过电子邮件发送给您'})
         return redirect(url_for('main.my_file_list'))
 
     return render_template('auth/register.html', form=form)
@@ -57,9 +62,9 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.my_file_list'))
     if current_user.confirm(token):
-        flash({'success': 'You have confirmed your account. Thanks!'})
+        flash({'success': '你已经确认了你的账户。谢谢！'})
     else:
-        flash({'errors': 'The confirmation link is invalid or has expired.'})
+        flash({'errors': '确认链接无效或已过期'})
     return redirect(url_for('main.my_file_list'))
 
 

@@ -27,7 +27,7 @@
             {
                 "name": "add_func",
                 "name_zh": "新增功能",
-                 "show_level": [1, 2, 3]
+                 "show_level": [1, 2, 3, 4]
             },
             {
                 "name": "add_product_char",
@@ -40,7 +40,7 @@
             {
                 "name": "edit_func_net",
                 "name_zh": "编辑功能网",
-                 "show_level": [1, 2, 3]
+                 "show_level": [1, 2, 3, 4]
             }
         ]
     },
@@ -56,7 +56,7 @@
             {
                 "name": "edit_failure",
                 "name_zh": "编辑失效网",
-                "show_level": [1, 2, 3]
+                "show_level": [1, 2, 3, 4]
             }
         ]
     },
@@ -67,27 +67,27 @@
             {
                 "name": "s_assess",
                 "name_zh": "S评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "preventive_action",
                 "name_zh": "预防措施",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "probe_action",
                 "name_zh": "探测措施",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "o_assess",
                 "name_zh": "O评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "d_assess",
                 "name_zh": "D评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             }
         ]
     },
@@ -98,27 +98,27 @@
             {
                 "name": "s_assess",
                 "name_zh": "S评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "preventive_action",
                 "name_zh": "预防措施",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "probe_action",
                 "name_zh": "探测措施",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "o_assess",
                 "name_zh": "O评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             },
             {
                 "name": "d_assess",
                 "name_zh": "D评估",
-                "show_level": [0, 1, 2, 3]
+                "show_level": [0, 1, 2, 3, 4]
             }
         ]
     }

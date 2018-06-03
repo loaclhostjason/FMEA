@@ -5,6 +5,8 @@
 {% block head %}
 
     {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
+
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     {% assets "common_css" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}"/>
@@ -81,6 +83,9 @@
 {% block scripts %}
 
     {{ super() }}
+    <script src="{{ url_for('static', filename='vendor/bootstrap/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.js') }}" ></script>
+
     {{ moment.include_moment('2.10.3', '/static/vendor/moment/moment-with-locales.min.js') }}
     {% assets "common_js" %}
         <script src="{{ ASSET_URL }}"></script>
