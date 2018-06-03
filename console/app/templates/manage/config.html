@@ -34,7 +34,7 @@
                     {% for attr in attrs %}
                         <tr>
                             <td>
-                                {{ attr.name or '--' }}
+                                {{ attr.name or (attr.name_number or '--') }}
                             </td>
 
                             <td>{{ attr.content or '--' }}</td>

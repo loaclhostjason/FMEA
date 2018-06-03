@@ -37,7 +37,7 @@
                 <div class="col-sm-2">{{ render_form.input_label(form.file) }}</div>
                 <div class="col-sm-3">
                     <div class="form-label">
-                        {{ form.file }}
+                        {{ form.file(data_max_size="67108864") }}
                         {% if form.file.data %}
                             <p class="form-input-help">已有文件：{{ form.file.data }}</p>
                         {% endif %}
@@ -52,7 +52,7 @@
             <div class="top-line"></div>
             <div class="form-group">
                 <div class="col-sm-2">
-                    <button class="btn btn-primary pull-right">
+                    <button class="btn btn-primary pull-right" disabled>
                         {% if doc %}保存{% else %}上传{% endif %}
                     </button>
                 </div>
@@ -65,5 +65,25 @@
     </form>
 
 
+{% endblock %}
+
+{% block scripts %}
+
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $('[name="file"]').change(function (myevent) {
+                var target = myevent.target;
+                var fileSize = $(this).attr("data-max_size");
+                var inFactFileSize = target.files[0].size;
+                if (inFactFileSize > fileSize) {
+                    toastr.error('上传文件不能超过64M');
+                    $('.btn-primary').attr('disabled', 'disabled');
+                } else
+                    $('.btn-primary').removeAttr('disabled');
+            })
+        })
+
+    </script>
 {% endblock %}
 
