@@ -80,6 +80,8 @@ class Config:
     UPLOAD_DOC_DIR = upload_doc_path
     UPLOADS_DEFAULT_DEST = upload_video_path
 
+    MAX_CONTENT_LENGTH = 64 * 1024 * 1024
+
     @staticmethod
     def init_app(app):
         pass

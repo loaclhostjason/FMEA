@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+    <div class="page-header error-page">
+         <h2>413</h2>
+        <p>上次文件太大，最大为64MB。 <a href="{{ url_for('help.create_edit_video') }}">返回</a></p>
+    </div>
+{% endblock %}

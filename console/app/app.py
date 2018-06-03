@@ -25,10 +25,10 @@ jinja_env = JinjaEnv()
 upload_video = UploadSet('videos', ALL)
 
 login_manager = LoginManager()
-# login_manager.session_protection = 'strong'
+login_manager.session_protection = 'strong'
 # message in warning, error, success
-# login_manager.login_message = {'info': "您还未登录"}
-# login_manager.login_view = 'auth.login'
+login_manager.login_message = {'info': "您还未登录"}
+login_manager.login_view = 'auth.login'
 
 
 def create_app():
@@ -51,7 +51,7 @@ def create_app():
     error_handle.init_app(app)
 
     configure_uploads(app, upload_video)
-    patch_request_class(app, size=640 * 1024 * 1024)
+    patch_request_class(app, size=None)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
