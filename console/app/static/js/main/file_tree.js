@@ -1,3 +1,8 @@
+function attr_html() {
+
+}
+
+
 $(document).ready(function () {
     var $$ = go.GraphObject.make;
     var jqclass = $.jqclass;
@@ -31,7 +36,18 @@ $(document).ready(function () {
         $$(go.Adornment, "Vertical",
             makeButton("编辑属性",
                 function (e, obj) {
+                    var node = obj.part.adornedPart;
+                    if (node !== null) {
+                        var thisemp = node.data;
+                        var parent_id = thisemp['key'];
+                        var level = thisemp['level'] - 1;
+                    }
+                    $.get('/tree/attr?level=' + level, function (resp) {
+                        console.log(resp)
+                        var data = resp['data'];
 
+                    });
+                    // alert(level)
 
                 }),
             makeButton("新增过程",

@@ -12,6 +12,7 @@ from datetime import datetime
 from .func import get_func_relation, get_failure_relation
 from ..read_config import ReadAppConfig
 from collections import defaultdict
+import json
 
 '''
 process 
@@ -27,7 +28,6 @@ def prcess_list():
     for k, v in process_list:
         result.append({k: dict(v)})
     return jsonify({'success': True, 'data': result})
-
 
 
 '''
@@ -190,3 +190,22 @@ def add_file_tree_content(id):
     else:
         ProductRelation.add_product_relation(d, form_data.get('content'))
     return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id, 'func_relation_id': func_relation_id})
+
+
+'''
+属性接口
+'''
+
+
+@main.route('/tree/attr')
+@login_required
+def get_tree_attr():
+    level = request.args.get('level')
+    if level is not None:
+        attr = Attr.query.filter_by(level=level).first()
+        if not attr:
+            abort(404)
+
+        return jsonify({'success': True, 'data': json.loads(attr.content) if attr.content else None})
+
+

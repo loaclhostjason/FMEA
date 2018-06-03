@@ -124,6 +124,7 @@ class AttrMixin:
     update_time = db.Column(db.DateTime, default=datetime.now)
 
     content = db.Column(db.Text)
+    real_content = db.Column(db.Text)
     username = db.Column(db.String(12), default='系统')
 
     extra = db.Column(db.Boolean, default=False)
