@@ -13,6 +13,7 @@ from .func import get_func_relation, get_failure_relation
 from ..read_config import ReadAppConfig
 from collections import defaultdict
 import json
+from sqlalchemy import or_
 
 '''
 process 
@@ -201,17 +202,18 @@ def add_file_tree_content(id):
 @login_required
 def get_tree_attr():
     level = request.args.get('level')
-    if level is not None:
-        attr = Attr.query.filter_by(level=level).first()
-        if not attr:
-            abort(404)
+    type_name = request.args.get('type_name')
 
-        data = None
-        content = None
-        if attr.content:
-            data = json.loads(attr.content)
+    attr = Attr.query.filter(or_(Attr.level==level, Attr.type == type_name)).first()
+    if not attr:
+        return jsonify({'success': False, 'messgae': '参数不对'})
 
-        if attr.real_content:
-            content = json.loads(attr.real_content)
+    data = None
+    content = None
+    if attr.content:
+        data = json.loads(attr.content)
 
-        return jsonify({'success': True, 'data': data, 'content': content})
+    if attr.real_content:
+        content = json.loads(attr.real_content)
+
+    return jsonify({'success': True, 'data': data, 'content': content})

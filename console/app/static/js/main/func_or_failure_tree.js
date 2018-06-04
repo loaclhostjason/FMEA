@@ -31,11 +31,23 @@ $(document).ready(function () {
         $$(go.Adornment, "Vertical",
             makeButton("编辑属性",
                 function (e, obj) {
-                    if (product_id) {
-                        // action = $.getUrlParam('action');
-                        // if (action !== 'edit_attr')
-                        //     window.location.href = window.location.href + '?action=edit_attr'
-                    }
+                    var node = obj.part.adornedPart;
+                    var thisemp = node.data;
+
+                    var type = thisemp['category'];
+                    var type_name = (type === "FuncNode") ? 'func': 'failure';
+                    $.get('/tree/attr?type_name=' + type_name, function (resp) {
+                        console.log(resp);
+                        var data = resp['data'];
+                        var content = resp['content'];
+                        $.attr_html(data, type_name, content);
+
+                    });
+                    // if (product_id) {
+                    // action = $.getUrlParam('action');
+                    // if (action !== 'edit_attr')
+                    //     window.location.href = window.location.href + '?action=edit_attr'
+                    // }
 
                 }),
             makeButton("新增失效",

@@ -41,7 +41,7 @@ $(document).ready(function () {
                         console.log(resp);
                         var data = resp['data'];
                         var content = resp['content'];
-                        attr_html(data, level, content);
+                        $.attr_html(data, level, content);
 
                     });
                     // alert(level)
@@ -132,13 +132,17 @@ $(document).ready(function () {
 
     }
 
-    function attr_html(data, level, content) {
+    $.attr_html = function(data, level, content) {
         var attr_form = $('#attr-form');
         if (!data || !data.length) {
             attr_form.html('');
             return false
         }
-        var form_html = '<input name="level" type="hidden" value="' + level + '">';
+        if ($.inArray(level, ['func', 'failure'])> -1) {
+            var form_html = '<input name="type" type="hidden" value="' + level + '">';
+        } else
+            var form_html = '<input name="level" type="hidden" value="' + level + '">';
+
         data.forEach(function (value) {
             form_html += '<div class="form-group">';
             form_html += '<div class="col-sm-2"><label class="control-label pull-right">' + required_html(value['required']) + value['field_zh'] + '</label></div>';
