@@ -124,9 +124,9 @@ $(document).ready(function () {
     }
 
     function required_input(field, required, content) {
-        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="'+ content[field] +'">';
+        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + content[field] + '">';
         if (required)
-            html = '<input class="form-control pull-left" name="' + field + '" type="text" value="'+ content[field] +'" required>';
+            html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + content[field] + '" required>';
 
         return html
 
@@ -164,6 +164,17 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
+    function content_html(content) {
+        var html = '';
+        if (!content || !content.length) {
+            return html
+        }
+        content.forEach(function (value) {
+            html += '<div></i><label class="label-border-default" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+        });
+        return html
+    }
+
     var add_process = $("#add-process");
     add_process.on('hide.bs.modal', function () {
         $(this).find('input').val("");
@@ -189,6 +200,7 @@ $(document).ready(function () {
         // console.log(data);
         data.forEach(function (info) {
             for (var key in info) {
+                var id = info[key]['id'];
 
                 html += '<tr><td>' + info[key]['name_zh'] + '</td>';
                 html += '<td>';
@@ -208,6 +220,39 @@ $(document).ready(function () {
                                 html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
 
                             break;
+
+                        case 'current_action':
+                            if ($.inArray(level, value['show_level']) > -1) {
+                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
+                            }
+                            else {
+                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
+                            }
+
+
+                            html += value['name_zh'] + '</label></a></div>';
+                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
+
+                            break;
+
+                        case 'optimize_action':
+                            if ($.inArray(level, value['show_level']) > -1) {
+                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
+                            }
+                            else {
+                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
+                            }
+
+
+                            html += value['name_zh'] + '</label></a></div>';
+                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
+
+                            break;
+
                         default:
                             if ($.inArray(level, value['show_level']) > -1)
                                 html += '<div><label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';

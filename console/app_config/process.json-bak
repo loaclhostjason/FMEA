@@ -30,6 +30,14 @@
                  "show_level": [1, 2, 3, 4]
             },
             {
+                "name": "add_product_char",
+                "name_zh": "新增产品特性"
+            },
+            {
+                "name": "add_process_char",
+                "name_zh": "新增过程特性"
+            },
+            {
                 "name": "edit_func_net",
                 "name_zh": "编辑功能网",
                  "show_level": [1, 2, 3, 4]

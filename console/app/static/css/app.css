@@ -95,6 +95,25 @@ a {
     margin-right: 2px
 }
 
+.label-border-default {
+    border: 1px solid #8e8282;
+    padding: 4px 10px;
+    margin-right: 2px
+}
+
+.table-process .label-border-default:hover {
+    background: #dddddd;
+    border: 1px solid #999;
+}
+
+.label-a {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: none;
+    text-decoration: none;
+}
+
 .panel-page {
     width: 800px;
     text-align: center;
