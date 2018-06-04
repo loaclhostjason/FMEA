@@ -1,8 +1,3 @@
-function attr_html() {
-
-}
-
-
 $(document).ready(function () {
     var $$ = go.GraphObject.make;
     var jqclass = $.jqclass;
@@ -43,8 +38,10 @@ $(document).ready(function () {
                         var level = thisemp['level'] - 1;
                     }
                     $.get('/tree/attr?level=' + level, function (resp) {
-                        console.log(resp)
+                        console.log(resp);
                         var data = resp['data'];
+                        var content = resp['content'];
+                        attr_html(data, level, content);
 
                     });
                     // alert(level)
@@ -116,7 +113,52 @@ $(document).ready(function () {
     };
 
     if (product_id)
-        $.get_tree(product_id)
+        $.get_tree(product_id);
+
+    function required_html(required) {
+        var html = '';
+        if (required)
+            html = '<span class="text-danger">*</span>';
+        return html
+
+    }
+
+    function required_input(field, required, content) {
+        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="'+ content[field] +'">';
+        if (required)
+            html = '<input class="form-control pull-left" name="' + field + '" type="text" value="'+ content[field] +'" required>';
+
+        return html
+
+    }
+
+    function attr_html(data, level, content) {
+        var attr_form = $('#attr-form');
+        if (!data || !data.length) {
+            attr_form.html('');
+            return false
+        }
+        var form_html = '<input name="level" type="hidden" value="' + level + '">';
+        data.forEach(function (value) {
+            form_html += '<div class="form-group">';
+            form_html += '<div class="col-sm-2"><label class="control-label pull-right">' + required_html(value['required']) + value['field_zh'] + '</label></div>';
+            form_html += '<div class="col-sm-8">' + required_input(value['field'], value['required'], content) + '</div>';
+            form_html += '</div>';
+        });
+        form_html += '<div class="form-group"><div class="col-sm-2"><button type="button" class="btn btn-primary submit-add-attr">保存</button></div></div>';
+        attr_form.html(form_html);
+
+    }
+
+    $(document).on('click', '.submit-add-attr', function () {
+        var form_data = $('form#attr-form').serialize();
+        $.post('/manage/attr/content/add', form_data, function (resp) {
+            if (resp.success) {
+                toastr.success(resp['message'])
+            } else
+                toastr.error(resp['message'])
+        })
+    })
 
 });
 

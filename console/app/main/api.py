@@ -206,6 +206,12 @@ def get_tree_attr():
         if not attr:
             abort(404)
 
-        return jsonify({'success': True, 'data': json.loads(attr.content) if attr.content else None})
+        data = None
+        content = None
+        if attr.content:
+            data = json.loads(attr.content)
 
+        if attr.real_content:
+            content = json.loads(attr.real_content)
 
+        return jsonify({'success': True, 'data': data, 'content': content})

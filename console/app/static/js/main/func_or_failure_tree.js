@@ -32,9 +32,9 @@ $(document).ready(function () {
             makeButton("编辑属性",
                 function (e, obj) {
                     if (product_id) {
-                        action = $.getUrlParam('action');
-                        if (action !== 'edit_attr')
-                            window.location.href = window.location.href + '?action=edit_attr'
+                        // action = $.getUrlParam('action');
+                        // if (action !== 'edit_attr')
+                        //     window.location.href = window.location.href + '?action=edit_attr'
                     }
 
                 }),
