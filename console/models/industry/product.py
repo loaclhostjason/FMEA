@@ -118,7 +118,7 @@ class AttrMixin:
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String(16))
-    level = db.Column(db.Integer)
+    level = db.Column(db.Integer, default=-1)
     type = db.Column(db.Enum(AttrType))
 
     update_time = db.Column(db.DateTime, default=datetime.now)
@@ -138,7 +138,7 @@ class AttrContentMixin:
     real_content = db.Column(db.Text)
 
     # func | failuer | structure
-    level = db.Column(db.Integer)
+    level = db.Column(db.Integer, default=-1)
     type = db.Column(db.Enum(AttrType))
 
     name_number = db.Column(db.String(32))

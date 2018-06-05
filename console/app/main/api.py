@@ -210,7 +210,7 @@ def get_tree_attr():
 
     attr = Attr.query.filter(Attr.name_number == name_number).first()
     if not attr:
-        attr = Attr.query.filter(or_(Attr.level == level, Attr.type == type_name)).first()
+        attr = Attr.query.filter(or_(Attr.level == level if level else False, Attr.type == type_name)).first()
 
     if not attr or not product_id:
         return jsonify({'success': False, 'messgae': '参数不对'})
