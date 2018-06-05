@@ -59,7 +59,7 @@
             {
                 "name": "s_assess",
                 "name_zh": "S评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",
@@ -74,7 +74,7 @@
             {
                 "name": "o_assess",
                 "name_zh": "O评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",
@@ -89,7 +89,7 @@
             {
                 "name": "d_assess",
                 "name_zh": "D评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",
@@ -110,7 +110,7 @@
             {
                 "name": "s_assess",
                 "name_zh": "S评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",
@@ -125,7 +125,7 @@
             {
                 "name": "o_assess",
                 "name_zh": "O评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",
@@ -140,7 +140,7 @@
             {
                 "name": "d_assess",
                 "name_zh": "D评估",
-                "show_level": [0, 1, 2, 3, 4],
+                "show_level": [-1, 0, 1, 2, 3, 4],
                 "content": [
                     {
                         "name": "preventive_action",

@@ -124,7 +124,7 @@ $(document).ready(function () {
     }
 
     function required_input(field, required, content) {
-        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + (content ? content[field]: "") + '">';
+        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + (content ? content[field] : "") + '">';
         if (required)
             html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + (content ? content[field] : "") + '" required>';
 
@@ -211,30 +211,35 @@ $(document).ready(function () {
                 info[key]['content'].forEach(function (value) {
                     switch (key) {
                         case "functional_analysis":
+                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<div><label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
-                                html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
+
+                            html += value['name_zh'] + '</label></a></div>';
 
                             break;
                         case "failure_analysis":
+                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<div><label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
-                                html += '<div><label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
 
+                            html += value['name_zh'] + '</label></a></div>';
                             break;
 
                         case 'current_action':
+                            html += '<div>';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
                             }
                             else {
-                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
                             }
-
 
                             html += value['name_zh'] + '</label></a></div>';
                             html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
@@ -242,15 +247,15 @@ $(document).ready(function () {
                             break;
 
                         case 'optimize_action':
+                            html += '<div>';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
                             }
                             else {
-                                html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
+                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
                             }
-
 
                             html += value['name_zh'] + '</label></a></div>';
                             html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
@@ -258,11 +263,13 @@ $(document).ready(function () {
                             break;
 
                         default:
+                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
                             if ($.inArray(level, value['show_level']) > -1)
-                                html += '<div><label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'];
                             else
-                                html += '<div><label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'] + '</label></div>';
+                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'];
 
+                            html += '</a></div>';
                     }
 
                 });

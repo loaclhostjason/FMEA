@@ -35,7 +35,7 @@ $(document).ready(function () {
                     var thisemp = node.data;
 
                     var type = thisemp['category'];
-                    var type_name = (type === "FuncNode") ? 'func': 'failure';
+                    var type_name = (type === "FuncNode") ? 'func' : 'failure';
                     $.get('/tree/attr?type_name=' + type_name, function (resp) {
                         console.log(resp);
                         var data = resp['data'];
@@ -71,6 +71,16 @@ $(document).ready(function () {
                 function (e, obj) {
 
 
+                }),
+            makeButton("新增失效",
+                function (e, obj) {
+                    var node = obj.part.adornedPart;
+                    if (node !== null) {
+                        var thisemp = node.data;
+                    }
+                    var add_process = $("#add-process");
+                    jqclass.show_modal(add_process, $(this));
+                    add_process.find('[name="level"]').val(-1);
                 })
         );
 

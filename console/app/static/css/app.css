@@ -112,6 +112,11 @@ a {
     list-style: none;
     border: none;
     text-decoration: none;
+    color: #2793ff;
+}
+
+.label-a :hover{
+    color: #2794ffff;
 }
 
 .panel-page {
