@@ -152,6 +152,23 @@ class AttrContentMixin:
         return db.relationship('Product', backref=backref("attr_content", cascade="all, delete-orphan"))
 
 
+class AttrActionMixin:
+    __tablename__ = 'attr_action'
+    id = db.Column(db.Integer, primary_key=True)
+
+    content = db.Column(db.Text)
+
+    name_number = db.Column(db.String(32))
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref=backref("attr_action", cascade="all, delete-orphan"))
+
+
 class Product(ProductMixin, db.Model):
     pass
 
@@ -173,4 +190,8 @@ class Attr(AttrMixin, db.Model):
 
 
 class AttrContent(AttrContentMixin, db.Model):
+    pass
+
+
+class AttrAction(AttrActionMixin, db.Model):
     pass

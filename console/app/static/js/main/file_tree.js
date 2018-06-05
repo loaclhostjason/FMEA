@@ -173,6 +173,9 @@ $(document).ready(function () {
 
 });
 
+//
+// process  html
+//
 
 $(document).ready(function () {
     function content_html(content) {
@@ -181,7 +184,7 @@ $(document).ready(function () {
             return html
         }
         content.forEach(function (value) {
-            html += '<div></i><label class="label-border-default" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+            html += '<div></i><label class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
         });
         return html
     }
@@ -272,11 +275,11 @@ $(document).ready(function () {
                         default:
                             html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1)
-                                html += '<label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'];
+                                html += '<label class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             else
-                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">' + value['name_zh'];
+                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
 
-                            html += '</a></div>';
+                            html += value['name_zh'] + '</a></div>';
                     }
 
                 });
@@ -286,4 +289,16 @@ $(document).ready(function () {
         process_table.html(html);
 
     }
+});
+
+
+//
+$(document).ready(function () {
+    var action_modal = $('#action_modal');
+    $(document).on('click', '.add-action', function () {
+        $.jqclass.show_modal(action_modal, $(this));
+        var text = $(this).parents('.panel-collapse').prev().find('label').text();
+        action_modal.find('.modal-title').text(text);
+
+    });
 });

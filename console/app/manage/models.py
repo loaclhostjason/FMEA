@@ -1,6 +1,7 @@
 # coding: utf-8
 from .. import db
 from models.industry.product import AttrContentMixin
+from models.industry.product import AttrActionMixin
 import json
 from sqlalchemy import or_
 
@@ -42,3 +43,8 @@ class AttrContent(AttrContentMixin, db.Model):
 
         cls.update_model(is_have_content, data)
         return
+
+
+class AttrAction(AttrActionMixin, db.Model):
+    def __init__(self, *args, **kwargs):
+        super(AttrAction, self).__init__(*args, **kwargs)

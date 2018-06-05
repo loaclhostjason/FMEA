@@ -1,4 +1,77 @@
-<div tabindex="-1" class="modal fade" id="userpwdModal">
+<style>
+    .form-group {
+        margin-bottom: 8px;
+    }
+
+    .col-sm-8 label {
+        display: block;
+    }
+</style>
+
+{% macro html_title(title) %}
+    <div class="console-sub-title clearfix">
+        <div class="pull-left">
+            <span>{{ title }}</span>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro html_content() %}
+
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="" class="control-label pull-right">
+                <span class="text-danger">*</span><span>名称:</span>
+            </label>
+        </div>
+        <div class="col-sm-8">
+            <label><input name="name" type="text" class="form-control pull-left" required></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="" class="control-label pull-right"><span>发生度评估:</span></label>
+        </div>
+        <div class="col-sm-8">
+            <label><input name="current_assess" class="form-control pull-left" required></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="" class="control-label pull-right"><span>AP行动优先级:</span></label>
+        </div>
+        <div class="col-sm-8">
+            <label><input name="ap_priority" class="form-control pull-left"></label>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="" class="control-label pull-right"><span>备注:</span></label>
+        </div>
+        <div class="col-sm-8">
+            <label><input name="description" class="form-control pull-left"></label>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="" class="control-label pull-right"><span>帮助:</span></label>
+        </div>
+        <div class="col-sm-8">
+            <label><input name="help" class="form-control pull-left"></label>
+        </div>
+    </div>
+
+
+{% endmacro %}
+
+<div tabindex="-1" class="modal fade" id="action_modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div>
@@ -10,37 +83,42 @@
                 <div class="modal-body clearfix">
                     <form class="form-horizontal" name="form">
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="pull-left">
-                                    <div class="div_title" style="border-left-color: #88B7E0">
-                                        <span>密码修改</span>
-                                    </div>
-                                </div>
+                        <div>
+                            {{ html_title('当前措施组--预防措施') }}
+                            <div class="col-sm-12  ram-overview-block">
+                                {{ html_content() }}
                             </div>
-                            <div class="col-sm-12">
 
-                                <div class="form-group">
-                                    <div class="col-sm-3">
-                                        <label for="" class="control-label pull-right">
-                                            <span class="text-danger">*</span><span>新密码:</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label><input name="password" type="password" class="form-control pull-left" required></label>
-                                    </div>
-                                </div>
+                        </div>
 
-                                <div class="form-group">
-                                    <div class="col-sm-3">
-                                        <label for="" class="control-label pull-right">
-                                            <span class="text-danger">*</span><span>确认密码:</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label><input name="password2" type="password" class="form-control pull-left" required></label>
-                                    </div>
-                                </div>
+                        <hr>
+
+                        <div>
+
+                            {{ html_title('当前措施组--探测措施') }}
+                            <div class="col-sm-12 ram-overview-block">
+                                {{ html_content() }}
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div>
+
+                            {{ html_title('优化措施组--预防措施') }}
+                            <div class="col-sm-12 ram-overview-block">
+                                {{ html_content() }}
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            {{ html_title('优化措施组--探测措施') }}
+                            <div class="col-sm-12" style="margin-top: 13px">
+                                {{ html_content() }}
 
                             </div>
 
@@ -49,7 +127,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-primary submit_update">确定</button>
+                    <button class="btn btn-primary submit_action">确定</button>
                     <button class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
