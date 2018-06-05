@@ -74,7 +74,7 @@ $(document).ready(function () {
 
 
                 }),
-            makeButton("新增失效",
+            makeButton("编辑评估",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
