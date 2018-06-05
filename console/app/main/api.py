@@ -14,6 +14,7 @@ from ..read_config import ReadAppConfig
 from collections import defaultdict
 import json
 from sqlalchemy import or_
+from ..manage.models import AttrContent
 
 '''
 process 
@@ -213,7 +214,8 @@ def get_tree_attr():
     if attr.content:
         data = json.loads(attr.content)
 
-    if attr.real_content:
-        content = json.loads(attr.real_content)
+    attr_content = AttrContent.query.filter(or_(Attr.level == level, Attr.type == type_name)).first()
+    if attr_content and attr_content.real_content:
+        content = json.loads(attr_content.real_content)
 
     return jsonify({'success': True, 'data': data, 'content': content})

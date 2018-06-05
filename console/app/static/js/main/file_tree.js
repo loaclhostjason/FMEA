@@ -124,21 +124,21 @@ $(document).ready(function () {
     }
 
     function required_input(field, required, content) {
-        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + content[field] + '">';
+        var html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + (content ? content[field]: "") + '">';
         if (required)
-            html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + content[field] + '" required>';
+            html = '<input class="form-control pull-left" name="' + field + '" type="text" value="' + (content ? content[field] : "") + '" required>';
 
         return html
 
     }
 
-    $.attr_html = function(data, level, content) {
+    $.attr_html = function (data, level, content) {
         var attr_form = $('#attr-form');
         if (!data || !data.length) {
             attr_form.html('');
             return false
         }
-        if ($.inArray(level, ['func', 'failure'])> -1) {
+        if ($.inArray(level, ['func', 'failure']) > -1) {
             var form_html = '<input name="type" type="hidden" value="' + level + '">';
         } else
             var form_html = '<input name="level" type="hidden" value="' + level + '">';
@@ -156,7 +156,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.submit-add-attr', function () {
         var form_data = $('form#attr-form').serialize();
-        $.post('/manage/attr/content/add', form_data, function (resp) {
+        $.post('/manage/attr/content/add?product_id=' + product_id, form_data, function (resp) {
             if (resp.success) {
                 toastr.success(resp['message'])
             } else

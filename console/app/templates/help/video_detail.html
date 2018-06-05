@@ -1,0 +1,42 @@
+{% extends "help.html" %}
+
+{% block help_video %}act{% endblock %}
+
+{% block help_content %}
+
+
+    <div class="col-sm-12 console-title clearfix bline" style="margin-bottom: 15px">
+        <div class="pull-left">
+            <h4> {{ video.title }}</h4>
+            <a href="{{ url_for('.video_list') }}"
+               class="btn btn-xs btn-toinstlist"><span class="icon-toinstlist"></span><span>返回视频列表</span>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-sm-12 row" style="margin-top: 5px">
+
+
+        <div class="panel-border" style="margin-top: 10px">
+            <div class="charttable-title">
+                <span class="title-text" style="display: inline"><b>{{ video.title }}</b></span>
+            </div>
+            <div class="charttable-w">
+                <div>
+                    <video style="min-height: 500px" src="{{ url_for('.read_video', id=video.id) }}" controls="controls">
+                        您的浏览器不支持 video 标签。
+                    </video>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+{% endblock %}
+

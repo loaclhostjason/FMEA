@@ -98,8 +98,27 @@ def download_files():
 @login_required
 def video_list():
     form = SelectHelpVideoForm()
-    videos = HelpFiles.query.filter_by(type='video').all()
+
+    video_query = HelpFiles.query.order_by(HelpFiles.time.desc()).filter_by(type='video')
+
+    Check(form).check_validate_on_submit()
+    if form.validate_on_submit():
+        form_data = form.get_form_data()
+        return redirect(url_for('.video_list', **form_data))
+
+    page_params = {k: v for k, v in request.args.items() if v and k not in ['page']}
+
+    videos = HelpFiles.filter_params(video_query, page_params)
+
+    form.set_form_data(page_params)
     return render_template('help/video.html', form=form, videos=videos)
+
+
+@help.route('/video/detail/<int:id>', methods=['GET', 'POST'])
+@login_required
+def video_detail(id):
+    video = HelpFiles.query.get_or_404(id)
+    return render_template('help/video_detail.html', video=video)
 
 
 @help.route('/video/create_edit', methods=['GET', 'POST'])

@@ -131,6 +131,27 @@ class AttrMixin:
     name_number = db.Column(db.String(32))
 
 
+class AttrContentMixin:
+    __tablename__ = 'attr_content'
+    id = db.Column(db.Integer, primary_key=True)
+
+    real_content = db.Column(db.Text)
+
+    # func | failuer | structure
+    level = db.Column(db.Integer)
+    type = db.Column(db.Enum(AttrType))
+
+    name_number = db.Column(db.String(32))
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref=backref("attr_content", cascade="all, delete-orphan"))
+
+
 class Product(ProductMixin, db.Model):
     pass
 
@@ -148,4 +169,8 @@ class FailureRelation(FailureRelationMixin, db.Model):
 
 
 class Attr(AttrMixin, db.Model):
+    pass
+
+
+class AttrContent(AttrContentMixin, db.Model):
     pass

@@ -44,36 +44,56 @@
 
         <hr/>
         <div class="col-sm-12" style="margin-top: 20px">
-            {% for video in videos %}
 
-                <div class="col-xs-4">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th width="150">上次时间</th>
+                    <th>视频标题</th>
+                    <th>视频名</th>
+                    <th width="100">上传者</th>
+                    {% if current_user.is_admin() %}
+                        <th width="160" class="text-right">操作</th>
+                    {% endif %}
 
-                    <div class="panel-border" style="margin-top: 10px">
-                        <div class="charttable-title">
-                            <span class="title-text" style="display: inline"><b>{{ video.title }}</b></span>
-                            {% if current_user.is_admin() %}
-                                <span style="position: absolute; right: 30px; font-size: 16px"><a href="javascript:void (0)" class="update-video"
-                                                                                                  data-id="{{ video.id }}"><i
-                                        class="glyphicon glyphicon-edit"></i></a></span>
-                                <span style="position: absolute; right: 10px;font-size: 16px"><a href="javascript:void (0)" class="delete-video"
-                                                                                                 data-id="{{ video.id }}"><i
-                                        class="glyphicon glyphicon-trash"></i></a></span>
-                            {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if videos %}
+                    {% for video in videos %}
+                        <tr>
+                            <td>
+                                {{ video.time or '--' }}
+                            </td>
 
-                        </div>
-                        <div class="charttable-w">
-                            <div>
-                                <video style="height: 300px" src="{{ url_for('.read_video', id=video.id) }}" controls="controls">
-                                    您的浏览器不支持 video 标签。
-                                </video>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <td>{{ video.title }}</td>
+                            <td>
+                                <a href="{{ url_for('.video_detail', id=video.id) }}">
+                                    {{ video.file_name or '--' }}
+                                </a>
+                            </td>
+                            <td><span>{{ video.user.username if video.user else '--' }}</span></td>
 
+                            <td class="text-right">
+                                <a href="{{ url_for('.video_detail', id=video.id) }}">播放</a>
+                                <span class="text-explode">|</span>
+                                <a href="javascript:void (0)" class="update-video" data-id="{{ video.id }}">编辑标题</a>
+                                <span class="text-explode">|</span>
+                                <a href="javascript:void (0)" class="delete-video" data-id="{{ video.id }}">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-            {% endfor %}
+                {% else %}
+                    <tr>
+                        <td style="padding: 50px 0" colspan="7" align="center">
+                            <span>没有记录</span>
+                        </td>
+                    </tr>
 
+                {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
