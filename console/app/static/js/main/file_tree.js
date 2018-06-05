@@ -34,14 +34,20 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var parent_id = thisemp['key'];
                         var level = thisemp['level'] - 1;
+                        var name_number = thisemp['name_number'];
+                        console.log(thisemp)
                     }
-                    $.get('/tree/attr?level=' + level, function (resp) {
+                    $.get('/tree/attr?product_id=' + product_id + '&level=' + level + '&name_number=' + name_number, function (resp) {
                         console.log(resp);
-                        var data = resp['data'];
-                        var content = resp['content'];
-                        $.attr_html(data, level, content);
+                        if (resp.success) {
+                            var data = resp['data'];
+                            var content = resp['content'];
+                            $.attr_html(data, level, name_number, 'structure', content);
+                        } else {
+                            toastr.error(resp.messgae)
+                        }
+
 
                     });
                     // alert(level)
@@ -132,16 +138,15 @@ $(document).ready(function () {
 
     }
 
-    $.attr_html = function (data, level, content) {
+    $.attr_html = function (data, level, name_number, type, content) {
         var attr_form = $('#attr-form');
         if (!data || !data.length) {
             attr_form.html('');
             return false
         }
-        if ($.inArray(level, ['func', 'failure']) > -1) {
-            var form_html = '<input name="type" type="hidden" value="' + level + '">';
-        } else
-            var form_html = '<input name="level" type="hidden" value="' + level + '">';
+        var form_html = '<input name="level" type="hidden" value="' + level + '">';
+        form_html += '<input name="type_name" type="hidden" value="' + type + '">';
+        form_html += '<input name="name_number" type="hidden" value="' + name_number + '">';
 
         data.forEach(function (value) {
             form_html += '<div class="form-group">';
@@ -152,7 +157,7 @@ $(document).ready(function () {
         form_html += '<div class="form-group"><div class="col-sm-2"><button type="button" class="btn btn-primary submit-add-attr">保存</button></div></div>';
         attr_form.html(form_html);
 
-    }
+    };
 
     $(document).on('click', '.submit-add-attr', function () {
         var form_data = $('form#attr-form').serialize();
@@ -211,7 +216,7 @@ $(document).ready(function () {
                 info[key]['content'].forEach(function (value) {
                     switch (key) {
                         case "functional_analysis":
-                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
+                            html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
                                 html += '<label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
@@ -221,7 +226,7 @@ $(document).ready(function () {
 
                             break;
                         case "failure_analysis":
-                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
+                            html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
                                 html += '<label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
@@ -263,7 +268,7 @@ $(document).ready(function () {
                             break;
 
                         default:
-                            html += '<div><a class="label-a" href="javascript:vodi(0)">';
+                            html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1)
                                 html += '<label class="label-border text-center show-content" style="width: 125px;cursor: pointer">' + value['name_zh'];
                             else

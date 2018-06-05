@@ -35,12 +35,14 @@ $(document).ready(function () {
                     var thisemp = node.data;
 
                     var type = thisemp['category'];
+                    var name_number = thisemp['name_number'];
                     var type_name = (type === "FuncNode") ? 'func' : 'failure';
-                    $.get('/tree/attr?type_name=' + type_name, function (resp) {
+
+                    $.get('/tree/attr?product_id=' + product_id + '&type_name=' + type_name + '&name_number=' + name_number, function (resp) {
                         console.log(resp);
                         var data = resp['data'];
                         var content = resp['content'];
-                        $.attr_html(data, type_name, content);
+                        $.attr_html(data, '', name_number, type_name, content);
 
                     });
                     // if (product_id) {

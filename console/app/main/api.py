@@ -202,11 +202,17 @@ def add_file_tree_content(id):
 @main.route('/tree/attr')
 @login_required
 def get_tree_attr():
+    # get attr 参数
     level = request.args.get('level')
     type_name = request.args.get('type_name')
+    name_number = request.args.get('name_number')
+    product_id = request.args.get('product_id')
 
-    attr = Attr.query.filter(or_(Attr.level==level, Attr.type == type_name)).first()
+    attr = Attr.query.filter(Attr.name_number == name_number).first()
     if not attr:
+        attr = Attr.query.filter(or_(Attr.level == level, Attr.type == type_name)).first()
+
+    if not attr or not product_id:
         return jsonify({'success': False, 'messgae': '参数不对'})
 
     data = None
@@ -214,7 +220,9 @@ def get_tree_attr():
     if attr.content:
         data = json.loads(attr.content)
 
-    attr_content = AttrContent.query.filter(or_(Attr.level == level, Attr.type == type_name)).first()
+    attr_content_query = AttrContent.query.filter(AttrContent.product_id == product_id)
+    attr_content = attr_content_query.filter(AttrContent.name_number == name_number).first()
+
     if attr_content and attr_content.real_content:
         content = json.loads(attr_content.real_content)
 

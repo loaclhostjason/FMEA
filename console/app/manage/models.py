@@ -9,27 +9,32 @@ class AttrContent(AttrContentMixin, db.Model):
     def __init__(self, *args, **kwargs):
         super(AttrContent, self).__init__(*args, **kwargs)
 
-    def get_insert_data(self, data, product_id, type):
+    def get_insert_data(self, data, product_id):
         if not data:
             return
         level = data.get('level')
+        type_name = data.get('type_name')
+        name_number = data.get('name_number')
         try:
             del data['level']
+            del data['name_number']
+            del data['type_name']
         except:
             pass
         d = {
             'level': level,
             'product_id': product_id,
             'real_content': json.dumps(data),
-            'type': 'structure' if level else type
+            'type': 'structure' if not type_name else type_name,
+            'name_number': name_number,
         }
         return d
 
     @classmethod
-    def create_edit(cls, data, product_id, type_name):
-        is_have_content = cls.query.filter(or_(cls.level == data.get('level'), cls.type == type_name)).first()
+    def create_edit(cls, data, product_id, name_number):
+        is_have_content = cls.query.filter(cls.product_id == product_id, cls.name_number == name_number).first()
 
-        data = cls().get_insert_data(data, product_id, type_name)
+        data = cls().get_insert_data(data, product_id)
         if not is_have_content:
             content = cls(**data)
             db.session.add(content)
