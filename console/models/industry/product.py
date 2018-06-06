@@ -71,9 +71,14 @@ class FuncRelationMixin:
 
     timestamp = db.Column(db.DateTime, default=datetime.now)
 
+    type = db.Column(db.String(32), default='func')
+
+    parent_id = db.Column(db.Integer)
+
     @declared_attr
     def product_relation(cls):
-        return db.relationship('ProductRelation', backref=db.backref('func_relation', lazy='dynamic', cascade='all, delete-orphan'))
+        return db.relationship('ProductRelation',
+                               backref=db.backref('func_relation', lazy='dynamic', cascade='all, delete-orphan'))
 
     @declared_attr
     def product(cls):
@@ -100,7 +105,8 @@ class FailureRelationMixin:
 
     @declared_attr
     def func_relation(cls):
-        return db.relationship('FuncRelation', backref=db.backref('failure_relation', lazy='dynamic', cascade='all, delete-orphan'))
+        return db.relationship('FuncRelation',
+                               backref=db.backref('failure_relation', lazy='dynamic', cascade='all, delete-orphan'))
 
     @declared_attr
     def product(cls):

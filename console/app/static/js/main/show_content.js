@@ -19,20 +19,12 @@ $(document).ready(function () {
         var params = add_content.find('form').serialize();
         var type = btn.data('type');
 
-        params += '&parent_id=' + add_content.find('[name="parent_id"]').val() + '&type=' + type || '';
+        params += '&parent_id=' + '&type=' + type || '';
         $.post('/file/tree/content/add/' + product_id, params, function (resp) {
             if (resp.success) {
-
                 var type = resp['type'];
-                if (type === 'func') {
-                    var product_relation_id = resp['product_relation_id'];
-                    $.get_func_or_failure_tree('func', product_relation_id);
-
-                } else if (type === 'failure') {
-
-                    var func_relation_id = resp['func_relation_id'];
-                    $.get_func_or_failure_tree('failure', func_relation_id);
-
+                if (type) {
+                    $.get_func_or_failure_tree(resp['product_relation_id']);
                 } else {
                     $.get_tree(product_id);
                 }

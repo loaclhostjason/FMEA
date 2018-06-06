@@ -8,6 +8,7 @@ from models.industry import FailureRelationMixin
 
 from .. import db
 from ..base import Tool, Check
+from sqlalchemy import func
 
 
 class Product(ProductMixin, db.Model):
@@ -137,7 +138,7 @@ class FuncRelation(FuncRelationMixin, db.Model):
         super(FuncRelation, self).__init__(*args, **kwargs)
 
     @staticmethod
-    def update_name_number(parent_id, number):
+    def update_func_name_number(parent_id, number):
         parduct_relation = ProductRelation.query.filter_by(id=parent_id).first()
         if not parduct_relation:
             func_relation = FuncRelation.query.filter(FuncRelation.product_id == FuncRelation.product_relation_id).all()
@@ -146,27 +147,43 @@ class FuncRelation(FuncRelationMixin, db.Model):
         return '%s-FU%d' % (parduct_relation.name_number, number)
 
     @classmethod
-    def add_func_relation(cls, data, content):
-        if not data['parent_id']:
+    def update_failure_name_number(cls, parent_id, number):
+        func_relation = cls.query.get_or_404(parent_id)
+        if not func_relation:
             return
 
-        data['product_relation_id'] = int(data['parent_id'])
-        try:
+        return '%s-FA%d' % (func_relation.name_number, number)
+
+    @classmethod
+    def start_index(cls, type, product_relation_id, parent_id=None):
+        base_model = db.session.query(func.count(cls.id).label('num'))
+        if type == 'func':
+            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=None).group_by(cls.product_relation_id)
+        else:
+            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=parent_id).group_by(cls.product_relation_id, cls.parent_id)
+
+        info = info.first()
+        return info.num + 1 if info else 1
+
+    @classmethod
+    def add_func_relation(cls, data, content, tree_type):
+        if tree_type == 'func':
             del data['parent_id']
-            del data['level']
-        except Exception:
-            pass
 
         content = content.split('\r\n')
         result = []
-        for index, con in enumerate(content, start=1):
+        for index, con in enumerate(content, start=cls.start_index(tree_type, data['product_relation_id'], data.get('parent_id'))):
             data['name'] = con
             data['number'] = index
-            data['name_number'] = cls.update_name_number(data['product_relation_id'], index)
+            data['type'] = tree_type
+            if tree_type == 'func':
+                data['name_number'] = cls.update_name_number(data['product_relation_id'], index)
+            else:
+                data['name_number'] = cls.update_failure_name_number(data['parent_id'], index)
+
             result.append(cls(**data))
         db.session.add_all(result)
         db.session.commit()
-        return data['product_relation_id']
 
 
 class FailureRelation(FailureRelationMixin, db.Model):

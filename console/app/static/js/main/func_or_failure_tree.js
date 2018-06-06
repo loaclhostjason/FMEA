@@ -57,12 +57,18 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var func_relation_id = thisemp['key'];
+                        var func_id = thisemp['key'];
+                        var product_relation_id = thisemp['product_relation_id'];
                     }
+                    console.log(thisemp);
                     var add_process = $("#add-process");
                     var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
-                    add_content.find('[name="parent_id"]').val(func_relation_id);
+
+                     // tree 参数 product_relation_id-， parent_id -， level
+                    add_content.find('[name="parent_id"]').val(func_id);
+                    add_content.find('[name="product_relation_id"]').val(product_relation_id);
+                    add_content.find('[name="level"]').val('');
                 })
         );
 
@@ -140,17 +146,8 @@ $(document).ready(function () {
 
     // $.myDiagramFunc = myDiagram;
 
-    $.get_func_or_failure_tree = function (type, relation_id) {
-        var params = '';
-        if (type === 'func') {
-            params = '&product_relation_id=' + relation_id
-        }
-
-        if (type === 'failure') {
-            params = '&func_relation_id=' + relation_id
-        }
-
-        $.get('/file/func/failure/tree?type=' + type + params).done(function (resp) {
+    $.get_func_or_failure_tree = function (relation_id) {
+        $.get('/file/func/failure/tree?product_relation_id=' + relation_id).done(function (resp) {
             if (resp.success) {
                 var data = resp['data'];
                 var nodedata = data['nodedata'];

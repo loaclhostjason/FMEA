@@ -156,16 +156,9 @@ def get_file_func_tree():
         'linkdata': [],
     }
 
-    type = request.args.get('type')
-
-    product_relation_id = None
-    if type == 'func':
-        product_relation_id = request.args.get('product_relation_id')
-
-    if type == 'failure':
-        func_relation_id = request.args.get('func_relation_id')
-        func_relation = FuncRelation.query.get_or_404(func_relation_id)
-        product_relation_id = func_relation.product_relation_id
+    product_relation_id = request.args.get('product_relation_id')
+    if not product_relation_id:
+        return jsonify({'success': False, 'messgae': 'id 不存在'})
 
     result = get_func_relation(result, product_relation_id)
     return jsonify({'success': True, 'data': result})
@@ -180,26 +173,26 @@ def get_file_func_tree():
 @login_required
 def add_file_tree_content(id):
     form_data = request.form.to_dict()
+    parent_id = form_data.get('parent_id')
 
     if not form_data.get('content'):
         return jsonify({'success': False, 'message': '内容不能为空'})
 
     d = {
-        'parent_id': form_data.get('parent_id') or id,
+        'parent_id': parent_id,
         'product_id': id,
-        'level': int(form_data['level']) if form_data.get('level') else None
     }
 
-    product_relation_id = None
-    func_relation_id = None
-    if form_data.get('type') == 'func':
-        product_relation_id = FuncRelation.add_func_relation(d, form_data.get('content'))
-    elif form_data.get('type') == 'failure':
-        func_relation_id = FailureRelation.add_fail_relation(d, form_data.get('content'))
+    product_relation_id = form_data.get('product_relation_id')
+
+    # func | failure
+    if form_data.get('type'):
+        d['product_relation_id'] = product_relation_id
+        FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))
     else:
+        d['level'] = int(form_data['level']) if form_data.get('level') else None
         ProductRelation.add_product_relation(d, form_data.get('content'))
-    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id,
-                    'func_relation_id': func_relation_id})
+    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id})
 
 
 '''

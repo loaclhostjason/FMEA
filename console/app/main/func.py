@@ -10,7 +10,7 @@ def get_func_relation(init_result, product_relation_id):
     #     'nodedata': [],
     #     'linkdata': [],
     # }
-    func_relation = FuncRelation.query.filter_by(product_relation_id=product_relation_id).all()
+    func_relation = FuncRelation.query.filter_by(product_relation_id=product_relation_id, type='func').all()
     if not func_relation:
         return init_result
 
@@ -19,7 +19,8 @@ def get_func_relation(init_result, product_relation_id):
             'category': 'FuncNode',
             'name': fr.name,
             'key': fr.id,
-            'name_number': fr.name_number
+            'name_number': fr.name_number,
+            'product_relation_id': product_relation_id
         })
 
         init_result = get_failure_relation(init_result, fr.id)
@@ -34,8 +35,8 @@ def get_func_relation(init_result, product_relation_id):
     return init_result
 
 
-def get_failure_relation(result, func_relation_id):
-    failure_relation = FailureRelation.query.filter_by(func_relation_id=func_relation_id).all()
+def get_failure_relation(result, parent_id):
+    failure_relation = FuncRelation.query.filter_by(parent_id=parent_id, type='failure').all()
     if not failure_relation:
         return result
 
@@ -48,7 +49,7 @@ def get_failure_relation(result, func_relation_id):
         })
         d = {
             'category': 'FailureLink',
-            'from': func_relation_id,
+            'from': parent_id,
             'to': failure.id
         }
         result['linkdata'].append(d)

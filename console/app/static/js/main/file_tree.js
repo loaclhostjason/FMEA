@@ -58,16 +58,23 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var parent_id = thisemp['key'];
+                        var key = thisemp['key'];
                         var level = thisemp['level'];
                     }
                     var add_process = $("#add-process");
                     var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
 
-                    add_content.find('[name="parent_id"]').val(parent_id);
-                    add_content.find('[name="level"]').val(level);
+                    console.log(thisemp);
+
+                    // 添加 process level 1，2，3
                     add_process.find('[name="level"]').val(level);
+
+                    // tree 参数 product_relation_id， parent_id-， level-
+                    add_content.find('[name="product_relation_id"]').val(key);
+                    add_content.find('[name="parent_id"]').val(key);
+                    add_content.find('[name="level"]').val(level);
+
                 })
         );
 
@@ -88,7 +95,7 @@ $(document).ready(function () {
                     var node = obj.part.data;
                     if (node !== null) {
                         var product_relation_id = node['key'];
-                        $.get_func_or_failure_tree('func', product_relation_id);
+                        $.get_func_or_failure_tree(product_relation_id);
 
                     }
 
