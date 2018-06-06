@@ -70,6 +70,16 @@ def create_file_product():
     db.session.flush()
 
     product_id = add_product.id
+
+    product_relation = {
+        'name': form_data['name'],
+        'level': 0,
+        'name_number': 0,
+        'product_id': product_id
+    }
+
+    relation = ProductRelation(**product_relation)
+    db.session.add(relation)
     return jsonify({'success': True, 'message': '更新成功', 'product_id': product_id})
 
 
@@ -117,19 +127,16 @@ def get_file_tree():
     if not product_id:
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
-    product = Product.query.get_or_404(product_id)
-    result['nodedata'].append({
-        'name': product.name,
-        'key': product_id,
-        'level': product.level + 1,
-        'name_number': product.name_number
-    })
+    product = ProductRelation.query.filter_by(product_id=product_id).all()
+    if not product:
+        return jsonify({'success': True, 'data': result})
 
-    realtion = product.product_relation
     link_data = []
-    for rl in realtion:
+    for rl in product:
         # if rl.parent_id != product_id:
-        link_data.append({'from': rl.parent_id, 'to': rl.id})
+        if rl.parent_id:
+            link_data.append({'from': rl.parent_id, 'to': rl.id})
+
         result['nodedata'].append({
             'name': rl.name,
             'key': rl.id,
@@ -191,7 +198,8 @@ def add_file_tree_content(id):
         func_relation_id = FailureRelation.add_fail_relation(d, form_data.get('content'))
     else:
         ProductRelation.add_product_relation(d, form_data.get('content'))
-    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id, 'func_relation_id': func_relation_id})
+    return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id,
+                    'func_relation_id': func_relation_id})
 
 
 '''

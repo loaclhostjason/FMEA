@@ -61,7 +61,7 @@ class ProductRelation(ProductRelationMixin, db.Model):
             le.name_number_set = None
             db.session.add(le)
 
-        level2 = cls.query.filter(cls.level != 1).all()
+        level2 = cls.query.filter(cls.level != 1, cls.level != 0).all()
         if not level2:
             return
         for lv2 in level2:
