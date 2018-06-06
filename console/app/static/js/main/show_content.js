@@ -19,7 +19,8 @@ $(document).ready(function () {
         var params = add_content.find('form').serialize();
         var type = btn.data('type');
 
-        params += '&parent_id=' + '&type=' + type || '';
+        var type_name = (!type || typeof(type) === "undefined") ? '' : type;
+        params += '&type=' + type_name;
         $.post('/file/tree/content/add/' + product_id, params, function (resp) {
             if (resp.success) {
                 var type = resp['type'];

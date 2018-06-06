@@ -85,34 +85,6 @@ class FuncRelationMixin:
         return db.relationship('Product', backref=backref("func_relation", cascade="all, delete-orphan"))
 
 
-class FailureRelationMixin:
-    __tablename__ = 'failure_relation'
-    id = db.Column(db.Integer, primary_key=True)
-
-    @declared_attr
-    def func_relation_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('func_relation.id'))
-
-    @declared_attr
-    def product_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('product.id'))
-
-    name = db.Column(db.String(64))
-    number = db.Column(db.Integer, default=1)  # 插入顺序
-    name_number = db.Column(db.String(32), index=True)  # 编号
-
-    timestamp = db.Column(db.DateTime, default=datetime.now)
-
-    @declared_attr
-    def func_relation(cls):
-        return db.relationship('FuncRelation',
-                               backref=db.backref('failure_relation', lazy='dynamic', cascade='all, delete-orphan'))
-
-    @declared_attr
-    def product(cls):
-        return db.relationship('Product', backref=backref("failure_relation", cascade="all, delete-orphan"))
-
-
 class AttrType(Enum):
     structure = '结构树'
     func = '功能树'
@@ -185,11 +157,6 @@ class ProductRelation(ProductRelationMixin, db.Model):
 
 class FuncRelation(FuncRelationMixin, db.Model):
     pass
-
-
-class FailureRelation(FailureRelationMixin, db.Model):
-    pass
-
 
 class Attr(AttrMixin, db.Model):
     pass

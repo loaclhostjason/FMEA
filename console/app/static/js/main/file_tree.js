@@ -152,8 +152,8 @@ $(document).ready(function () {
             return false
         }
         var form_html = '';
-        if (level)
-            form_html += '<input name="level" type="hidden" value="' + level + '">';
+
+        form_html += '<input name="level" type="hidden" value="' + level + '">';
         form_html += '<input name="type_name" type="hidden" value="' + type + '">';
         form_html += '<input name="name_number" type="hidden" value="' + name_number + '">';
 

@@ -34,15 +34,13 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     var thisemp = node.data;
 
-                    var type = thisemp['category'];
                     var name_number = thisemp['name_number'];
-                    var type_name = (type === "FuncNode") ? 'func' : 'failure';
 
-                    $.get('/tree/attr?product_id=' + product_id + '&type_name=' + type_name + '&name_number=' + name_number, function (resp) {
+                    $.get('/tree/attr?product_id=' + product_id + '&type_name=func' + '&name_number=' + name_number, function (resp) {
                         console.log(resp);
                         var data = resp['data'];
                         var content = resp['content'];
-                        $.attr_html(data, '', name_number, type_name, content);
+                        $.attr_html(data, -1, name_number, 'func', content);
 
                     });
                     // if (product_id) {
@@ -65,10 +63,12 @@ $(document).ready(function () {
                     var add_content = $("#add-content");
                     jqclass.show_modal(add_process, $(this));
 
-                     // tree 参数 product_relation_id-， parent_id -， level
+                    // tree 参数 product_relation_id-， parent_id -， level
                     add_content.find('[name="parent_id"]').val(func_id);
                     add_content.find('[name="product_relation_id"]').val(product_relation_id);
-                    add_content.find('[name="level"]').val('');
+                    add_content.find('[name="level"]').val(-1);
+
+                    add_process.find('[name="level"]').val(-1);
                 })
         );
 
@@ -77,7 +77,17 @@ $(document).ready(function () {
         $$(go.Adornment, "Vertical",
             makeButton("编辑属性",
                 function (e, obj) {
+                    var node = obj.part.adornedPart;
+                    var thisemp = node.data;
+                    var name_number = thisemp['name_number'];
 
+                    $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + name_number, function (resp) {
+                        console.log(resp);
+                        var data = resp['data'];
+                        var content = resp['content'];
+                        $.attr_html(data, -2, name_number, 'failure', content);
+
+                    });
 
                 }),
             makeButton("编辑评估",
@@ -88,7 +98,7 @@ $(document).ready(function () {
                     }
                     var add_process = $("#add-process");
                     jqclass.show_modal(add_process, $(this));
-                    add_process.find('[name="level"]').val(-1);
+                    add_process.find('[name="level"]').val(-2);
                 })
         );
 

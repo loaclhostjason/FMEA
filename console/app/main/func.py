@@ -1,6 +1,6 @@
 # coding: utf-8
 from flask import request, jsonify
-from .models import FuncRelation, FailureRelation
+from .models import FuncRelation
 
 
 def get_func_relation(init_result, product_relation_id):

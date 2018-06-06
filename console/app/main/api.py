@@ -186,6 +186,7 @@ def add_file_tree_content(id):
     product_relation_id = form_data.get('product_relation_id')
 
     # func | failure
+    print(form_data.get('type'))
     if form_data.get('type'):
         d['product_relation_id'] = product_relation_id
         FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))

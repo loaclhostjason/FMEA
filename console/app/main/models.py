@@ -4,7 +4,6 @@ from models.industry import ProductMixin
 from models.industry import ProductRelationMixin
 from models.industry import AttrMixin
 from models.industry import FuncRelationMixin
-from models.industry import FailureRelationMixin
 
 from .. import db
 from ..base import Tool, Check
@@ -177,45 +176,10 @@ class FuncRelation(FuncRelationMixin, db.Model):
             data['number'] = index
             data['type'] = tree_type
             if tree_type == 'func':
-                data['name_number'] = cls.update_name_number(data['product_relation_id'], index)
+                data['name_number'] = cls.update_func_name_number(data['product_relation_id'], index)
             else:
                 data['name_number'] = cls.update_failure_name_number(data['parent_id'], index)
 
             result.append(cls(**data))
         db.session.add_all(result)
         db.session.commit()
-
-
-class FailureRelation(FailureRelationMixin, db.Model):
-    def __init__(self, *args, **kwargs):
-        super(FailureRelation, self).__init__(*args, **kwargs)
-
-    @staticmethod
-    def update_name_number(parent_id, number):
-        func_relation = FuncRelation.query.get_or_404(parent_id)
-        if not func_relation:
-            return
-
-        return '%s-FA%d' % (func_relation.name_number, number)
-
-    @classmethod
-    def add_fail_relation(cls, data, content):
-        if not data['parent_id']:
-            return
-
-        data['func_relation_id'] = int(data['parent_id'])
-        try:
-            del data['parent_id']
-            del data['level']
-        except Exception:
-            pass
-
-        result = []
-        for index, con in enumerate(content.split('\r\n'), start=1):
-            data['name'] = con
-            data['number'] = index
-            data['name_number'] = cls.update_name_number(data['func_relation_id'], index)
-            result.append(cls(**data))
-        db.session.add_all(result)
-        db.session.commit()
-        return data['func_relation_id']

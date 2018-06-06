@@ -142,3 +142,18 @@ class Tool:
     def str_to_time(timestring, format='%Y-%m-%d %H:%M:%S'):
         result = time.mktime(time.strptime(timestring, format))
         return result
+
+    @staticmethod
+    def remove_key(my_list, my_key):
+
+        if isinstance(my_key, list):
+            for k in my_key:
+                try:
+                    del my_list[k]
+                except KeyError:
+                    pass
+        else:
+            try:
+                del my_list[my_key]
+            except KeyError:
+                pass

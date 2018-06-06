@@ -4,6 +4,7 @@ from models.industry.product import AttrContentMixin
 from models.industry.product import AttrActionMixin
 import json
 from sqlalchemy import or_
+from ..base import Tool
 
 
 class AttrContent(AttrContentMixin, db.Model):
@@ -16,12 +17,10 @@ class AttrContent(AttrContentMixin, db.Model):
         level = data.get('level')
         type_name = data.get('type_name')
         name_number = data.get('name_number')
-        try:
-            del data['level']
-            del data['name_number']
-            del data['type_name']
-        except:
-            pass
+
+        Tool.remove_key(data, ['level', 'name_number', 'type_name'])
+
+        print(data)
         d = {
             'level': level,
             'product_id': product_id,
