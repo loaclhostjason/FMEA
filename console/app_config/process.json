@@ -32,7 +32,8 @@
             {
                 "name": "edit_func_net",
                 "name_zh": "编辑功能网",
-                 "show_level": [1, 2, 3, 4]
+                 "show_level": [1, 2, 3, 4],
+                "action": "edit"
             }
         ]
     },
@@ -48,7 +49,8 @@
             {
                 "name": "edit_failure",
                 "name_zh": "编辑失效网",
-                "show_level": [1, 2, 3, 4]
+                "show_level": [1, 2, 3, 4],
+                "action": "edit"
             }
         ]
     },

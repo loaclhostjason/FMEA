@@ -194,7 +194,7 @@ $(document).ready(function () {
             return html
         }
         content.forEach(function (value) {
-            html += '<div></i><label data-assess="'+ assess +'" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+            html += '<div></i><label data-assess="' + assess + '" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
         });
         return html
     }
@@ -233,7 +233,10 @@ $(document).ready(function () {
                         case "functional_analysis":
                             html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
+                                if (value['action'] === 'edit')
+                                    html += '<label data-message="' + value['name_zh'] + '" data-type="func" class="label-border text-center show-edit-tree" style="width: 125px;cursor: pointer">';
+                                else
+                                    html += '<label data-type="func" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
                                 html += '<label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
 
@@ -243,7 +246,10 @@ $(document).ready(function () {
                         case "failure_analysis":
                             html += '<div><a class="label-a" href="javascript:void(0)">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
+                                if (value['action'] === 'edit')
+                                    html += '<label data-message="' + value['name_zh'] + '" data-type="func" class="label-border text-center show-edit-tree" style="width: 125px;cursor: pointer">';
+                                else
+                                    html += '<label data-type="failure" class="label-border text-center show-content" style="width: 125px;cursor: pointer">';
                             } else
                                 html += '<label data-type="failure" class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
 

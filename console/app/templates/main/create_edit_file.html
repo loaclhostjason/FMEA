@@ -7,6 +7,7 @@
     {% include 'main/modals/add_process.html' %}
     {% include 'main/modals/add_content.html' %}
     {% include 'main/modals/add_action.html' %}
+    {% include 'main/modals/edit_func_tree.html' %}
 
     <div class="col-sm-12 console-title clearfix">
         <div class="pull-left">
@@ -77,6 +78,7 @@
     <script src="{{ url_for('static', filename='js/main/func_or_failure_tree.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main/show_content.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main/action.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/edit_tree.js') }}"></script>
     <script>
         product_id = "{{ product.id if product else '' }}"
     </script>
