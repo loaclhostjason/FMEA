@@ -17,8 +17,6 @@
 {% endmacro %}
 
 {% macro html_content() %}
-
-
     <div class="form-group">
         <div class="col-sm-3">
             <label for="" class="control-label pull-right">
@@ -48,7 +46,6 @@
         </div>
     </div>
 
-
     <div class="form-group">
         <div class="col-sm-3">
             <label for="" class="control-label pull-right"><span>备注:</span></label>
@@ -58,7 +55,6 @@
         </div>
     </div>
 
-
     <div class="form-group">
         <div class="col-sm-3">
             <label for="" class="control-label pull-right"><span>帮助:</span></label>
@@ -67,8 +63,6 @@
             <label><input name="help" class="form-control pull-left"></label>
         </div>
     </div>
-
-
 {% endmacro %}
 
 <div tabindex="-1" class="modal fade" id="action_modal">
@@ -85,7 +79,7 @@
 
                         <div>
                             {{ html_title('当前措施组--预防措施') }}
-                            <div class="col-sm-12  ram-overview-block">
+                            <div class="col-sm-12  ram-overview-block current_action_01">
                                 {{ html_content() }}
                             </div>
 
@@ -96,7 +90,7 @@
                         <div>
 
                             {{ html_title('当前措施组--探测措施') }}
-                            <div class="col-sm-12 ram-overview-block">
+                            <div class="col-sm-12 ram-overview-block current_action_02">
                                 {{ html_content() }}
                             </div>
 
@@ -107,7 +101,7 @@
                         <div>
 
                             {{ html_title('优化措施组--预防措施') }}
-                            <div class="col-sm-12 ram-overview-block">
+                            <div class="col-sm-12 ram-overview-block optimize_action_01">
                                 {{ html_content() }}
                             </div>
 
@@ -117,7 +111,7 @@
 
                         <div>
                             {{ html_title('优化措施组--探测措施') }}
-                            <div class="col-sm-12" style="margin-top: 13px">
+                            <div class="col-sm-12 ram-overview-block optimize_action_02">
                                 {{ html_content() }}
 
                             </div>

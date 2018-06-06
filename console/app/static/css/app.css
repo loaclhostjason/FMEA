@@ -204,7 +204,7 @@ a {
     z-index: 1;
 }
 
-table hr {
+table hr, .modal-content hr {
     border: 1px solid #fff !important;
 }
 

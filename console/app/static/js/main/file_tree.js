@@ -185,13 +185,13 @@ $(document).ready(function () {
 //
 
 $(document).ready(function () {
-    function content_html(content) {
+    function content_html(content, type) {
         var html = '';
         if (!content || !content.length) {
             return html
         }
         content.forEach(function (value) {
-            html += '<div></i><label class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+            html += '<div></i><label data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
         });
         return html
     }
@@ -259,23 +259,22 @@ $(document).ready(function () {
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
-                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
+                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'current') + '</div>';
 
                             break;
 
                         case 'optimize_action':
-                            html += '<div>';
+
+                            html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
                             }
                             else {
-                                html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                                 html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
-                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content']) + '</div>';
+                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'optimize') + '</div>';
 
                             break;
 
