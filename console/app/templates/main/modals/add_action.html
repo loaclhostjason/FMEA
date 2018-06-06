@@ -76,46 +76,49 @@
 
                 <div class="modal-body clearfix">
                     <form class="form-horizontal" name="form">
+                        <input name="name_number" value="">
+                        <div class="rest_form">
 
-                        <div>
-                            {{ html_title('当前措施组--预防措施') }}
-                            <div class="col-sm-12  ram-overview-block current_action_01">
-                                {{ html_content() }}
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        <div>
-
-                            {{ html_title('当前措施组--探测措施') }}
-                            <div class="col-sm-12 ram-overview-block current_action_02">
-                                {{ html_content() }}
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        <div>
-
-                            {{ html_title('优化措施组--预防措施') }}
-                            <div class="col-sm-12 ram-overview-block optimize_action_01">
-                                {{ html_content() }}
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        <div>
-                            {{ html_title('优化措施组--探测措施') }}
-                            <div class="col-sm-12 ram-overview-block optimize_action_02">
-                                {{ html_content() }}
+                            <div>
+                                {{ html_title('当前措施组--预防措施') }}
+                                <div class="col-sm-12  ram-overview-block current_preventive_action">
+                                    {{ html_content() }}
+                                </div>
 
                             </div>
 
+                            <hr>
+
+                            <div>
+
+                                {{ html_title('当前措施组--探测措施') }}
+                                <div class="col-sm-12 ram-overview-block current_probe_action">
+                                    {{ html_content() }}
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div>
+
+                                {{ html_title('优化措施组--预防措施') }}
+                                <div class="col-sm-12 ram-overview-block optimize_preventive_action">
+                                    {{ html_content() }}
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div>
+                                {{ html_title('优化措施组--探测措施') }}
+                                <div class="col-sm-12 ram-overview-block optimize_probe_action">
+                                    {{ html_content() }}
+
+                                </div>
+
+                            </div>
                         </div>
                     </form>
                 </div>

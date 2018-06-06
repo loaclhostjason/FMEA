@@ -130,13 +130,17 @@ class AttrContentMixin:
         return db.relationship('Product', backref=backref("attr_content", cascade="all, delete-orphan"))
 
 
-class AttrActionMixin:
-    __tablename__ = 'attr_action'
+class ProductAssessMixin:
+    __tablename__ = 'product_assess'
     id = db.Column(db.Integer, primary_key=True)
 
     content = db.Column(db.Text)
 
     name_number = db.Column(db.String(32))
+    type = db.Column(db.String(32))  # current | optimize
+    action_type = db.Column(db.String(32))  # preventive_action | probe_action
+
+    assess = db.Column(db.String(32))
 
     @declared_attr
     def product_id(cls):
@@ -144,7 +148,7 @@ class AttrActionMixin:
 
     @declared_attr
     def product(cls):
-        return db.relationship('Product', backref=backref("attr_action", cascade="all, delete-orphan"))
+        return db.relationship('Product', backref=backref("assess", cascade="all, delete-orphan"))
 
 
 class Product(ProductMixin, db.Model):
@@ -158,6 +162,7 @@ class ProductRelation(ProductRelationMixin, db.Model):
 class FuncRelation(FuncRelationMixin, db.Model):
     pass
 
+
 class Attr(AttrMixin, db.Model):
     pass
 
@@ -166,5 +171,5 @@ class AttrContent(AttrContentMixin, db.Model):
     pass
 
 
-class AttrAction(AttrActionMixin, db.Model):
+class ProductAssess(ProductAssessMixin, db.Model):
     pass

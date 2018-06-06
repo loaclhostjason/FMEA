@@ -1,7 +1,7 @@
 # coding: utf-8
 from .. import db
 from models.industry.product import AttrContentMixin
-from models.industry.product import AttrActionMixin
+from models.industry.product import ProductAssessMixin
 import json
 from sqlalchemy import or_
 from ..base import Tool
@@ -44,6 +44,18 @@ class AttrContent(AttrContentMixin, db.Model):
         return
 
 
-class AttrAction(AttrActionMixin, db.Model):
+class ProductAssess(ProductAssessMixin, db.Model):
     def __init__(self, *args, **kwargs):
-        super(AttrAction, self).__init__(*args, **kwargs)
+        super(ProductAssess, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def create_edit(cls, form_data, assess):
+        if not form_data:
+            return
+        if not assess:
+            assess = cls(**form_data)
+            db.session.add(assess)
+            return
+
+        cls.update_model(assess, form_data)
+        return
