@@ -78,6 +78,9 @@ $(document).ready(function () {
                     var action_modal = $("#action_modal");
                     action_modal.find('[name="name_number"]').val(thisemp['name_number']);
 
+                    // edit tree
+                    $("#edit-tree-modal").find('[name="id"]').val(parent_id);
+
                 }),
             makeButton('修改名称', function (e, obj) {
                 var node = obj.part.adornedPart;

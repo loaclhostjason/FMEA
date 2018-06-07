@@ -4,9 +4,10 @@ from flask import jsonify, request
 from flask_login import login_required
 import json
 
-from ..main.models import Attr
+from ..main.models import Attr, ProductTree
 from .models import *
 from .. import db
+from .func import get_all_func
 
 
 @manage.route('/attr/content/add', methods=['POST'])
@@ -83,3 +84,28 @@ def create_edit_assess():
     if assess:
         content = json.loads(assess.content)
     return jsonify({'success': True, 'data': content})
+
+
+@manage.route('/edit/tree')
+def edit_tree_func_fail():
+    type = request.args.get('type')
+    id = request.args.get('id')
+    product_id = request.args.get('product_id')
+    if not type or not id or not product_id:
+        return jsonify({'success': False, 'message': '参数出错'})
+
+    ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).delete()
+
+    result = get_all_func(id, product_id, type)
+
+    # add new
+    new_dict = {
+        'type': 'func',
+        'product_relation_id': id,
+        'node': json.dumps(result['nodedata']),
+        'link': json.dumps(result['linkdata']),
+        'product_id': product_id
+    }
+    db.session.add(ProductTree(**new_dict))
+
+    return jsonify({'success': True, 'data': result})

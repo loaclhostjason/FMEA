@@ -159,21 +159,15 @@ class ProductTreeMixin:
     def product_relation_id(cls):
         return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
 
-    @declared_attr
-    def func_relation_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('func_relation.id'))
-
     node = db.Column(db.Text)
     link = db.Column(db.Text)
+    type = db.Column(db.String(32))
+
+    is_show = db.Column(db.Boolean, default=False)
 
     @declared_attr
     def product_relation(cls):
         return db.relationship('ProductRelation',
-                               backref=db.backref('edit_tree', lazy='dynamic', cascade='all, delete-orphan'))
-
-    @declared_attr
-    def func_relation(cls):
-        return db.relationship('FuncRelation',
                                backref=db.backref('edit_tree', lazy='dynamic', cascade='all, delete-orphan'))
 
     @declared_attr
