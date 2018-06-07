@@ -58,7 +58,7 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var key = thisemp['key'];
+                        var parent_id = thisemp['key'];
                         var level = thisemp['level'];
                     }
                     var add_process = $("#add-process");
@@ -71,14 +71,65 @@ $(document).ready(function () {
                     add_process.find('[name="level"]').val(level);
 
                     // tree 参数 product_relation_id， parent_id-， level-
-                    add_content.find('[name="product_relation_id"]').val(key);
-                    add_content.find('[name="parent_id"]').val(key);
+                    add_content.find('[name="parent_id"]').val(parent_id);
                     add_content.find('[name="level"]').val(level);
 
                     var action_modal = $("#action_modal");
                     action_modal.find('[name="name_number"]').val(thisemp['name_number']);
 
-                })
+                }),
+            makeButton('修改名称', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                var update_name = $('#update-name-modal');
+                $.jqclass.show_modal(update_name);
+                update_name.find('[name="id"]').val(id);
+            }),
+            makeButton('复制', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var key = thisemp['key'];
+                    var level = thisemp['level'];
+                    var name = thisemp['name'];
+                }
+                console.log(thisemp);
+                if (key) {
+                    var params = {
+                        'level': level,
+                        'content': name
+                    };
+                    $.post('/file/tree/content/add/' + product_id + '?key=' + key, params, function (resp) {
+                        if (resp.success) {
+                            toastr.success('复制成功');
+                            $.get_tree(product_id)
+                        } else {
+                            toastr.error(resp.message)
+                        }
+                    })
+                }
+
+            }),
+            makeButton('删除', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                if (id) {
+                    $.post('/tree/delete/' + id, '', function (resp) {
+                        if (resp.success) {
+                            toastr.success(resp.message);
+                            $.get_tree(product_id);
+                        } else {
+                            toastr.error(resp.message)
+                        }
+                    })
+                }
+            })
         );
 
     myDiagram.nodeTemplate =

@@ -55,3 +55,7 @@ def get_failure_relation(result, parent_id):
         result['linkdata'].append(d)
 
     return result
+
+
+def export_excel():
+    pass

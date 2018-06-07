@@ -169,17 +169,36 @@ def get_file_func_tree():
 '''
 
 
+def get_copy_parent_id(key, type_name):
+    copy_parent_id = None
+    if key and not type_name:
+        product_info = ProductRelation.query.filter_by(id=key).first()
+        copy_parent_id = product_info.parent_id
+        if not copy_parent_id:
+            return {'success': False, 'message': '第一个不能被复制'}
+    if key and type_name:
+        func_info = FuncRelation.query.filter_by(id=key).first()
+        copy_parent_id = func_info.parent_id
+
+    return copy_parent_id
+
+
 @main.route('/file/tree/content/add/<int:id>', methods=['POST'])
 @login_required
 def add_file_tree_content(id):
+    key = request.args.get('key')
     form_data = request.form.to_dict()
     parent_id = form_data.get('parent_id')
+
+    copy_parent_id = get_copy_parent_id(key, form_data.get('type'))
+    if isinstance(copy_parent_id, dict):
+        return jsonify(copy_parent_id)
 
     if not form_data.get('content'):
         return jsonify({'success': False, 'message': '内容不能为空'})
 
     d = {
-        'parent_id': parent_id,
+        'parent_id': parent_id if not copy_parent_id else copy_parent_id,
         'product_id': id,
     }
 

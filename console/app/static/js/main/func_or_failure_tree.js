@@ -43,11 +43,6 @@ $(document).ready(function () {
                         $.attr_html(data, -1, name_number, 'func', content);
 
                     });
-                    // if (product_id) {
-                    // action = $.getUrlParam('action');
-                    // if (action !== 'edit_attr')
-                    //     window.location.href = window.location.href + '?action=edit_attr'
-                    // }
 
                 }),
             makeButton("新增失效",
@@ -55,7 +50,7 @@ $(document).ready(function () {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
                         var thisemp = node.data;
-                        var func_id = thisemp['key'];
+                        var parent_id = thisemp['key'];
                         var product_relation_id = thisemp['product_relation_id'];
                     }
                     console.log(thisemp);
@@ -64,12 +59,71 @@ $(document).ready(function () {
                     jqclass.show_modal(add_process, $(this));
 
                     // tree 参数 product_relation_id-， parent_id -， level
-                    add_content.find('[name="parent_id"]').val(func_id);
+                    add_content.find('[name="parent_id"]').val(parent_id);
                     add_content.find('[name="product_relation_id"]').val(product_relation_id);
                     add_content.find('[name="level"]').val(-1);
 
                     add_process.find('[name="level"]').val(-1);
-                })
+
+                    var action_modal = $("#action_modal");
+                    action_modal.find('[name="name_number"]').val(thisemp['name_number']);
+                }),
+            makeButton('修改名称', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                var update_name = $('#update-name-modal');
+                $.jqclass.show_modal(update_name);
+                update_name.find('[name="id"]').val(id);
+                update_name.find('[name="type"]').val('func');
+            }),
+            makeButton('复制', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var key = thisemp['key'];
+                    var name = thisemp['name'];
+                    var product_relation_id = thisemp['product_relation_id'];
+                }
+                console.log(thisemp);
+                if (key) {
+                    var params = {
+                        'parent_id': null,
+                        'level': -1,
+                        'content': name,
+                        'product_relation_id': product_relation_id,
+                        'type': 'func'
+                    };
+                    $.post('/file/tree/content/add/' + product_id, params, function (resp) {
+                        if (resp.success) {
+                            toastr.success('复制成功');
+                            $.get_func_or_failure_tree(product_relation_id);
+                        } else {
+                            toastr.error(resp.message || 'error: func Tree')
+                        }
+                    })
+                }
+            }),
+            makeButton('删除', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                if (id) {
+                    $.post('/tree/delete/' + id + '?type=func', '', function (resp) {
+                        if (resp.success) {
+                            toastr.success(resp.message);
+                            var product_relation_id = resp ['product_relation_id'];
+                            $.get_func_or_failure_tree(product_relation_id);
+                        } else {
+                            toastr.error(resp.message)
+                        }
+                    })
+                }
+            })
         );
 
 
@@ -99,7 +153,65 @@ $(document).ready(function () {
                     var add_process = $("#add-process");
                     jqclass.show_modal(add_process, $(this));
                     add_process.find('[name="level"]').val(-2);
-                })
+
+                    var action_modal = $("#action_modal");
+                    action_modal.find('[name="name_number"]').val(thisemp['name_number']);
+                }),
+            makeButton('修改名称', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                var update_name = $('#update-name-modal');
+                $.jqclass.show_modal(update_name);
+                update_name.find('[name="id"]').val(id);
+                update_name.find('[name="type"]').val('failure');
+            }),
+            makeButton('复制', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var key = thisemp['key'];
+                    var name = thisemp['name'];
+                    var product_relation_id = thisemp['product_relation_id'];
+                }
+                console.log(thisemp);
+                if (key) {
+                    var params = {
+                        'level': -2,
+                        'content': name,
+                        'product_relation_id': product_relation_id,
+                        'type': 'failure'
+                    };
+                    $.post('/file/tree/content/add/' + product_id + '?key=' + key, params, function (resp) {
+                        if (resp.success) {
+                            toastr.success('复制成功');
+                            $.get_func_or_failure_tree(product_relation_id);
+                        } else {
+                            toastr.error(resp.message || 'error: failure Tree')
+                        }
+                    })
+                }
+            }),
+            makeButton('删除', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var id = thisemp['key'];
+                }
+                if (id) {
+                    $.post('/tree/delete/' + id + '?type=failure', '', function (resp) {
+                        if (resp.success) {
+                            toastr.success(resp.message);
+                            var product_relation_id = resp ['product_relation_id'];
+                            $.get_func_or_failure_tree(product_relation_id);
+                        } else {
+                            toastr.error(resp.message)
+                        }
+                    })
+                }
+            })
         );
 
     myDiagram.nodeTemplateMap.add("FuncNode",

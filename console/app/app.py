@@ -7,6 +7,7 @@ from flask_babel import Babel
 from flask_moment import Moment
 from flask_mail import Mail
 from flask_uploads import UploadSet, configure_uploads, patch_request_class, AUDIO, ALL
+import flask_excel as excel
 
 from config import Config
 from .assets import assets_env, bundles
@@ -45,13 +46,14 @@ def create_app():
     babel.init_app(app)
     moment.init_app(app)
     mail.init_app(app)
+    excel.init_excel(app)
 
     assets_env.init_app(app)
     assets_env.register(bundles)
     error_handle.init_app(app)
 
     configure_uploads(app, upload_video)
-    patch_request_class(app, size=None)
+    patch_request_class(app, size=64 * 1024 * 1024)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
