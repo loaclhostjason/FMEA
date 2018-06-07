@@ -18,7 +18,7 @@ def del_tree(id):
         return jsonify({'success': True, 'message': '更新成功'})
 
     else:
-        func_relation = ProductRelation.query.filter_by(id=id).first()
+        func_relation = FuncRelation.query.filter_by(id=id).first()
         if not func_relation:
             return jsonify({'success': False, 'message': '没有此记录'})
 
@@ -56,7 +56,7 @@ def edit_tree_name():
         return jsonify({'success': True, 'message': '更新成功', 'product_relation_id': None})
 
     else:
-        func_relation = ProductRelation.query.filter_by(id=id).first()
+        func_relation = FuncRelation.query.filter_by(id=id).first()
         if not func_relation:
             return jsonify({'success': False, 'message': '没有此记录'})
 

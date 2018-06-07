@@ -4,6 +4,7 @@ from models.industry import ProductMixin
 from models.industry import ProductRelationMixin
 from models.industry import AttrMixin
 from models.industry import FuncRelationMixin
+from models.industry import ProductTreeMixin
 
 from .. import db
 from ..base import Tool, Check
@@ -157,9 +158,11 @@ class FuncRelation(FuncRelationMixin, db.Model):
     def start_index(cls, type, product_relation_id, parent_id=None):
         base_model = db.session.query(func.count(cls.id).label('num'))
         if type == 'func':
-            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=None).group_by(cls.product_relation_id)
+            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=None).group_by(
+                cls.product_relation_id)
         else:
-            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=parent_id).group_by(cls.product_relation_id, cls.parent_id)
+            info = base_model.filter_by(product_relation_id=product_relation_id, parent_id=parent_id).group_by(
+                cls.product_relation_id, cls.parent_id)
 
         info = info.first()
         return info.num + 1 if info else 1
@@ -171,7 +174,8 @@ class FuncRelation(FuncRelationMixin, db.Model):
 
         content = content.split('\r\n')
         result = []
-        for index, con in enumerate(content, start=cls.start_index(tree_type, data['product_relation_id'], data.get('parent_id'))):
+        for index, con in enumerate(content, start=cls.start_index(tree_type, data['product_relation_id'],
+                                                                   data.get('parent_id'))):
             data['name'] = con
             data['number'] = index
             data['type'] = tree_type
@@ -183,3 +187,8 @@ class FuncRelation(FuncRelationMixin, db.Model):
             result.append(cls(**data))
         db.session.add_all(result)
         db.session.commit()
+
+
+class ProductTree(ProductTreeMixin, db.Model):
+    def __init__(self, *args, **kwargs):
+        super(ProductTree, self).__init__(*args, **kwargs)

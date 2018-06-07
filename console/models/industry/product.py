@@ -151,6 +151,40 @@ class ProductAssessMixin:
         return db.relationship('Product', backref=backref("assess", cascade="all, delete-orphan"))
 
 
+class ProductTreeMixin:
+    __tablename__ = 'product_tree_edit'
+    id = db.Column(db.Integer, primary_key=True)
+
+    @declared_attr
+    def product_relation_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
+
+    @declared_attr
+    def func_relation_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('func_relation.id'))
+
+    node = db.Column(db.Text)
+    link = db.Column(db.Text)
+
+    @declared_attr
+    def product_relation(cls):
+        return db.relationship('ProductRelation',
+                               backref=db.backref('edit_tree', lazy='dynamic', cascade='all, delete-orphan'))
+
+    @declared_attr
+    def func_relation(cls):
+        return db.relationship('FuncRelation',
+                               backref=db.backref('edit_tree', lazy='dynamic', cascade='all, delete-orphan'))
+
+    @declared_attr
+    def product_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref=backref("edit_tree", cascade="all, delete-orphan"))
+
+
 class Product(ProductMixin, db.Model):
     pass
 
@@ -172,4 +206,8 @@ class AttrContent(AttrContentMixin, db.Model):
 
 
 class ProductAssess(ProductAssessMixin, db.Model):
+    pass
+
+
+class ProductTree(ProductTreeMixin, db.Model):
     pass
