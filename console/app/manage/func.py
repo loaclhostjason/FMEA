@@ -43,6 +43,8 @@ def get_all_func(id, product_id, type):
 
     # todo more
     func = FuncRelation.query.filter_by(product_relation_id=id, type=type, product_id=product_id).first()
+    if not func:
+        return result
 
     result.append({
         'color': 'green' if type == 'func' else 'red',

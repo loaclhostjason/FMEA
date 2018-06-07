@@ -92,7 +92,7 @@ def edit_tree_func_fail():
     id = request.args.get('id')
     product_id = request.args.get('product_id')
     if not type or not id or not product_id:
-        return jsonify({'success': False, 'message': '参数出错'})
+        return jsonify({'success': True, 'data': []})
 
     ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).delete()
 
