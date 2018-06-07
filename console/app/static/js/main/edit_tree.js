@@ -15,7 +15,7 @@ $(document).ready(function () {
     });
 
     update_name.find('.submit_update_name').click(function () {
-        var params = (this).find('form').serialize();
+        var params = update_name.find('form').serialize();
         $.post('/tree/edit/name', params, function (resp) {
             if (resp.success) {
                 toastr.success(resp.message);
