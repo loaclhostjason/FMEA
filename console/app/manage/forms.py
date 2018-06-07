@@ -53,7 +53,7 @@ class AttrForm(FlaskForm, BaseForm):
 
 
 class AttrExtraForm(FlaskForm, BaseForm):
-    name_number = StringField('编号:')
+    name_number = StringField('编号:', validators=[DataRequired('编号不能为空')])
     extra = HiddenField(default=True)
     content = StringField()
     username = StringField()
@@ -61,6 +61,7 @@ class AttrExtraForm(FlaskForm, BaseForm):
     def __init__(self):
         super(AttrExtraForm, self).__init__()
         self.username.data = current_user.username
+        self.required_form()
 
     def get_content(self):
         field_key = [

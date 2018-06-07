@@ -71,6 +71,7 @@ $(document).ready(function () {
                     add_process.find('[name="level"]').val(level);
 
                     // tree 参数 product_relation_id， parent_id-， level-
+                    add_content.find('[name="product_relation_id"]').val(parent_id);
                     add_content.find('[name="parent_id"]').val(parent_id);
                     add_content.find('[name="level"]').val(level);
 
@@ -118,6 +119,7 @@ $(document).ready(function () {
                 if (node !== null) {
                     var thisemp = node.data;
                     var id = thisemp['key'];
+                    var level = thisemp['level'];
                 }
                 if (id) {
                     $.post('/tree/delete/' + id, '', function (resp) {

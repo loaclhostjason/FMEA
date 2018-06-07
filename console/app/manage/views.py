@@ -1,6 +1,6 @@
 from . import manage
 from flask_login import login_required
-from flask import render_template, flash, redirect, url_for, request, abort
+from flask import render_template, flash, redirect, url_for, request, abort, jsonify
 from ..decorators import role_required
 from ..contact.models import ContactWay
 from .forms import *
@@ -16,6 +16,17 @@ import json
 def config_list():
     attrs = Attr.query.all()
     return render_template('manage/config.html', attrs=attrs)
+
+
+@manage.route('/config/attr/delete/<int:id>', methods=['POST'])
+@login_required
+@role_required
+def delete_config_attr(id):
+    attr = Attr.query.filter_by(id=id).first()
+    if not attr:
+        return jsonify({'success': False, 'messgae': '没有此记录'})
+    db.session.delete(attr)
+    return jsonify({'success': True, 'messgae': '删除成功'})
 
 
 @manage.route('/attr/edit', methods=['GET', 'POST'])

@@ -78,3 +78,16 @@
     </div>
 {% endblock %}
 
+{% block scripts %}
+
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $('.delete-attr').click(function () {
+                var id = $(this).data('id');
+                $.update_info_reload('是否删除？', '/manage/config/attr/delete/' + id, '');
+            })
+        })
+    </script>
+{% endblock %}
+
