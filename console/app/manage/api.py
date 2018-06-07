@@ -99,13 +99,13 @@ def edit_tree_func_fail():
     result = get_all_func(id, product_id, type)
 
     # add new
-    new_dict = {
-        'type': 'func',
-        'product_relation_id': id,
-        'node': json.dumps(result['nodedata']),
-        'link': json.dumps(result['linkdata']),
-        'product_id': product_id
-    }
-    db.session.add(ProductTree(**new_dict))
+    # new_dict = {
+    #     'type': 'func',
+    #     'product_relation_id': id,
+    #     'node': json.dumps(result['nodedata']),
+    #     'link': json.dumps(result['linkdata']),
+    #     'product_id': product_id
+    # }
+    # db.session.add(ProductTree(**new_dict))
 
     return jsonify({'success': True, 'data': result})

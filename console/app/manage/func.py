@@ -39,54 +39,45 @@ def get_all_func(id, product_id, type):
     child_list = [v for v in list(children_info(id, product_id)) if v]
     print(child_list)
 
-    result = {
-        'nodedata': [],
-        'linkdata': [],
-    }
+    result = []
 
     # todo more
     func = FuncRelation.query.filter_by(product_relation_id=id, type=type, product_id=product_id).first()
 
-    result['nodedata'].append({
-        'category': 'SelfNode',
+    result.append({
         'color': 'green' if type == 'func' else 'red',
         'name': func.name,
-        'key': func.name_number
+        'key': "Root",
     })
-    result = get_parent_tree(parent_list, result, func.name_number, type)
-    result = get_children_tree(child_list, result, func.name_number, type)
+    result = get_parent_tree(parent_list, result, type)
+    result = get_children_tree(child_list, result, type)
     return result
 
 
-def get_parent_tree(parent_list, result, name_number, type):
+def get_parent_tree(parent_list, result, type):
     if parent_list:
         parent_func = FuncRelation.query.filter(FuncRelation.product_relation_id.in_(parent_list), FuncRelation.type == type).all()
         for info in parent_func:
-            result['nodedata'].append({
-                'category': 'ParentNode',
+            result.append({
+                'parent': 'Root',
+                'dir': "left",
                 'color': 'green' if type == 'func' else 'red',
                 'name': info.name,
                 'key': info.name_number
             })
-            result['linkdata'].append({
-                'from': info.name_number,
-                'to': name_number
-            })
+    print(result)
     return result
 
 
-def get_children_tree(child_list, result, name_number, type):
+def get_children_tree(child_list, result, type):
     if child_list:
         child_func = FuncRelation.query.filter(FuncRelation.product_relation_id.in_(child_list), FuncRelation.type == type).all()
         for info in child_func:
-            result['nodedata'].append({
-                'category': 'ChilrenNode',
+            result.append({
+                'parent': 'Root',
+                'dir': "right",
                 'color': 'green' if type == 'func' else 'red',
                 'name': info.name,
                 'key': info.name_number
-            })
-            result['linkdata'].append({
-                'from': name_number,
-                'to': info.name_number
             })
     return result
