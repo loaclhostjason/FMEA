@@ -159,11 +159,12 @@ class ProductTreeMixin:
     def product_relation_id(cls):
         return db.Column(db.Integer, db.ForeignKey('product_relation.id'))
 
-    node = db.Column(db.Text)
-    link = db.Column(db.Text)
+    content = db.Column(db.Text)
     type = db.Column(db.String(32))
 
     is_show = db.Column(db.Boolean, default=False)
+
+    update_time = db.Column(db.DateTime, default=datetime.now)
 
     @declared_attr
     def product_relation(cls):

@@ -67,7 +67,8 @@ def create_edit_assess():
             'action_type': action_type,
             'assess': assess,
         }
-        assess = ProductAssess.query.filter_by(product_id=product_id, name_number=name_number, type=type, action_type=action_type).first()
+        assess = ProductAssess.query.filter_by(product_id=product_id, name_number=name_number, type=type,
+                                               action_type=action_type).first()
 
         ProductAssess.create_edit(d, assess)
 
@@ -79,7 +80,8 @@ def create_edit_assess():
     action_type = request.args.get('action_type')
     assess = request.args.get('assess')
 
-    assess = ProductAssess.query.filter_by(product_id=product_id, name_number=name_number, type=type, action_type=action_type, assess=assess).first()
+    assess = ProductAssess.query.filter_by(product_id=product_id, name_number=name_number, type=type,
+                                           action_type=action_type, assess=assess).first()
     content = None
     if assess:
         content = json.loads(assess.content)
@@ -94,18 +96,17 @@ def edit_tree_func_fail():
     if not type or not id or not product_id:
         return jsonify({'success': True, 'data': []})
 
-    ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).delete()
+    old_product_tree = ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).first()
 
     result = get_all_func(id, product_id, type)
-
-    # add new
-    # new_dict = {
-    #     'type': 'func',
-    #     'product_relation_id': id,
-    #     'node': json.dumps(result['nodedata']),
-    #     'link': json.dumps(result['linkdata']),
-    #     'product_id': product_id
-    # }
-    # db.session.add(ProductTree(**new_dict))
+    if not old_product_tree:
+        # add new
+        new_dict = {
+            'type': 'func',
+            'product_relation_id': id,
+            'content': json.dumps(result),
+            'product_id': product_id
+        }
+        db.session.add(ProductTree(**new_dict))
 
     return jsonify({'success': True, 'data': result})

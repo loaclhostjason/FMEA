@@ -1,6 +1,7 @@
 # coding: utf-8
 from flask import request, jsonify
 from .models import FuncRelation
+from collections import defaultdict, OrderedDict
 
 
 def get_func_relation(init_result, product_relation_id):
@@ -57,5 +58,21 @@ def get_failure_relation(result, parent_id):
     return result
 
 
-def export_excel():
-    pass
+def export_excel(product_data):
+    export_result = defaultdict(list)
+
+    for contract, contract_type_name in product_data:
+        export_result['产品'].append(contract.contract_id)
+        export_result['签约日期'].append(contract.sign_date.strftime("%Y-%m-%d"))
+        export_result['合同类型'].append(contract_type_name)
+        export_result['最终用户'].append(contract.end_user_name)
+        export_result['合同金额'].append(contract.amount)
+        export_result['产品'].append('%s个' % contract.product_count if contract.product_count else '--')
+
+    column_names = ['合同号', '签约日期', '合同类型', '最终用户', '区域', '省份', '合同金额', '产品', '安装记录', '服务记录']
+    new_excel_data = OrderedDict()
+    for v in column_names:
+        new_excel_data[v] = export_result[v]
+    filename = u"%s年合同列表信息" % 'xx'
+
+    return new_excel_data, filename
