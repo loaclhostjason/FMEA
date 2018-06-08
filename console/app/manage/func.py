@@ -26,7 +26,8 @@ def children_info(id, product_id):
                     yield re
 
 
-def get_all_func(id, product_id, type, is_show):
+def get_all_func(id, product_id, type, show_key):
+    print(11, show_key)
     product_relation = ProductRelation.query.filter_by(id=id, product_id=product_id).first()
     if not product_relation:
         return
@@ -51,14 +52,14 @@ def get_all_func(id, product_id, type, is_show):
         'type': type,
         'name': func.name,
         'key': "Root",
-        'is_show':is_show
+        'is_show': True
     })
-    result = get_parent_tree(parent_list, result, type, is_show)
-    result = get_children_tree(child_list, result, type, is_show)
+    result = get_parent_tree(parent_list, result, type, show_key)
+    result = get_children_tree(child_list, result, type, show_key)
     return result
 
 
-def get_parent_tree(parent_list, result, type, is_show):
+def get_parent_tree(parent_list, result, type, show_key):
     if parent_list:
         parent_func = FuncRelation.query.filter(FuncRelation.product_relation_id.in_(parent_list), FuncRelation.type == type).all()
         for info in parent_func:
@@ -68,14 +69,14 @@ def get_parent_tree(parent_list, result, type, is_show):
                 'color': 'green' if type == 'func' else 'red',
                 'name': info.name,
                 'key': info.name_number,
-                'is_show': is_show,
+                'is_show': bool(info.name_number == show_key) if show_key is not False else False,
                 'type': type,
             })
-    print(result)
+    print(show_key)
     return result
 
 
-def get_children_tree(child_list, result, type, is_show):
+def get_children_tree(child_list, result, type, show_key):
     if child_list:
         child_func = FuncRelation.query.filter(FuncRelation.product_relation_id.in_(child_list), FuncRelation.type == type).all()
         for info in child_func:
@@ -85,7 +86,7 @@ def get_children_tree(child_list, result, type, is_show):
                 'color': 'green' if type == 'func' else 'red',
                 'name': info.name,
                 'key': info.name_number,
-                'is_show': is_show,
+                'is_show':  bool(info.name_number == show_key) if show_key is not False else False,
                 'type': type,
             })
     return result

@@ -58,6 +58,10 @@ $(document).ready(function () {
         $.jqclass.show_modal(edit_tree_modal, $(this));
         edit_tree_modal.find('.modal-title').text($(this).data('message'));
     });
+    $('.submit-tree-edit').click(function () {
+        $("#edit-tree-modal").modal('hide');
+        toastr.success('成功')
+    });
     // edit_tree_modal.on('hide.bs.modal', function () {
     //     $(this).find('input').val('');
     // });
@@ -97,9 +101,10 @@ $(document).ready(function () {
                     var node = obj.part.data;
                     if (node !== null) {
                         var type_name = node['type'];
+                        var key = node['key'];
                         var id = edit_tree_modal.find('[name="id"]').val();
 
-                        $.post('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&is_show=true', '', function (resp) {
+                        $.post('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&is_show=true&key=' + key, '', function (resp) {
                             if (resp.success) {
                                 var data = resp['data'];
                                 console.log(data)

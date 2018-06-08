@@ -92,14 +92,21 @@ def create_edit_assess():
 def edit_tree_func_fail():
     type = request.args.get('type')
     id = request.args.get('id')
-    is_show = bool(request.args.get('is_show'))
+    key = request.args.get('key')
     product_id = request.args.get('product_id')
     if not type or not id or not product_id:
         return jsonify({'success': True, 'data': []})
 
     old_product_tree = ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).first()
-    result = get_all_func(id, product_id, type,  not old_product_tree.is_show  )
+
+    result = get_all_func(id, product_id, type, False)
     if request.method == 'POST':
+        if old_product_tree:
+            result = json.loads(old_product_tree.content)
+        for r in result:
+            if r['key'] == key:
+                r['is_show'] = not r['is_show']
+
         old_product_tree.content = json.dumps(result)
         old_product_tree.is_show = not old_product_tree.is_show
         return jsonify({'success': True, 'data': result})
