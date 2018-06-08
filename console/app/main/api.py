@@ -15,6 +15,7 @@ from collections import defaultdict
 import json
 from sqlalchemy import or_
 from ..manage.models import AttrContent
+from ..app import excel
 
 '''
 process 
@@ -248,3 +249,13 @@ def get_tree_attr():
         content = json.loads(attr_content.real_content)
 
     return jsonify({'success': True, 'data': data, 'content': content})
+
+
+
+@main.route('/export/product/<int:product_id>')
+@login_required
+def exprot_product(product_id):
+    from .func import export_excel
+
+    excel_data, filename = export_excel(product_id)
+    return excel.make_response_from_dict(excel_data, "xls", file_name=filename)

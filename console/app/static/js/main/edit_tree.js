@@ -94,14 +94,30 @@ $(document).ready(function () {
             {
                 click: function (e, obj) {
 
+                    var node = obj.part.data;
+                    if (node !== null) {
+                        var type_name = node['type'];
+                        var id = edit_tree_modal.find('[name="id"]').val();
+
+                        $.post('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&is_show=true', '', function (resp) {
+                            if (resp.success) {
+                                var data = resp['data'];
+                                console.log(data)
+                                myDiagram.model = new go.TreeModel(data);
+                                doubleTreeLayout(myDiagram)
+                            } else
+                                toastr.error(resp.message)
+                        });
+                    }
                 }
             }
         );
 
     myDiagram.linkTemplate =
         $$(go.Link, {selectionAdorned: false},
-            $$(go.Shape, {strokeWidth: 2, stroke: "#666"}),
-            $$(go.Shape, {fill: '#666', stroke: null, toArrow: "Standard", segmentFraction: 0}));
+            $$(go.Shape, {strokeWidth: 2, stroke: "#666"}, new go.Binding("stroke", "is_show", function (val) {
+                return val ? '#666' : 'white';
+            })))
 
 
 });

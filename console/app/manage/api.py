@@ -88,25 +88,31 @@ def create_edit_assess():
     return jsonify({'success': True, 'data': content})
 
 
-@manage.route('/edit/tree')
+@manage.route('/edit/tree', methods=['GET', 'POST'])
 def edit_tree_func_fail():
     type = request.args.get('type')
     id = request.args.get('id')
+    is_show = bool(request.args.get('is_show'))
     product_id = request.args.get('product_id')
     if not type or not id or not product_id:
         return jsonify({'success': True, 'data': []})
 
     old_product_tree = ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).first()
+    result = get_all_func(id, product_id, type,  not old_product_tree.is_show  )
+    if request.method == 'POST':
+        old_product_tree.content = json.dumps(result)
+        old_product_tree.is_show = not old_product_tree.is_show
+        return jsonify({'success': True, 'data': result})
 
-    result = get_all_func(id, product_id, type)
     if not old_product_tree:
         # add new
         new_dict = {
-            'type': 'func',
+            'type': type,
             'product_relation_id': id,
             'content': json.dumps(result),
             'product_id': product_id
         }
         db.session.add(ProductTree(**new_dict))
-
+    else:
+        result = json.loads(old_product_tree.content)
     return jsonify({'success': True, 'data': result})
