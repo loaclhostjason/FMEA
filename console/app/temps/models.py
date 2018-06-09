@@ -7,10 +7,14 @@ class Temps(TempsMixin, db.Model):
         super(Temps, self).__init__(*args, **kwargs)
 
     @classmethod
-    def insetrt_tmeps(cls):
+    def insert_tmeps(cls):
+        old = cls.query.first()
+        if old:
+            return
+
         first_data = {
             'name_number': '0',
-            'name': '模板一',
+            'name': '名称0',
             'level': None,
             'parent_id': None,
             'number': 1
@@ -23,23 +27,26 @@ class Temps(TempsMixin, db.Model):
         data = [
             {
                 'name_number': '1',
-                'name': 'sss',
+                'name': '名称1',
                 'level': 1,
-                'parent_id': 1,
-                'product_id': 3,
                 'number': 1
             },
             {
                 'name_number': '1.1',
-                'name': 'S',
-                'level': 2, 'parent_id': 2,
-                'product_id': 3,
+                'name': '名称2',
+                'level': 2,
                 'number': 1
             },
             {
                 'name_number': '1.2',
-                'name': 'D',
+                'name': '名称3',
                 'level': 2,
-                'parent_id': 2,
                 'number': 2
             }]
+
+        for d in data:
+            d['parent_id'] = parent_id
+            db.session.add(cls(**d))
+            db.session.commit()
+
+        return

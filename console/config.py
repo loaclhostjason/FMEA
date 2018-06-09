@@ -43,7 +43,6 @@ upload_doc_path = os.path.join(base_path, 'upload', 'doc')
 upload_video_path = os.path.join(base_path, 'upload', 'video')
 
 
-
 class Config:
     DEBUG = True
     # SECRET_KEY = os.urandom(24)
@@ -79,6 +78,12 @@ class Config:
 
     UPLOAD_DOC_DIR = upload_doc_path
     UPLOADS_DEFAULT_DEST = upload_video_path
+
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_HOST = '127.0.0.1'
+    CACHE_REDIS_PORT = '6379'
+    CACHE_REDIS_DB = ''
+    CACHE_REDIS_PASSWORD = ''
 
     @staticmethod
     def init_app(app):

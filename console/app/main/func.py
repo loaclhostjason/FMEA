@@ -93,7 +93,7 @@ def export_excel(product_id):
 
                 export_result['过程项目'].append(pr.name)
                 export_result['过程步骤'].append(c.name)
-                export_result['过程作业要素'].append('--')
+                export_result['过程作业要素'].append('')
                 export_result = get_exceal_pre(export_result, c, product_id, False)
                 export_result['负责人'].append(product.user.username)
 

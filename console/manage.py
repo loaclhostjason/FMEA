@@ -6,6 +6,7 @@ from flask_assets import ManageAssets
 from app.models import *
 from app.main.models import Attr
 from app.contact.models import ContactWay
+from app.temps.models import Temps
 from app.assets import assets_env
 from app import app, db
 
@@ -32,6 +33,7 @@ def deploy():
     User.insert_admin()
     Attr.init_attr()
     ContactWay.insert_data()
+    Temps.insert_tmeps()
 
 
 if __name__ == '__main__':

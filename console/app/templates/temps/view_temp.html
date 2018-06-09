@@ -1,0 +1,41 @@
+{% extends "temps.html" %}
+
+{% block temps_list %}act{% endblock %}
+
+{% block temps_content %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="console-title clearfix bline" style="min-height: 50px">
+                <div class="pull-left">
+                    <h4>查看</h4>
+                    <a href="{{ url_for('.temps_list') }}" class="btn btn-xs btn-toinstlist">
+                        <span class="icon-toinstlist"></span>
+                        <span>返回</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-sm-12">
+            <div id="temp" style="min-height: 500px"></div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+    {{ super() }}
+    <script src="{{ url_for("static", filename="js/gojs/go.js") }}"></script>
+    {% assets "go_js" %}
+        <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script src="{{ url_for('static', filename='js/temps/temp.js') }}"></script>
+    <script>
+        temp_id = "{{ temp.id }}"
+    </script>
+{% endblock %}

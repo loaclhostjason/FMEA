@@ -8,6 +8,7 @@ from flask_moment import Moment
 from flask_mail import Mail
 from flask_uploads import UploadSet, configure_uploads, patch_request_class, AUDIO, ALL
 import flask_excel as excel
+from flask_caching import Cache
 
 from config import Config
 from .assets import assets_env, bundles
@@ -20,6 +21,7 @@ db = SQLAlchemy(model_class=BaseModel)
 babel = Babel()
 moment = Moment()
 mail = Mail()
+cache = Cache()
 
 error_handle = Ehandle()
 jinja_env = JinjaEnv()
@@ -47,6 +49,7 @@ def create_app():
     moment.init_app(app)
     mail.init_app(app)
     excel.init_excel(app)
+    cache.init_app(app)
 
     assets_env.init_app(app)
     assets_env.register(bundles)

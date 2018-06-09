@@ -63,7 +63,7 @@ class User(UserBaseMixin, UserMixin, db.Model):
     @staticmethod
     def insert_admin():
         u = {
-            'username': 'admin',
+            'username': '超级管理员',
             'email': 'admin@qq.com',
             'password': '123',
             'role': 'admin',
