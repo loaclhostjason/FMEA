@@ -72,10 +72,10 @@ class ProductRelation(ProductRelationMixin, db.Model):
         return
 
     @classmethod
-    def add_product_relation(cls, data, content):
+    def add_product_relation(cls, data, content, product_id):
         level = data['level']
 
-        len_level = cls.query.filter(cls.level == int(level)).order_by(cls.timestamp.desc(), cls.id.desc()).first()
+        len_level = cls.query.filter(cls.level == int(level), cls.product_id==product_id).order_by(cls.relation_order.desc(), cls.id.desc()).first()
         start_index = len_level.number + 1 if len_level else 1
 
         result = []

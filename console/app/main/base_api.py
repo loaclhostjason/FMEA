@@ -4,6 +4,23 @@ from flask_login import current_user, login_required
 from ..main.models import *
 
 
+def delete_children(id, type=None):
+    if not type:
+        relations = ProductRelation.query.filter_by(parent_id=id).all()
+    else:
+        relations = FuncRelation.query.filter_by(parent_id=id).all()
+
+    if not relations:
+        return
+
+    for relation in relations:
+        next_id = relation.id
+        db.session.delete(relation)
+        db.session.commit()
+
+        delete_children(next_id, type)
+
+
 @main.route('/tree/delete/<int:id>', methods=['POST'])
 @login_required
 def del_tree(id):
@@ -15,6 +32,7 @@ def del_tree(id):
         if not product_relation.parent_id:
             return jsonify({'success': False, 'message': '这节点为根节点，不支持删除'})
         db.session.delete(product_relation)
+        delete_children(id, type)
         return jsonify({'success': True, 'message': '更新成功'})
 
     else:
@@ -24,6 +42,7 @@ def del_tree(id):
 
         product_relation_id = func_relation.product_relation_id
         db.session.delete(func_relation)
+        delete_children(id, type)
         return jsonify({'success': True, 'message': '更新成功', 'product_relation_id': product_relation_id})
 
 

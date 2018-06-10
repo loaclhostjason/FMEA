@@ -29,22 +29,6 @@ $(document).ready(function () {
 
     var partContextMenu =
         $$(go.Adornment, "Vertical",
-            makeButton("编辑属性",
-                function (e, obj) {
-                    var node = obj.part.adornedPart;
-                    var thisemp = node.data;
-
-                    var name_number = thisemp['name_number'];
-
-                    $.get('/tree/attr?product_id=' + product_id + '&type_name=func' + '&name_number=' + name_number, function (resp) {
-                        console.log(resp);
-                        var data = resp['data'];
-                        var content = resp['content'];
-                        $.attr_html(data, -1, name_number, 'func', content);
-
-                    });
-
-                }),
             makeButton("新增失效",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
@@ -129,21 +113,6 @@ $(document).ready(function () {
 
     var failureContextMenu =
         $$(go.Adornment, "Vertical",
-            makeButton("编辑属性",
-                function (e, obj) {
-                    var node = obj.part.adornedPart;
-                    var thisemp = node.data;
-                    var name_number = thisemp['name_number'];
-
-                    $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + name_number, function (resp) {
-                        console.log(resp);
-                        var data = resp['data'];
-                        var content = resp['content'];
-                        $.attr_html(data, -2, name_number, 'failure', content);
-
-                    });
-
-                }),
             makeButton("编辑评估",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
@@ -219,6 +188,21 @@ $(document).ready(function () {
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "green"}),
             $$(go.TextBlock, {margin: 8, stroke: "green"}, new go.Binding("text", "name")),
             {
+                click: function (e, obj) {
+                    var node = obj.part.data;
+                    var name_number = node['name_number'];
+
+                    $.get('/tree/attr?product_id=' + product_id + '&type_name=func' + '&name_number=' + name_number, function (resp) {
+                        console.log(resp);
+                        var data = resp['data'];
+                        var content = resp['content'];
+                        $.attr_html(data, -1, name_number, 'func', content);
+
+                    });
+
+                }
+            },
+            {
                 toolTip: $$(go.Adornment, "Auto",
                     $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),
                     $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name_number", function (val) {
@@ -235,6 +219,21 @@ $(document).ready(function () {
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "red"}),
             $$(go.TextBlock, {margin: 8, stroke: "red"}, new go.Binding("text", "name")),
+            {
+                click: function (e, obj) {
+                    var node = obj.part.data;
+                    var name_number = node['name_number'];
+
+                    $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + name_number, function (resp) {
+                        console.log(resp);
+                        var data = resp['data'];
+                        var content = resp['content'];
+                        $.attr_html(data, -2, name_number, 'failure', content);
+
+                    });
+
+                }
+            },
             {
                 toolTip: $$(go.Adornment, "Auto",
                     $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),

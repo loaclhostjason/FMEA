@@ -212,7 +212,7 @@ def add_file_tree_content(id):
         FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))
     else:
         d['level'] = int(form_data['level']) if form_data.get('level') else None
-        ProductRelation.add_product_relation(d, form_data.get('content'))
+        ProductRelation.add_product_relation(d, form_data.get('content'), id)
     return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id})
 
 
@@ -276,27 +276,27 @@ def update_product_relation_order():
     parent_id = product_relation.parent_id
 
     if type == 'up':
-        prev_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, number=product_relation.number - 1).first()
+        prev_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, relation_order=product_relation.relation_order - 1).first()
         if not prev_product_relation:
             return jsonify({'success': False, 'message': '不能上移'})
 
-        pre_number = prev_product_relation.number + 1
-        this_number = prev_product_relation.number
+        pre_order = prev_product_relation.relation_order + 1
+        this_order = prev_product_relation.relation_order
 
-        prev_product_relation.relation_order = pre_number
-        product_relation.relation_order = this_number
+        prev_product_relation.relation_order = pre_order
+        product_relation.relation_order = this_order
 
         return jsonify({'success': True, 'message': '更新成功'})
 
     else:
-        next_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, number=product_relation.number + 1).first()
+        next_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, relation_order=product_relation.relation_order + 1).first()
         if not next_product_relation:
             return jsonify({'success': False, 'message': '不能下移'})
 
-        next_number = next_product_relation.number - 1
-        this_number = next_product_relation.number
+        next_order = next_product_relation.relation_order - 1
+        this_order = next_product_relation.relation_order
 
-        next_product_relation.relation_order = next_number
-        product_relation.relation_order = this_number
+        next_product_relation.relation_order = next_order
+        product_relation.relation_order = this_order
 
         return jsonify({'success': True, 'message': '更新成功'})
