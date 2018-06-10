@@ -10,6 +10,16 @@ import json
 def get_func_relation(init_result, product_relation_id):
     if not product_relation_id:
         return init_result
+
+    product_relation = ProductRelation.query.filter_by(id=product_relation_id).first()
+    if not product_relation:
+        return init_result
+
+    init_result['nodedata'].append({'category': 'ProductNode',
+                                    'name': product_relation.name,
+                                    'type': 'product',
+                                    'key': 'product_node_%s' % product_relation_id,
+                                    'name_number': product_relation.name_number})
     # result = {
     #     'nodedata': [],
     #     'linkdata': [],
@@ -25,6 +35,11 @@ def get_func_relation(init_result, product_relation_id):
             'key': fr.id,
             'name_number': fr.name_number,
             'product_relation_id': product_relation_id
+        })
+        init_result['linkdata'].append({
+            'from': 'product_node_%s' % product_relation_id,
+            'to': fr.id,
+            'category': 'ProductLink'
         })
 
         init_result = get_failure_relation(init_result, fr.id)

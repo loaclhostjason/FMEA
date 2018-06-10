@@ -183,6 +183,40 @@ $(document).ready(function () {
             })
         );
 
+        myDiagram.nodeTemplateMap.add("ProductNode",
+        $$(go.Node, "Auto",
+            $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
+            $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
+            {
+                click: function (e, obj) {
+                    var node = obj.part.data;
+                    var level = node['level'];
+                    var name_number = node['name_number'];
+
+                    $.get('/tree/attr?product_id=' + product_id + '&level=' + level + '&name_number=' + name_number, function (resp) {
+                        if (resp.success) {
+                            var data = resp['data'];
+                            var content = resp['content'];
+                            $.attr_html(data, level, name_number, 'structure', content);
+                        } else {
+                            toastr.error(resp.messgae)
+                        }
+
+
+                    });
+
+                }
+            },
+            {
+                toolTip: $$(go.Adornment, "Auto",
+                    $$(go.Shape, {fill: '#FFFFCC', stroke: "#ddd"}),
+                    $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name_number", function (val) {
+                        return val ? '编号: ' + val : '---'
+                    }))
+                )
+            }
+        ));
+
     myDiagram.nodeTemplateMap.add("FuncNode",
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white', stroke: "green"}),
@@ -262,6 +296,11 @@ $(document).ready(function () {
         $$(go.Link, {selectionAdorned: false},
             $$(go.Shape, {strokeWidth: 2, stroke: "#666"}),
             $$(go.Shape, {fill: '#666', stroke: null, toArrow: "Standard", segmentFraction: 0})
+        ));
+
+    myDiagram.linkTemplateMap.add("ProductLink",
+        $$(go.Link, {selectionAdorned: false},
+            $$(go.Shape, {strokeWidth: 2, stroke: "#666"})
         ));
 
 

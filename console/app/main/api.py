@@ -184,10 +184,31 @@ def get_copy_parent_id(key, type_name):
     return copy_parent_id
 
 
+# key is no_copy_id
+def copy_children(no_copy_id, copy_result_id):
+    parent_id = copy_result_id
+    product_relation = ProductRelation.query.filter_by(parent_id=no_copy_id).all()
+    if not product_relation:
+        return
+
+    for v in product_relation:
+        d = {
+            'parent_id': parent_id,
+            'product_id': v.product_id,
+            'level': int(v.level),
+        }
+        copy_result_id = ProductRelation.add_product_relation(d, v.name, v.product_id)
+        if not copy_result_id:
+            return
+        copy_children(v.id, copy_result_id)
+
+
 @main.route('/file/tree/content/add/<int:id>', methods=['POST'])
 @login_required
 def add_file_tree_content(id):
     key = request.args.get('key')
+    action = request.args.get('action')
+
     form_data = request.form.to_dict()
     parent_id = form_data.get('parent_id')
 
@@ -212,7 +233,12 @@ def add_file_tree_content(id):
         FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))
     else:
         d['level'] = int(form_data['level']) if form_data.get('level') else None
-        ProductRelation.add_product_relation(d, form_data.get('content'), id)
+        copy_result_id = ProductRelation.add_product_relation(d, form_data.get('content'), id)
+
+        if not copy_result_id:
+            return
+        if action == 'copy':
+            copy_children(key, copy_result_id)
     return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id})
 
 

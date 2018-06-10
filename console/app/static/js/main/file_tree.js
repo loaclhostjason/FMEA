@@ -79,10 +79,10 @@ $(document).ready(function () {
                 console.log(thisemp);
                 if (key) {
                     var params = {
-                        'level': level -1,
+                        'level': level - 1,
                         'content': name
                     };
-                    $.post('/file/tree/content/add/' + product_id + '?key=' + key, params, function (resp) {
+                    $.post('/file/tree/content/add/' + product_id + '?key=' + key + '&action=copy', params, function (resp) {
                         if (resp.success) {
                             toastr.success('复制成功');
                             $.get_tree(product_id)
