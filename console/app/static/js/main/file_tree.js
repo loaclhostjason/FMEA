@@ -29,30 +29,6 @@ $(document).ready(function () {
 
     var partContextMenu =
         $$(go.Adornment, "Vertical",
-            makeButton("编辑属性",
-                function (e, obj) {
-                    var node = obj.part.adornedPart;
-                    if (node !== null) {
-                        var thisemp = node.data;
-                        var level = thisemp['level'] - 1;
-                        var name_number = thisemp['name_number'];
-                        console.log(thisemp)
-                    }
-                    $.get('/tree/attr?product_id=' + product_id + '&level=' + level + '&name_number=' + name_number, function (resp) {
-                        console.log(resp);
-                        if (resp.success) {
-                            var data = resp['data'];
-                            var content = resp['content'];
-                            $.attr_html(data, level, name_number, 'structure', content);
-                        } else {
-                            toastr.error(resp.messgae)
-                        }
-
-
-                    });
-                    // alert(level)
-
-                }),
             makeButton("新增过程",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
@@ -103,7 +79,7 @@ $(document).ready(function () {
                 console.log(thisemp);
                 if (key) {
                     var params = {
-                        'level': level,
+                        'level': level -1,
                         'content': name
                     };
                     $.post('/file/tree/content/add/' + product_id + '?key=' + key, params, function (resp) {
@@ -134,6 +110,38 @@ $(document).ready(function () {
                         }
                     })
                 }
+            }),
+            makeButton('上移', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var key = thisemp['key'];
+                }
+                // alert('up');
+                console.log(key);
+                $.post('/product/relation?id=' + key + '&type=up', '', function (resp) {
+                    if (resp.success) {
+                        toastr.success(resp.message);
+                        $.get_tree(product_id)
+                    } else {
+                        toastr.error(resp.message)
+                    }
+                })
+            }),
+            makeButton('下移', function (e, obj) {
+                var node = obj.part.adornedPart;
+                if (node !== null) {
+                    var thisemp = node.data;
+                    var key = thisemp['key'];
+                }
+                $.post('/product/relation?id=' + key + '&type=down', '', function (resp) {
+                    if (resp.success) {
+                        toastr.success(resp.message);
+                        $.get_tree(product_id)
+                    } else {
+                        toastr.error(resp.message)
+                    }
+                })
             })
         );
 
@@ -154,9 +162,26 @@ $(document).ready(function () {
                     var node = obj.part.data;
                     if (node !== null) {
                         var product_relation_id = node['key'];
+                        var level = node['level'] - 1;
+                        var name_number = node['name_number'];
+
                         $.get_func_or_failure_tree(product_relation_id);
 
                     }
+
+
+                    // edit attr
+                    $.get('/tree/attr?product_id=' + product_id + '&level=' + level + '&name_number=' + name_number, function (resp) {
+                        if (resp.success) {
+                            var data = resp['data'];
+                            var content = resp['content'];
+                            $.attr_html(data, level, name_number, 'structure', content);
+                        } else {
+                            toastr.error(resp.messgae)
+                        }
+
+
+                    });
 
                 }
             },

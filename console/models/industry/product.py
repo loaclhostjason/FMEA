@@ -44,6 +44,8 @@ class ProductRelationMixin:
 
     parent_id = db.Column(db.Integer, index=True)
 
+    relation_order = db.Column(db.Integer, default=0)
+
     @declared_attr
     def product_id(cls):
         return db.Column(db.Integer, db.ForeignKey('product.id'))

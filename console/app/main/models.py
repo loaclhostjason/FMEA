@@ -82,6 +82,7 @@ class ProductRelation(ProductRelationMixin, db.Model):
         for index, con in enumerate(content.split('\r\n'), start=start_index):
             data['name'] = con
             data['number'] = index
+            data['relation_order'] = index
             result.append(cls(**data))
         db.session.add_all(result)
         db.session.commit()

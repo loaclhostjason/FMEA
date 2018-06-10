@@ -31,7 +31,7 @@ class User(UserBaseMixin, UserMixin, db.Model):
         return bool(self.password_hash)
 
     def is_admin(self):
-        return bool(self.username == 'admin')
+        return bool(self.role == 'admin')
 
     @classmethod
     def update_time_ip(cls):

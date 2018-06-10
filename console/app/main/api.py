@@ -128,7 +128,7 @@ def get_file_tree():
     if not product_id:
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
-    product = ProductRelation.query.filter_by(product_id=product_id).all()
+    product = ProductRelation.query.filter_by(product_id=product_id).order_by(ProductRelation.relation_order, ProductRelation.id).all()
     if not product:
         return jsonify({'success': True, 'data': result})
 
@@ -251,7 +251,6 @@ def get_tree_attr():
     return jsonify({'success': True, 'data': data, 'content': content})
 
 
-
 @main.route('/export/product/<int:product_id>')
 @login_required
 def exprot_product(product_id):
@@ -259,3 +258,45 @@ def exprot_product(product_id):
 
     excel_data, filename = export_excel(product_id)
     return excel.make_response_from_dict(excel_data, "xls", file_name=filename)
+
+
+@main.route('/product/relation', methods=['POST'])
+@login_required
+def update_product_relation_order():
+    id = request.args.get('id')
+
+    type = request.args.get('type')
+    if not id or not type:
+        return jsonify({'success': False, 'message': '参数不对'})
+    print(type)
+
+    product_relation = ProductRelation.query.filter_by(id=id).first()
+    if not product_relation:
+        return jsonify({'success': False, 'message': '没有记录'})
+    parent_id = product_relation.parent_id
+
+    if type == 'up':
+        prev_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, number=product_relation.number - 1).first()
+        if not prev_product_relation:
+            return jsonify({'success': False, 'message': '不能上移'})
+
+        pre_number = prev_product_relation.number + 1
+        this_number = prev_product_relation.number
+
+        prev_product_relation.relation_order = pre_number
+        product_relation.relation_order = this_number
+
+        return jsonify({'success': True, 'message': '更新成功'})
+
+    else:
+        next_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, number=product_relation.number + 1).first()
+        if not next_product_relation:
+            return jsonify({'success': False, 'message': '不能下移'})
+
+        next_number = next_product_relation.number - 1
+        this_number = next_product_relation.number
+
+        next_product_relation.relation_order = next_number
+        product_relation.relation_order = this_number
+
+        return jsonify({'success': True, 'message': '更新成功'})
