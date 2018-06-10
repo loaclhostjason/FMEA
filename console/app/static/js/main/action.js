@@ -17,10 +17,13 @@ $(document).ready(function () {
         console.log(action_type);
 
         modal.find('input').attr('disabled', 'disabled');
+        modal.find('select').attr('disabled', 'disabled');
         if (type === 'current') {
             action_type === 'preventive_action' ? modal.find('.current_preventive_action input').removeAttr('disabled') : modal.find('.current_probe_action input').removeAttr('disabled');
+            action_type === 'preventive_action' ? modal.find('.current_preventive_action select').removeAttr('disabled') : modal.find('.current_probe_action input').removeAttr('disabled');
         } else {
             action_type === 'preventive_action' ? modal.find('.optimize_preventive_action input').removeAttr('disabled') : modal.find('.optimize_probe_action input').removeAttr('disabled');
+            action_type === 'preventive_action' ? modal.find('.optimize_preventive_action select').removeAttr('disabled') : modal.find('.optimize_probe_action input').removeAttr('disabled');
         }
 
         if (product_id && name_number) {
