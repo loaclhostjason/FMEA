@@ -185,8 +185,8 @@ def get_copy_parent_id(key, type_name):
 
 
 # key is no_copy_id
-def copy_children(no_copy_id, copy_result_id):
-    parent_id = copy_result_id
+def copy_product_children(no_copy_id, copy_result_id):
+    parent_id = copy_result_id[0]
     product_relation = ProductRelation.query.filter_by(parent_id=no_copy_id).all()
     if not product_relation:
         return
@@ -200,7 +200,25 @@ def copy_children(no_copy_id, copy_result_id):
         copy_result_id = ProductRelation.add_product_relation(d, v.name, v.product_id)
         if not copy_result_id:
             return
-        copy_children(v.id, copy_result_id)
+        copy_product_children(v.id, copy_result_id)
+
+
+# key is no_copy_id
+def copy_func_children(no_copy_id, copy_result_id):
+    parent_id = copy_result_id[0]
+    print(no_copy_id)
+    func_relation = FuncRelation.query.filter_by(parent_id=no_copy_id).all()
+    if not func_relation:
+        return
+
+    for v in func_relation:
+        d = {
+            'parent_id': parent_id,
+            'product_id': v.product_id,
+            'product_relation_id': v.product_relation_id,
+        }
+        print(d)
+        FuncRelation.add_func_relation(d, v.name, 'failure')
 
 
 @main.route('/file/tree/content/add/<int:id>', methods=['POST'])
@@ -230,15 +248,17 @@ def add_file_tree_content(id):
     print(form_data.get('type'))
     if form_data.get('type'):
         d['product_relation_id'] = product_relation_id
-        FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))
+        copy_result_id = FuncRelation.add_func_relation(d, form_data.get('content'), form_data.get('type'))
+        if copy_result_id and action == 'copy':
+            copy_func_children(key, copy_result_id)
+
     else:
         d['level'] = int(form_data['level']) if form_data.get('level') else None
         copy_result_id = ProductRelation.add_product_relation(d, form_data.get('content'), id)
 
-        if not copy_result_id:
-            return
-        if action == 'copy':
-            copy_children(key, copy_result_id)
+        if copy_result_id and action == 'copy':
+            copy_product_children(key, copy_result_id)
+
     return jsonify({'success': True, 'type': form_data.get('type'), 'product_relation_id': product_relation_id})
 
 

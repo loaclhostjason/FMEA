@@ -75,7 +75,7 @@ class ProductRelation(ProductRelationMixin, db.Model):
     def add_product_relation(cls, data, content, product_id):
         level = data['level']
         print(level)
-        len_level = cls.query.filter(cls.level == int(level), cls.product_id==product_id).order_by(cls.relation_order.desc(), cls.id.desc()).first()
+        len_level = cls.query.filter(cls.level == int(level), cls.product_id == product_id).order_by(cls.relation_order.desc(), cls.id.desc()).first()
         start_index = len_level.number + 1 if len_level else 1
 
         result = []
@@ -190,7 +190,11 @@ class FuncRelation(FuncRelationMixin, db.Model):
 
             result.append(cls(**data))
         db.session.add_all(result)
+        db.session.flush()
+        result = [v.id for v in result]
+
         db.session.commit()
+        return result
 
 
 class ProductTree(ProductTreeMixin, db.Model):

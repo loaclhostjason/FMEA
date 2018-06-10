@@ -64,7 +64,8 @@ def get_failure_relation(result, parent_id):
             'category': 'FailureNode',
             'name': failure.name,
             'key': failure.id,
-            'name_number': failure.name_number
+            'name_number': failure.name_number,
+            'product_relation_id': failure.product_relation_id,
         })
         d = {
             'category': 'FailureLink',

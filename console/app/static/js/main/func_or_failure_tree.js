@@ -80,7 +80,7 @@ $(document).ready(function () {
                         'product_relation_id': product_relation_id,
                         'type': 'func'
                     };
-                    $.post('/file/tree/content/add/' + product_id, params, function (resp) {
+                    $.post('/file/tree/content/add/' + product_id + '?action=copy&key=' + key, params, function (resp) {
                         if (resp.success) {
                             toastr.success('复制成功');
                             $.get_func_or_failure_tree(product_relation_id);
@@ -183,7 +183,7 @@ $(document).ready(function () {
             })
         );
 
-        myDiagram.nodeTemplateMap.add("ProductNode",
+    myDiagram.nodeTemplateMap.add("ProductNode",
         $$(go.Node, "Auto",
             $$(go.Shape, "RoundedRectangle", {strokeWidth: 1, fill: 'white'}),
             $$(go.TextBlock, {margin: 8}, new go.Binding("text", "name")),
