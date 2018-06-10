@@ -66,7 +66,7 @@ def create_edit_extra_attr():
         form_data = form.get_form_data()
         form_data['extra'] = bool(form_data.get('extra') == 'True')
         content = form.get_content()
-        new_form_data = dict({'content': json.dumps(content), **form_data})
+        new_form_data = dict({'content': json.dumps(content)}, **form_data)
         print(new_form_data)
         Attr.create_edit_extra(new_form_data, attr_info)
         flash({'success': '更新成功'})
