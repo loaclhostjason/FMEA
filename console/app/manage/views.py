@@ -43,7 +43,7 @@ def edit_attr():
     if form.validate_on_submit():
         form_data = form.get_form_data()
         content = form.get_content()
-        new_form_data = dict({'content': json.dumps(content), **form_data})
+        new_form_data = dict({'content': json.dumps(content)}, **form_data)
         Attr.edit(new_form_data, attr_info)
         flash({'success': '更新成功'})
         return redirect(url_for('.config_list'))
