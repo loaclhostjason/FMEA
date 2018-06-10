@@ -9,6 +9,7 @@ Flask==1.0.2
 Flask-Assets==0.12
 Flask-Babel==0.11.2
 Flask-Bootstrap==3.3.7.1
+Flask-Caching==1.4.0
 Flask-Excel==0.0.7
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
@@ -35,6 +36,7 @@ PyMySQL==0.8.1
 python-dateutil==2.7.2
 python-editor==1.0.3
 pytz==2018.4
+redis==2.10.6
 six==1.11.0
 SQLAlchemy==1.2.7
 texttable==1.2.1
