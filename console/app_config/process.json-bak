@@ -5,7 +5,7 @@
         "content": [
             {
                 "name": "add_process",
-                "name_zh": "新增过程",
+                "name_zh": "新增",
                 "show_level": [1]
             },
             {

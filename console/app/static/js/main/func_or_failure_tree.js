@@ -12,6 +12,7 @@ $(document).ready(function () {
                 layout: $$(go.TreeLayout,
                     {
                         setsPortSpot: false,
+                        angle: 90,
                         setsChildPortSpot: false,
                         arrangement: go.TreeLayout.ArrangementVertical
                     }

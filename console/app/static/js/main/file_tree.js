@@ -29,7 +29,7 @@ $(document).ready(function () {
 
     var partContextMenu =
         $$(go.Adornment, "Vertical",
-            makeButton("新增过程",
+            makeButton("新增",
                 function (e, obj) {
                     var node = obj.part.adornedPart;
                     if (node !== null) {
@@ -275,7 +275,7 @@ $(document).ready(function () {
             return html
         }
         content.forEach(function (value) {
-            html += '<div></i><label data-assess="' + assess + '" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default add-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+            html += '<div></i><label data-assess="' + assess + '" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
         });
         return html
     }
@@ -385,16 +385,4 @@ $(document).ready(function () {
         process_table.html(html);
 
     }
-});
-
-
-//
-$(document).ready(function () {
-    var action_modal = $('#action_modal');
-    $(document).on('click', '.add-action', function () {
-        $.jqclass.show_modal(action_modal, $(this));
-        var text = $(this).parents('.panel-collapse').prev().find('label').text();
-        action_modal.find('.modal-title').text(text);
-
-    });
 });

@@ -5,7 +5,7 @@
         "content": [
             {
                 "name": "add_process",
-                "name_zh": "新增过程",
+                "name_zh": "新增",
                 "show_level": [1]
             },
             {
@@ -32,7 +32,7 @@
             {
                 "name": "edit_func_net",
                 "name_zh": "编辑功能网",
-                 "show_level": [1, 2, 3, 4],
+                 "show_level": [-1],
                 "action": "edit"
             }
         ]
@@ -49,7 +49,7 @@
             {
                 "name": "edit_failure",
                 "name_zh": "编辑失效网",
-                "show_level": [1, 2, 3, 4],
+                "show_level": [-2],
                 "action": "edit"
             }
         ]
@@ -59,47 +59,40 @@
         "id": 4,
         "content": [
             {
-                "name": "s_assess",
-                "name_zh": "S评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
+                "name": "preventive_action",
+                "name_zh": "预防措施",
+                "show_level": [-2],
                 "content": [
                     {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "s_assess",
+                        "name_zh": "S评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
+                        "name": "o_assess",
+                        "name_zh": "O评估"
+                    },
+                    {
+                        "name": "d_assess",
+                        "name_zh": "D评估"
                     }
                 ]
             },
             {
-                "name": "o_assess",
-                "name_zh": "O评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
+                "name": "probe_action",
+                "name_zh": "探测措施",
+                "show_level": [-2],
                 "content": [
                     {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "s_assess",
+                        "name_zh": "S评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
-                    }
-                ]
-            },
-            {
-                "name": "d_assess",
-                "name_zh": "D评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
-                "content": [
-                    {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "o_assess",
+                        "name_zh": "O评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
+                        "name": "d_assess",
+                        "name_zh": "D评估"
                     }
                 ]
             }
@@ -110,47 +103,40 @@
         "id": 5,
         "content": [
             {
-                "name": "s_assess",
-                "name_zh": "S评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
+                "name": "preventive_action",
+                "name_zh": "预防措施",
+                "show_level": [-2],
                 "content": [
                     {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "s_assess",
+                        "name_zh": "S评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
+                        "name": "o_assess",
+                        "name_zh": "O评估"
+                    },
+                    {
+                        "name": "d_assess",
+                        "name_zh": "D评估"
                     }
                 ]
             },
             {
-                "name": "o_assess",
-                "name_zh": "O评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
+                "name": "probe_action",
+                "name_zh": "探测措施",
+                "show_level": [-2],
                 "content": [
                     {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "s_assess",
+                        "name_zh": "S评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
-                    }
-                ]
-            },
-            {
-                "name": "d_assess",
-                "name_zh": "D评估",
-                "show_level": [-2, -1, 1, 2, 3, 4],
-                "content": [
-                    {
-                        "name": "preventive_action",
-                        "name_zh": "预防措施"
+                        "name": "o_assess",
+                        "name_zh": "O评估"
                     },
                     {
-                        "name": "probe_action",
-                        "name_zh": "探测措施"
+                        "name": "d_assess",
+                        "name_zh": "D评估"
                     }
                 ]
             }
