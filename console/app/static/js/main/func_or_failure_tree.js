@@ -120,6 +120,7 @@ $(document).ready(function () {
                     if (node !== null) {
                         var thisemp = node.data;
                     }
+                    $.g_name_number = thisemp['name_number'];
                     var add_process = $("#add-process");
                     jqclass.show_modal(add_process, $(this));
                     add_process.find('[name="level"]').val(-2);
@@ -258,14 +259,15 @@ $(document).ready(function () {
                 click: function (e, obj) {
                     var node = obj.part.data;
                     var name_number = node['name_number'];
+                    $.attr_html('', -2, name_number, 'failure', '');
 
-                    $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + name_number, function (resp) {
-                        console.log(resp);
-                        var data = resp['data'];
-                        var content = resp['content'];
-                        $.attr_html(data, -2, name_number, 'failure', content);
-
-                    });
+                    // $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + name_number, function (resp) {
+                    //     console.log(resp);
+                    //     var data = resp['data'];
+                    //     var content = resp['content'];
+                    //     $.attr_html(data, -2, name_number, 'failure', content);
+                    //
+                    // });
 
                 }
             },

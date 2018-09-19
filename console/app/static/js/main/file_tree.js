@@ -237,6 +237,8 @@ $(document).ready(function () {
         }
         var form_html = '';
 
+        // type 类型 失效数据
+        form_html += '<input name="type" type="hidden" value="' + level + '">';
         form_html += '<input name="level" type="hidden" value="' + level + '">';
         form_html += '<input name="type_name" type="hidden" value="' + type + '">';
         form_html += '<input name="name_number" type="hidden" value="' + name_number + '">';
@@ -275,7 +277,7 @@ $(document).ready(function () {
             return html
         }
         content.forEach(function (value) {
-            html += '<div></i><label data-assess="' + assess + '" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
+            html += '<div></i><label data-assess="' + assess + '" data-action-type="' + value['name'] + '" data-type="' + type + '" class="label-border-default click-action" style="width: 125px;cursor: pointer"><i class="glyphicon glyphicon-triangle-right"></i>' + value['name_zh'] + '</label></div>'
         });
         return html
     }
@@ -294,7 +296,32 @@ $(document).ready(function () {
             console.log(data);
             get_process_table(data, level);
 
+        }).done(function () {
+            $('.label-action').each(function () {
+                if ($(this).hasClass('disabled')) {
+                    $(this).parent('a').removeAttr('data-toggle');
+                }
+            });
         })
+    });
+    $(document).on('click', '.click-action', function () {
+        add_process.modal('hide');
+        var action = $(this).data('assess');
+        var asses = $(this).data('action-type');
+        var type = $(this).data('type');
+        console.log(action, asses, type);
+
+        $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + $.g_name_number, function (resp) {
+            if (resp.success) {
+                var data = resp['data'];
+                var content = resp['content'];
+                $.attr_html(data, -2, $.g_name_number, 'failure', content);
+            } else {
+                toastr.error(resp.messgae)
+            }
+
+
+        });
     });
 
 
@@ -341,11 +368,11 @@ $(document).ready(function () {
                             html += '<div>';
                             if ($.inArray(level, value['show_level']) > -1) {
                                 html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
-                                html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
+                                html += '<label class="label-border label-action text-center" style="width: 125px;cursor: pointer">';
                             }
                             else {
                                 html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
-                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
+                                html += '<label class="label-border label-action text-center disabled" style="width: 125px;cursor: pointer">';
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
@@ -357,10 +384,10 @@ $(document).ready(function () {
 
                             html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<label class="label-border text-center" style="width: 125px;cursor: pointer">';
+                                html += '<label class="label-border label-action text-center" style="width: 125px;cursor: pointer">';
                             }
                             else {
-                                html += '<label class="label-border text-center disabled" style="width: 125px;cursor: pointer">';
+                                html += '<label class="label-border label-action text-center disabled" style="width: 125px;cursor: pointer">';
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
