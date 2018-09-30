@@ -2,6 +2,7 @@ from . import main
 from flask import jsonify, request, abort
 from flask_login import current_user, login_required
 from ..main.models import *
+from datetime import datetime
 
 
 def delete_product_children(id):
@@ -77,6 +78,7 @@ def edit_tree_name():
             db.session.add(product)
 
         product_relation.name = name
+        product_relation.timestamp = datetime.now()
         db.session.add(product_relation)
         return jsonify({'success': True, 'message': '更新成功', 'product_relation_id': None})
 

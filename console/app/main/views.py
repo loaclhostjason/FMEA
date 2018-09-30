@@ -9,6 +9,7 @@ from ..base import Check
 from ..read_config import ReadAppConfig
 from sqlalchemy import or_
 from ..base import pagination_result
+from collections import defaultdict
 
 '''
 dashboard
@@ -54,7 +55,6 @@ def edit_file(product_id):
     return render_template('main/create_edit_file.html', form=form, product=product, process_list=process_list)
 
 
-
 '''
 页面 最近修改文件
 '''
@@ -83,3 +83,28 @@ def update_password():
     user.password = form_data['password']
     db.session.add(user)
     return jsonify({'success': True, 'message': '更新成功'})
+
+
+@main.after_request
+def after_request(response):
+    if not request.url_rule or request.method != 'POST':
+        return response
+
+    product_relation = ProductRelation.query.order_by(ProductRelation.timestamp.desc()).all()
+    r = defaultdict(list)
+    if product_relation:
+        for pr in product_relation:
+            r[pr.product_id].append(pr.timestamp)
+
+    d = {k: max(v) for k, v in r.items() if v}
+    if not d:
+        return response
+
+    for product_id, timestamp in d.items():
+        product = Product.query.filter_by(id=product_id).first()
+        if product and product.last_time < timestamp:
+            product.last_time = timestamp
+            db.session.add(product)
+            db.session.commit()
+
+    return response
