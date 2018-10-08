@@ -169,6 +169,14 @@ class ProductTreeMixin:
     update_time = db.Column(db.DateTime, default=datetime.now)
 
     @declared_attr
+    def func_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('func_relation.id'))
+
+    @declared_attr
+    def func(cls):
+        return db.relationship('FuncRelation', backref=backref("product_tree_edit", cascade="all, delete-orphan"))
+
+    @declared_attr
     def product_relation(cls):
         return db.relationship('ProductRelation',
                                backref=db.backref('edit_tree', lazy='dynamic', cascade='all, delete-orphan'))

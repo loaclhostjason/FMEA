@@ -65,12 +65,17 @@ $(document).ready(function () {
     // edit_tree_modal.on('hide.bs.modal', function () {
     //     $(this).find('input').val('');
     // });
-
+    edit_tree_modal.on('hidden.bs.modal', function () {
+        $(this).find("[name='id']").val('');
+        $(this).find("[name='func_id']").val('');
+    });
     edit_tree_modal.on('shown.bs.modal', function () {
         var type_name = $(this).find('.modal-title').text() === '编辑功能网' ? 'func' : 'failure';
         var id = $(this).find('[name="id"]').val();
 
-        $.get('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id).done(function (resp) {
+        var func_id = $(this).find('[name="func_id"]').val();
+
+        $.get('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&func_id=' + func_id).done(function (resp) {
             if (resp.success) {
                 var data = resp['data'];
 
@@ -104,7 +109,9 @@ $(document).ready(function () {
                         var key = node['key'];
                         var id = edit_tree_modal.find('[name="id"]').val();
 
-                        $.post('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&is_show=true&key=' + key, '', function (resp) {
+                        var func_id = edit_tree_modal.find('[name="func_id"]').val();
+
+                        $.post('/manage/edit/tree?product_id=' + product_id + '&type=' + type_name + '&id=' + id + '&is_show=true&key=' + key + '&func_id=' + func_id, '', function (resp) {
                             if (resp.success) {
                                 var data = resp['data'];
                                 console.log(data)

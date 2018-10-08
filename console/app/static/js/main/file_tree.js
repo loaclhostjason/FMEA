@@ -376,7 +376,7 @@ $(document).ready(function () {
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
-                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'current', value['name'].split('_')[0]) + '</div>';
+                            // html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'current', value['name'].split('_')[0]) + '</div>';
 
                             break;
 
@@ -391,7 +391,7 @@ $(document).ready(function () {
                             }
 
                             html += value['name_zh'] + '</label></a></div>';
-                            html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'optimize', value['name'].split('_')[0]) + '</div>';
+                            // html += '<div id="' + id + '_' + value['name'] + '" class="panel-collapse collapse">' + content_html(value['content'], 'optimize', value['name'].split('_')[0]) + '</div>';
 
                             break;
 

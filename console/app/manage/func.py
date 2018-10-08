@@ -26,7 +26,7 @@ def children_info(id, product_id):
                     yield re
 
 
-def get_all_func(id, product_id, type, show_key):
+def get_all_func(id, product_id, type, show_key, func_id=None):
     print(11, show_key)
     product_relation = ProductRelation.query.filter_by(id=id, product_id=product_id).first()
     if not product_relation:
@@ -43,7 +43,11 @@ def get_all_func(id, product_id, type, show_key):
     result = []
 
     # todo more
-    func = FuncRelation.query.filter_by(product_relation_id=id, type=type, product_id=product_id).first()
+    func = FuncRelation.query.filter_by(product_relation_id=id, type=type, product_id=product_id)
+    if func_id:
+        func = func.filter_by(id=func_id)
+    func = func.first()
+    # print(func.id)
     if not func:
         return result
 
@@ -54,8 +58,11 @@ def get_all_func(id, product_id, type, show_key):
         'key': "Root",
         'is_show': True
     })
+
     result = get_parent_tree(parent_list, result, type, show_key)
     result = get_children_tree(child_list, result, type, show_key)
+
+    print('result', result)
     return result
 
 

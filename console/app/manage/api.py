@@ -94,12 +94,15 @@ def edit_tree_func_fail():
     id = request.args.get('id')
     key = request.args.get('key')
     product_id = request.args.get('product_id')
+
+    func_id = request.args.get('func_id')
     if not type or not id or not product_id:
         return jsonify({'success': True, 'data': []})
 
-    old_product_tree = ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id).first()
+    old_product_tree = ProductTree.query.filter_by(type=type, product_id=product_id, product_relation_id=id,
+                                                   func_id=func_id).first()
 
-    result = get_all_func(id, product_id, type, False)
+    result = get_all_func(id, product_id, type, False, func_id)
     if request.method == 'POST':
         if old_product_tree:
             result = json.loads(old_product_tree.content)
@@ -116,6 +119,7 @@ def edit_tree_func_fail():
         new_dict = {
             'type': type,
             'product_relation_id': id,
+            'func_id': func_id,
             'content': json.dumps(result),
             'product_id': product_id
         }

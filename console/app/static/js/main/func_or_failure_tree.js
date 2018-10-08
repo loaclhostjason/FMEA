@@ -52,6 +52,10 @@ $(document).ready(function () {
 
                     var action_modal = $("#action_modal");
                     action_modal.find('[name="name_number"]').val(thisemp['name_number']);
+
+                    var edit_tree_modal = $('#edit-tree-modal');
+                    edit_tree_modal.find('[name="id"]').val(product_relation_id);
+                    edit_tree_modal.find('[name="func_id"]').val(parent_id);
                 }),
             makeButton('修改名称', function (e, obj) {
                 var node = obj.part.adornedPart;
@@ -127,6 +131,10 @@ $(document).ready(function () {
 
                     var action_modal = $("#action_modal");
                     action_modal.find('[name="name_number"]').val(thisemp['name_number']);
+
+                    var edit_tree_modal = $('#edit-tree-modal');
+                    edit_tree_modal.find('[name="id"]').val(thisemp['product_relation_id']);
+                    edit_tree_modal.find('[name="func_id"]').val(thisemp['key']);
                 }),
             makeButton('修改名称', function (e, obj) {
                 var node = obj.part.adornedPart;
