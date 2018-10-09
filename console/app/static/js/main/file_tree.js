@@ -6,6 +6,7 @@ $(document).ready(function () {
         $$(go.Diagram, "myDiagramStructure",
             {
                 initialContentAlignment: go.Spot.Center,
+                "animationManager.duration": 1,
                 "undoManager.isEnabled": true,
                 draggingTool: new NonRealtimeDraggingTool(),
                 "draggingTool.isEnabled": false,
