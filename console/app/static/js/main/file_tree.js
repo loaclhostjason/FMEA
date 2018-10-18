@@ -333,7 +333,7 @@ $(document).ready(function () {
             }
         })
     });
-
+    // todo assess form ------------------------------------------------------------------------
     function get_asses_form(data) {
         var attr_form = $('#attr-form');
         // if (!data || !data.length) {
