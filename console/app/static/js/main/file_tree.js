@@ -238,7 +238,7 @@ $(document).ready(function () {
         var form_html = '';
 
         // type 类型 失效数据
-        form_html += '<input name="type" type="hidden" value="' + level + '">';
+        // form_html += '<input name="type" type="hidden" value="' + level + '">';
         form_html += '<input name="level" type="hidden" value="' + level + '">';
         form_html += '<input name="type_name" type="hidden" value="' + type + '">';
         form_html += '<input name="name_number" type="hidden" value="' + name_number + '">';
@@ -271,6 +271,7 @@ $(document).ready(function () {
 //
 
 $(document).ready(function () {
+    // content_html(value['content'], 'current', value['name'].split('_')[0])
     function content_html(content, type, assess) {
         var html = '';
         if (!content || !content.length) {
@@ -304,25 +305,54 @@ $(document).ready(function () {
             });
         })
     });
+
+    // 失效 预防措施 action
+    var assess_action_type;
+    var assess_type;
     $(document).on('click', '.click-action', function () {
         add_process.modal('hide');
-        var action = $(this).data('assess');
-        var asses = $(this).data('action-type');
-        var type = $(this).data('type');
-        console.log(action, asses, type);
+        assess_action_type = $(this).data('action-type');
+        assess_type = $(this).data('type');
+        var func_relation_id = add_process.find('.modal-title').attr('f_id');
 
-        $.get('/tree/attr?product_id=' + product_id + '&type_name=failure' + '&name_number=' + $.g_name_number, function (resp) {
-            if (resp.success) {
-                var data = resp['data'];
-                var content = resp['content'];
-                $.attr_html(data, -2, $.g_name_number, 'failure', content);
-            } else {
-                toastr.error(resp.messgae)
-            }
-
-
+        $.get('/manage/product/assess/create_edit?action_type=' + assess_action_type + '&type=' + assess_type + '&product_id=' + product_id + '&func_relation_id=' + func_relation_id, function (resp) {
+            var data = resp['data'];
+            get_asses_form(data);
         });
     });
+    $(document).on('click', '.submit-assess', function () {
+        var func_relation_id = add_process.find('.modal-title').attr('f_id');
+
+        var form_data = $('form#attr-form').serialize();
+        $.post('/manage/product/assess/create_edit?action_type=' + assess_action_type + '&type=' + assess_type + '&product_id=' + product_id + '&func_relation_id=' + func_relation_id, form_data, function (resp) {
+            if (resp.success) {
+                toastr.success('更新成功')
+            } else {
+                toastr.error('更新失败')
+            }
+        })
+    });
+
+    function get_asses_form(data) {
+        var attr_form = $('#attr-form');
+        // if (!data || !data.length) {
+        //     attr_form.html('');
+        //     return false
+        // }
+        var form_html = '';
+
+        // type 类型 失效数据
+
+
+        form_html += '<div class="form-group">';
+        form_html += '<div class="col-sm-2"><label class="control-label pull-right">test</label></div>';
+        form_html += '<div class="col-sm-8"><input class="form-control pull-left" name="test" value="' + (data ? data['test'] : "") + '"></div>';
+        form_html += '</div>';
+
+        form_html += '<div class="form-group"><div class="col-sm-2"><button type="button" class="btn btn-primary submit-assess">保存</button></div></div>';
+        attr_form.html(form_html);
+
+    }
 
 
     function get_process_table(data, level) {
@@ -368,7 +398,7 @@ $(document).ready(function () {
                             html += '<div>';
                             if ($.inArray(level, value['show_level']) > -1) {
                                 html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
-                                html += '<label class="label-border label-action text-center" style="width: 125px;cursor: pointer">';
+                                html += '<label data-action-type="current" data-type="' + value['name'].split('_')[0] + '" class="label-border label-action text-center click-action" style="width: 125px;cursor: pointer">';
                             }
                             else {
                                 html += '<a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
@@ -384,7 +414,7 @@ $(document).ready(function () {
 
                             html += '<div><a class="label-a" data-toggle="collapse" data-parent="#accordion" href="#' + id + '_' + value['name'] + '">';
                             if ($.inArray(level, value['show_level']) > -1) {
-                                html += '<label class="label-border label-action text-center" style="width: 125px;cursor: pointer">';
+                                html += '<label data-action-type="optimize" data-type="' + value['name'].split('_')[0] + '" class="label-border label-action text-center click-action" style="width: 125px;cursor: pointer">';
                             }
                             else {
                                 html += '<label class="label-border label-action text-center disabled" style="width: 125px;cursor: pointer">';

@@ -138,11 +138,16 @@ class ProductAssessMixin:
 
     content = db.Column(db.Text)
 
-    name_number = db.Column(db.String(32))
     type = db.Column(db.String(32))  # current | optimize
     action_type = db.Column(db.String(32))  # preventive_action | probe_action
 
-    assess = db.Column(db.String(32))
+    @declared_attr
+    def func_relation_id(cls):
+        return db.Column(db.Integer, db.ForeignKey('func_relation.id'))
+
+    @declared_attr
+    def func_relation(cls):
+        return db.relationship('FuncRelation', backref=backref("assess", cascade="all, delete-orphan"))
 
     @declared_attr
     def product_id(cls):
