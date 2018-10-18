@@ -7,6 +7,7 @@ $(document).ready(function () {
             {
                 initialContentAlignment: go.Spot.Center,
                 "undoManager.isEnabled": true,
+                "animationManager.duration": 1,
                 draggingTool: new NonRealtimeDraggingTool(),
                 "draggingTool.isEnabled": false,
                 layout: $$(go.TreeLayout,

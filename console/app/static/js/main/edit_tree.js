@@ -93,7 +93,8 @@ $(document).ready(function () {
     var myDiagram =
         $$(go.Diagram, "edit-tree",
             {
-                initialContentAlignment: go.Spot.Center
+                initialContentAlignment: go.Spot.Center,
+                "animationManager.duration": 1
             });
 
     myDiagram.nodeTemplate =
