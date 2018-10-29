@@ -111,6 +111,17 @@ class AttrMixin:
     name_number = db.Column(db.String(32))
 
 
+class AttrOtherMixin:
+    __tablename__ = 'attr_action'
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(16))
+
+    update_time = db.Column(db.DateTime, default=datetime.now)
+
+    content = db.Column(db.Text)
+
+
 class AttrContentMixin:
     __tablename__ = 'attr_content'
     id = db.Column(db.Integer, primary_key=True)
@@ -208,6 +219,10 @@ class FuncRelation(FuncRelationMixin, db.Model):
 
 
 class Attr(AttrMixin, db.Model):
+    pass
+
+
+class AttrOther(AttrOtherMixin, db.Model):
     pass
 
 

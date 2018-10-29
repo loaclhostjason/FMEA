@@ -5,10 +5,13 @@ from models.industry import ProductRelationMixin
 from models.industry import AttrMixin
 from models.industry import FuncRelationMixin
 from models.industry import ProductTreeMixin
+from models.industry import AttrOtherMixin
 
 from .. import db
 from ..base import Tool, Check
 from sqlalchemy import func
+
+import json
 
 
 class Product(ProductMixin, db.Model):
@@ -75,7 +78,8 @@ class ProductRelation(ProductRelationMixin, db.Model):
     def add_product_relation(cls, data, content, product_id):
         level = data['level']
         print(level)
-        len_level = cls.query.filter(cls.level == int(level), cls.product_id == product_id).order_by(cls.relation_order.desc(), cls.id.desc()).first()
+        len_level = cls.query.filter(cls.level == int(level), cls.product_id == product_id).order_by(
+            cls.relation_order.desc(), cls.id.desc()).first()
         start_index = len_level.number + 1 if len_level else 1
 
         result = []
@@ -117,16 +121,62 @@ class Attr(AttrMixin, db.Model):
 
     @classmethod
     def init_attr(cls):
+        tree_one = [{"field": "company_name", "field_zh": "公司名称"}, {"field": "position", "field_zh": "工程位置"},
+                    {"field": "version", "field_zh": "型号/平台"}, {"field": "project", "field_zh": "项目"},
+                    {"field": "start_time", "field_zh": "PF开始时间"}, {"field": "end_time", "field_zh": "PF结束时间"},
+                    {"field": "team", "field_zh": "跨功能团队"}, {"field": "user", "field_zh": "设计责任"},
+                    {"field": "secrecy_level", "field_zh": "保密级别"}]
+
+        tree_other = [{"field": "name", "field_zh": "名称"}, {"field": "spec_num", "field_zh": "规格数量"},
+                      {"field": "spec_tole", "field_zh": "规格公差"}, {"field": "spec_company", "field_zh": "规格单位"},
+                      {"field": "detection_device", "field_zh": "检测装置"},
+                      {"field": "detection_capacity", "field_zh": "检测容量"},
+                      {"field": "control_method", "field_zh": "控制方法"}, {"field": "reaction_plan", "field_zh": "反应计划"},
+                      {"field": "type", "field_zh": "分类"}, {"field": "desciption", "field_zh": "备注"},
+                      {"field": "helper", "field_zh": "帮助"}]
+
         r = [
-            {'name': '结构树节点-0', 'level': 0, 'type': 'structure'},
-            {'name': '结构树节点-1', 'level': 1, 'type': 'structure'},
-            {'name': '结构树节点-2', 'level': 2, 'type': 'structure'},
-            {'name': '结构树节点-3', 'level': 3, 'type': 'structure'},
-            {'name': '功能树节点', 'level': None, 'type': 'func'},
-            {'name': '失效树节点', 'level': None, 'type': 'failure'},
+            {'name': '结构树节点-0', 'level': 0, 'type': 'structure', 'content': json.dumps(tree_one)},
+            {'name': '结构树节点-1', 'level': 1, 'type': 'structure', 'content': json.dumps(tree_other)},
+            {'name': '结构树节点-2', 'level': 2, 'type': 'structure', 'content': json.dumps(tree_other)},
+            {'name': '结构树节点-3', 'level': 3, 'type': 'structure', 'content': json.dumps(tree_other)},
+            {'name': '功能树节点', 'level': None, 'type': 'func', 'content': json.dumps(tree_other)},
+            {'name': '失效树节点', 'level': None, 'type': 'failure', 'content': json.dumps(tree_other)},
         ]
         attr = Attr.query.all()
         if attr:
+            return
+        result = []
+        for info in r:
+            new_attr = cls(**info)
+            result.append(new_attr)
+        db.session.add_all(result)
+        db.session.commit()
+        return
+
+
+class AttrOther(AttrOtherMixin, db.Model):
+    def __init__(self, *args, **kwargs):
+        super(AttrOther, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def init_attr_action(cls):
+        tree = [
+            {"field": "S", "field_zh": "S评估"},
+            {"field": "O", "field_zh": "O评估"},
+            {"field": "D", "field_zh": "D评估"},
+            {"field": "name", "field_zh": "名称"},
+            {"field": "occur_assess", "field_zh": "发生度评估"},
+            {"field": "priority", "field_zh": "AP行动优先级"},
+            {"field": "description", "field_zh": "备注"},
+            {"field": "helper", "field_zh": "帮助"},
+        ]
+
+        r = [
+            {'name': '优化方法', 'content': json.dumps(tree)}
+        ]
+        attr_action = AttrOther.query.all()
+        if attr_action:
             return
         result = []
         for info in r:

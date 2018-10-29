@@ -316,9 +316,10 @@ $(document).ready(function () {
         assess_type = $(this).data('type');
         var func_relation_id = add_process.find('.modal-title').attr('f_id');
 
-        $.get('/manage/product/assess/create_edit?action_type=' + assess_action_type + '&type=' + assess_type + '&product_id=' + product_id + '&func_relation_id=' + func_relation_id, function (resp) {
+        $.get('/tree/attr/action?action_type=' + assess_action_type + '&type=' + assess_type + '&product_id=' + product_id + '&func_relation_id=' + func_relation_id, function (resp) {
             var data = resp['data'];
-            get_asses_form(data);
+            var content = resp['content'];
+            get_asses_form(data, content);
         });
     });
     $(document).on('click', '.submit-assess', function () {
@@ -333,23 +334,41 @@ $(document).ready(function () {
             }
         })
     });
+
     // todo assess form ------------------------------------------------------------------------
-    function get_asses_form(data) {
+    function required_html(required) {
+        var html = '';
+        if (required)
+            html = '<span class="text-danger">*</span>';
+        return html
+
+    }
+
+    function required_input(field, required, content) {
+        var html = '<input class="form-control pull-left" name="' + field + '" value="' + (content ? content[field] : "") + '">';
+        if (required)
+            html = '<input class="form-control pull-left" name="' + field + '" value="' + (content ? content[field] : "") + '" required>';
+
+        return html
+
+    }
+
+    function get_asses_form(data, content) {
         var attr_form = $('#attr-form');
-        // if (!data || !data.length) {
-        //     attr_form.html('');
-        //     return false
-        // }
+        if (!data || !data.length) {
+            attr_form.html('');
+            return false
+        }
         var form_html = '';
 
         // type 类型 失效数据
 
-
-        form_html += '<div class="form-group">';
-        form_html += '<div class="col-sm-2"><label class="control-label pull-right">test</label></div>';
-        form_html += '<div class="col-sm-8"><input class="form-control pull-left" name="test" value="' + (data ? data['test'] : "") + '"></div>';
-        form_html += '</div>';
-
+        data.forEach(function (value) {
+            form_html += '<div class="form-group">';
+            form_html += '<div class="col-sm-2"><label class="control-label pull-right">' + required_html(value['required']) + value['field_zh'] + '</label></div>';
+            form_html += '<div class="col-sm-8">' + required_input(value['field'], value['required'], content) + '</div>';
+            form_html += '</div>';
+        });
         form_html += '<div class="form-group"><div class="col-sm-2"><button type="button" class="btn btn-primary submit-assess">保存</button></div></div>';
         attr_form.html(form_html);
 

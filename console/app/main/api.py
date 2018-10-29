@@ -14,7 +14,7 @@ from ..read_config import ReadAppConfig
 from collections import defaultdict
 import json
 from sqlalchemy import or_
-from ..manage.models import AttrContent
+from ..manage.models import AttrContent, ProductAssess
 from ..app import excel
 import xlwt
 
@@ -129,7 +129,8 @@ def get_file_tree():
     if not product_id:
         return jsonify({'success': False, 'message': '没有获取到配置文件信息'})
 
-    product = ProductRelation.query.filter_by(product_id=product_id).order_by(ProductRelation.relation_order, ProductRelation.id).all()
+    product = ProductRelation.query.filter_by(product_id=product_id).order_by(ProductRelation.relation_order,
+                                                                              ProductRelation.id).all()
     if not product:
         return jsonify({'success': True, 'data': result})
 
@@ -298,6 +299,28 @@ def get_tree_attr():
     return jsonify({'success': True, 'data': data, 'content': content})
 
 
+@main.route('/tree/attr/action')
+@login_required
+def get_tree_attr_action():
+    type = request.args.get('type')
+    action_type = request.args.get('action_type')
+    func_relation_id = request.args.get('func_relation_id')
+
+    attr_action = AttrOther.query.first()
+
+    if not attr_action:
+        return jsonify({'success': False, 'messgae': '参数不对'})
+
+    data = json.loads(attr_action.content)
+    data_action = ProductAssess.query.filter_by(type=type, action_type=action_type, func_relation_id=func_relation_id).first()
+
+    content = None
+    if data_action and data_action.content:
+        content = json.loads(data_action.content)
+
+    return jsonify({'success': True, 'data': data, 'content': content})
+
+
 @main.route('/export/product/<int:product_id>')
 @login_required
 def exprot_product(product_id):
@@ -323,7 +346,8 @@ def update_product_relation_order():
     parent_id = product_relation.parent_id
 
     if type == 'up':
-        prev_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, relation_order=product_relation.relation_order - 1).first()
+        prev_product_relation = ProductRelation.query.filter_by(parent_id=parent_id,
+                                                                relation_order=product_relation.relation_order - 1).first()
         if not prev_product_relation:
             return jsonify({'success': False, 'message': '不能上移'})
 
@@ -336,7 +360,8 @@ def update_product_relation_order():
         return jsonify({'success': True, 'message': '更新成功'})
 
     else:
-        next_product_relation = ProductRelation.query.filter_by(parent_id=parent_id, relation_order=product_relation.relation_order + 1).first()
+        next_product_relation = ProductRelation.query.filter_by(parent_id=parent_id,
+                                                                relation_order=product_relation.relation_order + 1).first()
         if not next_product_relation:
             return jsonify({'success': False, 'message': '不能下移'})
 
