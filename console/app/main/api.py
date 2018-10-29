@@ -16,6 +16,7 @@ import json
 from sqlalchemy import or_
 from ..manage.models import AttrContent
 from ..app import excel
+import xlwt
 
 '''
 process 

@@ -80,6 +80,8 @@ def get_failure_relation(result, parent_id):
 def export_excel(product_id):
     export_result = defaultdict(list)
 
+    first_column = ['结构分析', '功能分析', '失效分析', '风险分析', '优化分析']
+
     column_names = [
         '过程项目', '过程步骤', '过程作业要素',
         '过程项目功能', '过程步骤功能', '过程作业要素功能',
@@ -88,7 +90,8 @@ def export_excel(product_id):
         '优化风险分析S评估', '优化风险分析O评估', '优化风险分析D评估',
         '负责人'
     ]
-    product_relation = ProductRelation.query.filter(ProductRelation.product_id == product_id, ProductRelation.level == 1).all()
+    product_relation = ProductRelation.query.filter(ProductRelation.product_id == product_id,
+                                                    ProductRelation.level == 1).all()
 
     product = Product.query.filter(Product.id == product_id).first()
     if not product_relation:
@@ -175,8 +178,9 @@ def get_func_data(product_relation_id, type):
     return result, fail
 
 
-def get_assess_data(product_id, assess, name_number, type):
-    product_assess = ProductAssess.query.filter_by(product_id=product_id, assess=assess, name_number=name_number, type=type).first()
+def get_assess_data(product_id, type, name_number, action_type):
+    product_assess = ProductAssess.query.filter_by(product_id=product_id, type=type,
+                                                   action_type=action_type).first()
     result = []
     if not product_assess:
         return []
