@@ -41,6 +41,10 @@ app_path = os.path.join(base_path, 'console', 'app_config', 'process.json')
 upload_base_path = os.path.join(base_path, 'upload')
 upload_doc_path = os.path.join(base_path, 'upload', 'doc')
 upload_video_path = os.path.join(base_path, 'upload', 'video')
+upload_xml_path = os.path.join(base_path, 'upload', 'xml')
+
+if not os.path.exists(upload_xml_path):
+    os.makedirs(upload_xml_path)
 
 
 class Config:
@@ -78,6 +82,7 @@ class Config:
 
     UPLOAD_DOC_DIR = upload_doc_path
     UPLOADS_DEFAULT_DEST = upload_video_path
+    UPLOADS_XML_DEST = upload_xml_path
 
     CACHE_TYPE = 'redis'
     CACHE_REDIS_HOST = '127.0.0.1'

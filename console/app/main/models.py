@@ -84,10 +84,11 @@ class ProductRelation(ProductRelationMixin, db.Model):
 
         result = []
         for index, con in enumerate(content.split('\r\n'), start=start_index):
-            data['name'] = con
-            data['number'] = index
-            data['relation_order'] = index
-            result.append(cls(**data))
+            if con:
+                data['name'] = con
+                data['number'] = index
+                data['relation_order'] = index
+                result.append(cls(**data))
         db.session.add_all(result)
         db.session.flush()
         result = [v.id for v in result]
@@ -230,13 +231,14 @@ class FuncRelation(FuncRelationMixin, db.Model):
         result = []
         for index, con in enumerate(content, start=cls.start_index(tree_type, data['product_relation_id'],
                                                                    data.get('parent_id'))):
-            data['name'] = con
-            data['number'] = index
-            data['type'] = tree_type
-            if tree_type == 'func':
-                data['name_number'] = cls.update_func_name_number(data['product_relation_id'], index)
-            else:
-                data['name_number'] = cls.update_failure_name_number(data['parent_id'], index)
+            if con:
+                data['name'] = con
+                data['number'] = index
+                data['type'] = tree_type
+                if tree_type == 'func':
+                    data['name_number'] = cls.update_func_name_number(data['product_relation_id'], index)
+                else:
+                    data['name_number'] = cls.update_failure_name_number(data['parent_id'], index)
 
             result.append(cls(**data))
         db.session.add_all(result)

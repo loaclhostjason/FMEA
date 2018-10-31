@@ -1,9 +1,10 @@
 import xlwt
+from config import Config
+import os
 
 
 class Excel(object):
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self):
         self.xls_name = 'Sheet Name'
 
     @staticmethod
@@ -20,7 +21,7 @@ class Excel(object):
         style.alignment = alignment  # Add Alignment to Style
         return style
 
-    def write_to_xls(self, data_dict):
+    def write_to_xls(self, content, filename):
         table_head = [
             '过程',
             '过程步骤',
@@ -52,13 +53,6 @@ class Excel(object):
             'RPN',
             'AP'
         ]
-        content = [["测试部", '小王', 15933333333, '2016-02-09', "四川，成都"],
-                   ["测试部", '小张', 15933333334, '2017-02-09', '四川，雅安'],
-                   ["测试部", '小李', 15933333335, '2015-02-09', '双流'],
-                   ["开发部", '小熊1', 15933333336, '2012-02-09', '华阳'],
-                   ["开发部", '小熊2', 15933333337, '2014-12-31', '华阳'],
-                   ["市场部", '小熊3', 15933333338, '2014-02-09', '华阳']
-                   ]
 
         workbook = xlwt.Workbook(encoding='utf-8')
         sheet = workbook.add_sheet(self.xls_name, cell_overwrite_ok=True)
@@ -75,38 +69,41 @@ class Excel(object):
             sheet.write(1, i, table_head[i])
             sheet.col(i).width = 256 * 30
 
+        # start -----------------------------
+        for row, val in enumerate(content):
+            for i, col in enumerate(val):
+                sheet.write(row + 2, i, col)
+        # end ---------------------------------------
+
         # 行 字段 value
         # sheet.write(0, 2, '333')  # row, column, value
 
-        contentRow = len(content)  # 列表元素个数  = 待写入内容行数
+        # contentRow = len(content)  # 列表元素个数  = 待写入内容行数
 
         # 从content获取要写入的第一列的内容,存入列表
-        first_col = []
-        for i in range(contentRow):
-            first_col.append(content[i][0])
-        print("first_col", first_col)
+        # first_col = []
+        # for i in range(contentRow):
+        #     first_col.append(content[i][0])
+        # print("first_col", first_col)
+        #
+        # # 去掉列表中重复元素，并且顺序不变
+        # nfirst_col = list(set(first_col))
+        # nfirst_col.sort(key=first_col.index)  # sort排序与原顺序一致
+        # print("nfirst_col", nfirst_col)
 
-        # 去掉列表中重复元素，并且顺序不变
-        nfirst_col = list(set(first_col))
-        nfirst_col.sort(key=first_col.index)  # sort排序与原顺序一致
-        print("nfirst_col", nfirst_col)
+        # row = 2
+        # for i in nfirst_col:
+        #     count = first_col.count(i)  # 计算元素的重复个数，比如测试 ：3
+        #     uprange = row + count - 1  # 合并范围后的上行数
+        #     sheet.write_merge(row, uprange, 0, 0, i,
+        #                       self.set_style(vi=True))  # 合并单元格写入内容 top_row, bottom_row, left_column, right_column
+        #     row = uprange + 1  # 从下一行开始写入
+        #
+        # # 获取content子列表第二个元素，循环写入excel第2列到最后开始的数据
+        # for row in range(contentRow):
+        #     for col in range(1, len(content[row])):
+        #         sheet.write(row + 2, col, content[row][col])
 
-        row = 2
-        for i in nfirst_col:
-            count = first_col.count(i)  # 计算元素的重复个数，比如测试 ：3
-            uprange = row + count - 1  # 合并范围后的上行数
-            sheet.write_merge(row, uprange, 0, 0, i,
-                              self.set_style(vi=True))  # 合并单元格写入内容 top_row, bottom_row, left_column, right_column
-            row = uprange + 1  # 从下一行开始写入
-
-        # 获取content子列表第二个元素，循环写入excel第2列到最后开始的数据
-        for row in range(contentRow):
-            for col in range(1, len(content[row])):
-                sheet.write(row + 2, col, content[row][col])
-
-        workbook.save("foobar.xls")
-
-
-if __name__ == '__main__':
-    excel = Excel('a')
-    excel.write_to_xls([])
+        path = Config.UPLOADS_XML_DEST
+        file_path = os.path.join(path, '%s.xls' % filename)
+        workbook.save(file_path)
