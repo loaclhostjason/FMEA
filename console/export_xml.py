@@ -3,19 +3,19 @@ from excel import Excel
 
 
 class ExportXml(object):
-    def __init__(self, func_relation_id):
+    def __init__(self, func_relation_id, xls_filename):
         self.func_relation_id = func_relation_id
+        self.xls_filename = xls_filename
 
     def run(self):
-        excel = Excel()
+        excel = Excel(self.xls_filename)
 
         xml = XmlData(self.func_relation_id)
         xml_data = xml.get_func_xml()
-        xml_filename = xml.func_info.name
 
-        excel.write_to_xls(xml_data, xml_filename)
+        excel.write_to_xls(xml_data)
 
 
 if __name__ == '__main__':
-    export_xml = ExportXml(1)
+    export_xml = ExportXml(1, 'a')
     export_xml.run()

@@ -4,8 +4,9 @@ import os
 
 
 class Excel(object):
-    def __init__(self):
+    def __init__(self, xls_filename):
         self.xls_name = 'Sheet Name'
+        self.xls_filename = xls_filename
 
     @staticmethod
     def set_style(center=False, vi=False):
@@ -21,7 +22,7 @@ class Excel(object):
         style.alignment = alignment  # Add Alignment to Style
         return style
 
-    def write_to_xls(self, content, filename):
+    def write_to_xls(self, content):
         table_head = [
             '过程',
             '过程步骤',
@@ -105,5 +106,5 @@ class Excel(object):
         #         sheet.write(row + 2, col, content[row][col])
 
         path = Config.UPLOADS_XML_DEST
-        file_path = os.path.join(path, '%s.xls' % filename)
+        file_path = os.path.join(path, '%s.xls' % self.xls_filename)
         workbook.save(file_path)

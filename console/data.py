@@ -4,17 +4,12 @@ from app.main.models import ProductRelation
 from app import *
 from collections import defaultdict
 
-app_context = app.app_context()
-app_context.push()
-
 
 class XmlData(object):
     def __init__(self, func_id):
         self.result = defaultdict(list)
-        func_info = ProductRelation.query.filter_by(id=func_id, level=0).first()
 
-        self.func_info = func_info
-        self.product_id = func_info.id
+        self.product_id = func_id
 
     def __get_parent_func_relation(self):
         func_relation = ProductRelation.query.filter_by(parent_id=self.product_id).all()
@@ -39,7 +34,7 @@ class XmlData(object):
     def trans_data(self):
         self.__get_parent_func_relation()
         data = self.result
-        func_list = data.get(self.func_info.id)
+        func_list = data.get(self.product_id)
 
         result = []
 

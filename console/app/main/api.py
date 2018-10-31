@@ -1,5 +1,6 @@
 # coding: utf-8
-from flask import render_template, redirect, url_for, jsonify, abort, request, flash
+from flask import render_template, redirect, url_for, jsonify, abort, request, flash, make_response, send_file, \
+    current_app
 from flask_login import login_required, current_user
 
 from . import main
@@ -17,6 +18,8 @@ from sqlalchemy import or_
 from ..manage.models import AttrContent, ProductAssess
 from ..app import excel
 import xlwt
+import os
+from config import Config
 
 '''
 process 
@@ -41,7 +44,11 @@ def prcess_list():
 
 @main.route('/file/product/delete/<int:id>', methods=['POST'])
 def delete_file(id):
+    from ..help.func import del_os_filename
     product = Product.query.get_or_404(id)
+
+    del_os_filename(current_app.config['UPLOADS_XML_DEST'], '%s.xls' % product.name)
+
     db.session.delete(product)
     return jsonify({'success': True, 'message': '删除成功'})
 
@@ -312,7 +319,8 @@ def get_tree_attr_action():
         return jsonify({'success': False, 'messgae': '参数不对'})
 
     data = json.loads(attr_action.content)
-    data_action = ProductAssess.query.filter_by(type=type, action_type=action_type, func_relation_id=func_relation_id).first()
+    data_action = ProductAssess.query.filter_by(type=type, action_type=action_type,
+                                                func_relation_id=func_relation_id).first()
 
     content = None
     if data_action and data_action.content:
@@ -324,10 +332,35 @@ def get_tree_attr_action():
 @main.route('/export/product/<int:product_id>')
 @login_required
 def exprot_product(product_id):
-    from .func import export_excel
+    # from .func import export_excel
 
-    excel_data, filename = export_excel(product_id)
-    return excel.make_response_from_dict(excel_data, "xls", file_name=filename)
+    #
+    # excel_data, filename = export_excel(product_id)
+    # return excel.make_response_from_dict(excel_data, "xls", file_name=filename)
+
+    from export_xml import ExportXml
+    func_info = Product.query.filter_by(id=product_id).first()
+
+    export_xml = ExportXml(product_id, func_info.name)
+    export_xml.run()
+
+    try:
+        from urllib.parse import quote
+
+        path = Config.UPLOADS_XML_DEST
+        file_path = os.path.join(path, '%s.xls' % func_info.name)
+        file_name = '%s.xls' % func_info.name
+
+        response = make_response(send_file(file_path, as_attachment=True))
+        response.headers["Content-Disposition"] = \
+            "attachment;" \
+            "filename*=UTF-8''{utf_filename}".format(
+                utf_filename=quote(file_name.encode('utf-8'))
+            )
+        return response
+    except Exception as e:
+        print(e)
+        abort(404)
 
 
 @main.route('/product/relation', methods=['POST'])

@@ -1,5 +1,5 @@
 from . import main
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, current_app
 from flask_login import current_user, login_required
 from ..main.models import *
 from datetime import datetime
@@ -56,6 +56,7 @@ def del_tree(id):
 @main.route('/tree/edit/name', methods=['POST'])
 @login_required
 def edit_tree_name():
+    from ..help.func import del_os_filename
     type = request.form.get('type')
 
     name = request.form.get('name')
@@ -65,6 +66,9 @@ def edit_tree_name():
 
     if not type:
         product_relation = ProductRelation.query.filter_by(id=id).first()
+        if product_relation.level == 0:
+            del_os_filename(current_app.config['UPLOADS_XML_DEST'], '%s.xls' % product_relation.name)
+
         if not product_relation:
             return jsonify({'success': False, 'message': '没有此记录'})
 
