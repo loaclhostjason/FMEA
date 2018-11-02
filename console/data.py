@@ -43,7 +43,7 @@ class XmlData(object):
         other_init = dict()
 
         for info in func_list:
-            init_data = ['' for v in range(len(func_list) + 10)]
+            init_data = ['' for v in range(len(func_list) + 20)]
 
             init_data[0] = {info.name: info.to_dict()}
             init_data[1] = defaultdict(list)
@@ -99,6 +99,23 @@ class XmlData(object):
         # print(content)
         return content
 
+    def get_assess_data(self, func_id, action_type=None, type=None):
+        relation = FuncRelation.query.filter(FuncRelation.product_relation_id == func_id,
+                                             FuncRelation.product_id == self.product_id).all()
+        if not relation:
+            return []
+        failure_id = [v.id for v in relation]
+        assess = ProductAssess.query.filter(ProductAssess.func_relation_id.in_(failure_id)).all()
+        content = []
+        if assess:
+            for info in assess:
+                if info.content:
+                    c = json.loads(info.content)
+                    content.append(c['name'])
+
+        print(content)
+        return content
+
     # 再次转换 xml 需要的数据
     def get_func_xml(self):
         final_data, other_init = self.trans_data()
@@ -138,6 +155,7 @@ class XmlData(object):
                                     sec_data[6] = ','.join(self.failure_relation(vv['id'], vv['number']))
                                     sec_data[7] = ','.join(self.failure_relation(vv['id'], vv['number']))
 
+                                    sec_data[11] = ','.join(self.get_assess_data(vv['id']))
                                     print(vv['id'])
 
                                     a.append(sec_data)
