@@ -1,8 +1,10 @@
 # coding: utf-8
 
-from app.main.models import ProductRelation
+from app.main.models import *
+from app.manage.models import *
 from app import *
 from collections import defaultdict
+import json
 
 
 class XmlData(object):
@@ -38,10 +40,12 @@ class XmlData(object):
 
         result = []
 
-        for info in func_list:
-            init_data = ['' for v in range(len(func_list) + 1)]
+        other_init = dict()
 
-            init_data[0] = info.name
+        for info in func_list:
+            init_data = ['' for v in range(len(func_list) + 10)]
+
+            init_data[0] = {info.name: info.to_dict()}
             init_data[1] = defaultdict(list)
 
             s_id = info.id
@@ -51,35 +55,107 @@ class XmlData(object):
                     t_id = s_info.id
                     t_func_list = data.get(t_id)
 
-                    init_data[1][s_info.name] = [v.name for v in t_func_list] if t_func_list else []
+                    init_data[1][s_info.name] = [v.to_dict() for v in t_func_list] if t_func_list else []
+                    init_data[1] = dict(init_data[1])
+
+                    other_init[s_info.name] = s_info.to_dict()
+
+            if not init_data[1]:
+                init_data[1] = dict()
 
             result.append(init_data)
 
-        return result
+        return result, other_init
+
+    def filter_number(self, name_number):
+        attr_content = AttrContent.query.filter_by(product_id=self.product_id, type='func').filter(
+            AttrContent.name_number.like(name_number + '-FU' + '%')).all()
+        content = []
+        if attr_content:
+            for info in attr_content:
+                if info.real_content:
+                    c = json.loads(info.real_content)
+                    content.append(c['name'])
+
+        # print(11, content)
+        return content
+
+    def failure_relation(self, func_id, number):
+        relation = FuncRelation.query.filter(FuncRelation.product_relation_id == func_id, FuncRelation.number == number,
+                                             FuncRelation.product_id == self.product_id).first()
+
+        if not relation:
+            return []
+        failure = AttrContent.query.filter(AttrContent.name_number.like(relation.name_number + '-FA%'),
+                                           AttrContent.product_id == self.product_id).all()
+
+        content = []
+        if failure:
+            for info in failure:
+                if info.real_content:
+                    c = json.loads(info.real_content)
+                    content.append(c['name'])
+
+        # print(content)
+        return content
 
     # 再次转换 xml 需要的数据
     def get_func_xml(self):
+        final_data, other_init = self.trans_data()
+
         a = []
-        for v in self.trans_data():
-            for val in v:
-                copy_data = v.copy()
-                if isinstance(val, dict):
+        for v in final_data:
+
+            forth_data = ''
+            for index, val in enumerate(v):
+                copy_data = ['' for v in range(len(v))].copy()
+
+                # 第一个节点
+                copy_data[0] = list(dict(v[0]).keys())[0]
+
+                # print('one', v)
+                # 第四个节点
+                if index == 0:
+                    name_number = list(set([v['name_number'] for v in dict(val).values()]))
+                    forth_data = ','.join(self.filter_number(name_number[0]))
+                copy_data[3] = forth_data
+
+                # 第二个 三个 节点 5 he 6
+                if index == 1:
                     if val:
-                        for key, info in val.items():
+                        for key, info in dict(val).items():
                             if info:
                                 for vv in info:
-                                    aa = copy_data.copy()
-                                    aa[1] = key
-                                    aa[2] = vv
-                                    a.append(aa)
+                                    sec_data = copy_data.copy()
+                                    sec_data[1] = key
+                                    sec_data[2] = vv['name']
+
+                                    name_number = vv['name_number']
+                                    sec_data[5] = ','.join(self.filter_number(name_number or '0'))
+                                    sec_data[4] = ','.join(self.filter_number(name_number[:-2] or '0'))
+
+                                    # todo 8-10
+                                    sec_data[6] = ','.join(self.failure_relation(vv['id'], vv['number']))
+                                    sec_data[7] = ','.join(self.failure_relation(vv['id'], vv['number']))
+
+                                    print(vv['id'])
+
+                                    a.append(sec_data)
                             else:
-                                bb = copy_data.copy()
-                                bb[1] = key
-                                a.append(bb)
+                                sec = copy_data.copy()
+                                sec[1] = key
+
+                                name_number = other_init[key]['name_number']
+                                sec[4] = ','.join(self.filter_number(name_number or '0'))
+
+                                a.append(sec)
 
                     else:
                         copy_data[1] = ''
                         copy_data[2] = ''
+
+                        copy_data[4] = ''
                         a.append(copy_data)
 
+        print(a)
         return a

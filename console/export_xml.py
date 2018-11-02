@@ -1,5 +1,9 @@
 from data import XmlData
 from excel import Excel
+from app import app
+
+app_context = app.app_context()
+app_context.push()
 
 
 class ExportXml(object):
