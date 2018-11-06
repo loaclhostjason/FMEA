@@ -43,7 +43,7 @@ class XmlData(object):
         other_init = dict()
 
         for info in func_list:
-            init_data = ['' for v in range(len(func_list) + 20)]
+            init_data = ['' for v in range(len(func_list) + 22)]
 
             init_data[0] = {info.name: info.to_dict()}
             init_data[1] = defaultdict(list)
@@ -85,36 +85,54 @@ class XmlData(object):
                                              FuncRelation.product_id == self.product_id).first()
 
         if not relation:
-            return []
+            return [], [], [], []
         failure = AttrContent.query.filter(AttrContent.name_number.like(relation.name_number + '-FA%'),
                                            AttrContent.product_id == self.product_id).all()
 
-        content = []
+        content_name = []
+        content_s = []
+        content_fm = []
+        content_fc = []
         if failure:
             for info in failure:
                 if info.real_content:
                     c = json.loads(info.real_content)
-                    content.append(c['name'])
+
+                    content_name.append(c['name'])
+                    content_s.append(c.get('spec_num', ''))
+                    content_fm.append(c.get('detection_device', ''))
+                    content_fc.append(c.get('desciption', ''))
 
         # print(content)
-        return content
+        # name,
+        return content_name, content_s, content_fm, content_fc
 
     def get_assess_data(self, func_id, action_type=None, type=None):
         relation = FuncRelation.query.filter(FuncRelation.product_relation_id == func_id,
                                              FuncRelation.product_id == self.product_id).all()
+
+        content_12 = []
+        content_13 = []
+        content_14 = []
+        content_15 = []
+        content_16 = []
+        content_17 = []
+        content_18 = []
+
         if not relation:
-            return []
+            return content_12, content_13, content_14, content_15, content_16, content_17, content_18
+
         failure_id = [v.id for v in relation]
         assess = ProductAssess.query.filter(ProductAssess.func_relation_id.in_(failure_id)).all()
-        content = []
+
         if assess:
             for info in assess:
                 if info.content:
                     c = json.loads(info.content)
-                    content.append(c['name'])
+                    content_12.append(c['name'])
 
         # print(content)
-        return content
+        return content_12, content_13, content_14, content_15, content_16, content_17, content_18
 
     # 再次转换 xml 需要的数据
     def get_func_xml(self):
@@ -152,11 +170,51 @@ class XmlData(object):
                                     sec_data[4] = self.filter_number(name_number[:-2] or '0') or ''
 
                                     # todo 8-10
-                                    sec_data[6] = self.failure_relation(vv['id'], vv['number']) or ''
-                                    sec_data[7] = self.failure_relation(vv['id'], vv['number']) or ''
+                                    content_name, content_s, content_fm, content_fc = self.failure_relation(
+                                        vv['id'], vv['number'])
 
-                                    sec_data[11] = self.get_assess_data(vv['id']) or ''
+                                    sec_data[6] = content_name or ''
+                                    sec_data[7] = content_s or ''
+                                    sec_data[8] = content_fm or ''
+                                    sec_data[9] = content_fc or ''
+
+                                    # todo 12 -18
+                                    [
+                                        content_12,
+                                        content_13,
+                                        content_14,
+                                        content_15,
+                                        content_16,
+                                        content_17,
+                                        content_18
+                                    ] = self.get_assess_data(vv['id'], action_type='current')
                                     # print(vv['id'])
+                                    sec_data[10] = content_12 or ''
+                                    sec_data[11] = content_13 or ''
+                                    sec_data[12] = content_14 or ''
+                                    sec_data[13] = content_15 or ''
+                                    sec_data[14] = content_16 or ''
+                                    sec_data[15] = content_17 or ''
+                                    sec_data[16] = content_18 or ''
+
+                                    # todo 19 -23
+                                    [
+                                        content_19,
+                                        content_20,
+                                        content_21,
+                                        content_22,
+                                        content_23,
+                                        content_24,
+                                        content_25
+                                    ] = self.get_assess_data(vv['id'], action_type='optimize')
+
+                                    sec_data[17] = content_19 or ''
+                                    sec_data[18] = content_20 or ''
+                                    sec_data[19] = content_21 or ''
+                                    sec_data[20] = content_22 or ''
+                                    sec_data[21] = content_23 or ''
+                                    sec_data[22] = content_24 or ''
+                                    sec_data[23] = content_25 or ''
 
                                     a.append(sec_data)
                             else:
@@ -219,5 +277,5 @@ class XmlData(object):
             else:
                 result.append(val)
                 # print(11, val)
-        print(result)
+        # print(result)
         return result
