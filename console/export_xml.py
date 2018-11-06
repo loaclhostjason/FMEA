@@ -2,8 +2,8 @@ from data import XmlData
 from excel import Excel
 from app import app
 
-app_context = app.app_context()
-app_context.push()
+# app_context = app.app_context()
+# app_context.push()
 
 
 class ExportXml(object):
@@ -15,7 +15,8 @@ class ExportXml(object):
         excel = Excel(self.xls_filename)
 
         xml = XmlData(self.func_relation_id)
-        xml_data = xml.get_func_xml()
+        # xml_data = xml.get_func_xml()
+        xml_data = xml.test()
 
         excel.write_to_xls(xml_data)
 

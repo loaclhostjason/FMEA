@@ -113,7 +113,7 @@ class XmlData(object):
                     c = json.loads(info.content)
                     content.append(c['name'])
 
-        print(content)
+        # print(content)
         return content
 
     # 再次转换 xml 需要的数据
@@ -134,7 +134,7 @@ class XmlData(object):
                 # 第四个节点
                 if index == 0:
                     name_number = list(set([v['name_number'] for v in dict(val).values()]))
-                    forth_data = ','.join(self.filter_number(name_number[0]))
+                    forth_data = self.filter_number(name_number[0]) or ''
                 copy_data[3] = forth_data
 
                 # 第二个 三个 节点 5 he 6
@@ -148,15 +148,15 @@ class XmlData(object):
                                     sec_data[2] = vv['name']
 
                                     name_number = vv['name_number']
-                                    sec_data[5] = ','.join(self.filter_number(name_number or '0'))
-                                    sec_data[4] = ','.join(self.filter_number(name_number[:-2] or '0'))
+                                    sec_data[5] = self.filter_number(name_number or '0') or ''
+                                    sec_data[4] = self.filter_number(name_number[:-2] or '0') or ''
 
                                     # todo 8-10
-                                    sec_data[6] = ','.join(self.failure_relation(vv['id'], vv['number']))
-                                    sec_data[7] = ','.join(self.failure_relation(vv['id'], vv['number']))
+                                    sec_data[6] = self.failure_relation(vv['id'], vv['number']) or ''
+                                    sec_data[7] = self.failure_relation(vv['id'], vv['number']) or ''
 
-                                    sec_data[11] = ','.join(self.get_assess_data(vv['id']))
-                                    print(vv['id'])
+                                    sec_data[11] = self.get_assess_data(vv['id']) or ''
+                                    # print(vv['id'])
 
                                     a.append(sec_data)
                             else:
@@ -164,7 +164,7 @@ class XmlData(object):
                                 sec[1] = key
 
                                 name_number = other_init[key]['name_number']
-                                sec[4] = ','.join(self.filter_number(name_number or '0'))
+                                sec[4] = self.filter_number(name_number or '0') or ''
 
                                 a.append(sec)
 
@@ -175,5 +175,49 @@ class XmlData(object):
                         copy_data[4] = ''
                         a.append(copy_data)
 
-        print(a)
+        # print(a)
         return a
+
+    def test(self):
+        data = self.get_func_xml()
+        if not data:
+            return
+
+        _len = defaultdict(list)
+        for index, val in enumerate(data):
+            for v in val:
+                if isinstance(v, list):
+                    _len[index].append(len(v))
+                else:
+                    _len[index].append(0)
+        max_len = {k: max(v) for k, v in _len.items()}
+
+        # print(max_len)
+        #
+        # # todo
+        result = []
+        for index, val in enumerate(data):
+            this_len = max_len[index]
+            if this_len:
+                # print(val)
+                mult_val = [val] * this_len
+                # print(mult_val)
+                for i, v in enumerate(mult_val):
+                    this_list = []
+                    for info in v:
+                        if isinstance(info, list):
+                            try:
+                                info = info[i]
+                            except:
+                                info = ''
+                            this_list.append(info)
+                        else:
+                            this_list.append(info)
+                    result.append(this_list)
+                # print(result)
+                # break
+            else:
+                result.append(val)
+                # print(11, val)
+        print(result)
+        return result

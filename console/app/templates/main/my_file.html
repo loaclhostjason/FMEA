@@ -39,7 +39,8 @@
                             <td>{{ product.last_time or '--' }}</td>
 
                             <td class="text-right">
-                                <a href="{{ url_for('.exprot_product', product_id=product.id) }}">数据导出</a>
+                                {#                                <a href="{{ url_for('.exprot_product', product_id=product.id) }}">数据导出</a>#}
+                                <a href="javascript:void(0)" class="export_excel" data-id="{{ product.id }}">数据导出</a>
                                 <span class="text-explode">|</span>
                                 <a href="{{ url_for('.edit_file', product_id=product.id) }}">编辑</a>
                                 <span class="text-explode">|</span>
@@ -70,6 +71,23 @@
             $('.delete-file').click(function () {
                 var _this_id = $(this).data('id');
                 $.update_info_reload('是否删除项目', '/file/product/delete/' + _this_id, '')
+            });
+
+            function downloadFile(url) {
+                try {
+                    var elemIF = document.createElement("iframe");
+                    elemIF.src = url;
+                    elemIF.style.display = "none";
+                    document.body.appendChild(elemIF);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            $('.export_excel').click(function () {
+                var project_id = $(this).data('id');
+                alert(project_id)
+                downloadFile('/export/product/' + project_id);
             })
 
 
